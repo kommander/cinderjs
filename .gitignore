@@ -1,0 +1,11 @@
+*.sublime-project
+*.sublime-workspace
+*.log
+*.preset
+*._*
+*.DS_*
+build-tmp
+build
+node_modules
+xcuserdata
+xcode/build
