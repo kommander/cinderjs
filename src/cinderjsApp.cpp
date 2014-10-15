@@ -37,6 +37,7 @@ class cinderjsApp : public AppNative {
   std::shared_ptr<std::thread> mV8Thread;
   
   static void LogCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void test(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 void cinderjsApp::LogCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
@@ -47,6 +48,14 @@ void cinderjsApp::LogCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
   printf("%s", *str);
   
   return;
+}
+
+void cinderjsApp::test(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope handle_scope(isolate);
+  
+  ReturnValue<v8::Value> ret = args.GetReturnValue();
+  ret.Set(v8::String::NewFromUtf8(isolate, "Hello World!"));
 }
 
 void cinderjsApp::setup()
@@ -68,6 +77,7 @@ void cinderjsApp::v8Thread(){
   
   Local<ObjectTemplate> global = ObjectTemplate::New();
   global->Set(v8::String::NewFromUtf8(isolate, "log"), FunctionTemplate::New(isolate, LogCallback));
+  global->Set(v8::String::NewFromUtf8(isolate, "test"), FunctionTemplate::New(isolate, test));
   
   // Create a new context.
   Local<Context> context = Context::New(isolate, NULL, global);
@@ -76,7 +86,7 @@ void cinderjsApp::v8Thread(){
   Context::Scope context_scope(context);
   
   // Create a string containing the JavaScript source code.
-  Local<String> source = String::NewFromUtf8(isolate, "log('Hello World')");
+  Local<String> source = String::NewFromUtf8(isolate, "log(test())");
   
   // Compile the source code.
   Local<Script> script = Script::Compile(source);
