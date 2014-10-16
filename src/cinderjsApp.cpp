@@ -161,7 +161,12 @@ void CinderjsApp::setup()
   }
 }
 
+/**
+ * Runs a JS string and prints eventual errors to the AppConsole
+ */
 void CinderjsApp::runJS( std::string scriptStr ){
+  v8::TryCatch try_catch;
+  
   // Enter the context for compiling and running the hello world script.
   Context::Scope context_scope(mMainContext);
   
@@ -173,6 +178,18 @@ void CinderjsApp::runJS( std::string scriptStr ){
   
   // Run the script to get the result.
   Local<Value> result = script->Run();
+  
+  if(result.IsEmpty()){
+    if(try_catch.HasCaught()){
+      v8::String::Utf8Value exception(try_catch.Exception());
+      v8::String::Utf8Value trace(try_catch.StackTrace());
+      std::string ex = "JS Error: ";
+      ex.append(*exception);
+      ex.append(*trace);
+      AppConsole::log( ex );
+    }
+  }
+  
 }
 
 void CinderjsApp::v8Thread(){
