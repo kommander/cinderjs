@@ -7,6 +7,8 @@ $> open xcode/build/Debug/cinderjs.app --args /Users/sebastian/Dropbox/+Projects
 
 # Build
 ## v8
+Using Version branch 3.29
+
 To be able to link against lib++, build on OSX with:
 
   export CXX="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -std=c++11 -stdlib=libc++"
