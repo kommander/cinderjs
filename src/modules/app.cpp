@@ -21,14 +21,39 @@
  */
 
 #include "app.hpp"
+#include "AppConsole.h"
 
 using namespace std;
 using namespace cinder;
 
 namespace cjs {
   
-void AppModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
-  
+v8::Local<v8::Function> AppModule::sDrawCallback;
+
+void AppModule::draw(){
+  if( !sDrawCallback.IsEmpty() ){
+    // TODO: call draw callback in v8 context
+  }
 }
+
+void AppModule::drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope handle_scope(isolate);
+  
+  if(!args[0]->IsFunction()){
+    // TODO: throw js exception
+    AppConsole::log("draw callback expects one argument of type function.");
+    return;
+  }
+  AppConsole::log("draw callback set.");
+  sDrawCallback = args[0].As<v8::Function>();
+  
+  return;
+}
+
+void AppModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
+  global->Set(v8::String::NewFromUtf8(getIsolate(), "draw"), v8::FunctionTemplate::New(getIsolate(), drawCallback));
+}
+
  
 } // namespace cjs

@@ -43,11 +43,12 @@ class AppModule : public PipeModule {
   
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
   
-    void draw(){}
+    void draw();
   
   //
   private:
-    
+    static void drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static v8::Local<v8::Function> sDrawCallback;
  };
   
 } // namespace cjs
