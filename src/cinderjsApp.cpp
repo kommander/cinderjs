@@ -12,8 +12,13 @@
 #include <cerrno>
 
 #include "AppConsole.h"
+#include "CinderAppBase.hpp"
 
 #include "v8.h"
+
+// Modules
+#include "modules/app.hpp"
+#include "modules/gl.hpp"
 
 using namespace ci;
 using namespace ci::app;
@@ -24,7 +29,7 @@ namespace cjs {
 
 typedef boost::filesystem::path Path;
   
-class CinderjsApp : public AppNative {
+class CinderjsApp : public AppNative, public CinderAppBase  {
   public:
   ~CinderjsApp(){
     v8::V8::Dispose();
@@ -51,11 +56,10 @@ class CinderjsApp : public AppNative {
   
   // V8
   std::shared_ptr<std::thread> mV8Thread;
-  Isolate* mIsolate;
-  Local<Context> mMainContext;
   
   static void LogCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void test(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
+
 };
 
 void CinderjsApp::LogCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
@@ -66,14 +70,6 @@ void CinderjsApp::LogCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
   AppConsole::log( *str );
   
   return;
-}
-
-void CinderjsApp::test(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  v8::Isolate* isolate = args.GetIsolate();
-  v8::HandleScope handle_scope(isolate);
-  
-  ReturnValue<v8::Value> ret = args.GetReturnValue();
-  ret.Set(v8::String::NewFromUtf8(isolate, "Hello World!"));
 }
 
 /**
@@ -148,15 +144,18 @@ void CinderjsApp::setup()
   HandleScope handle_scope(mIsolate);
   
   // Set general globals for JS
-  Local<ObjectTemplate> global = ObjectTemplate::New();
-  global->Set(v8::String::NewFromUtf8(mIsolate, "log"), FunctionTemplate::New(mIsolate, LogCallback));
-  global->Set(v8::String::NewFromUtf8(mIsolate, "test"), FunctionTemplate::New(mIsolate, test));
+  mGlobal = ObjectTemplate::New();
+  
+  mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "log"), FunctionTemplate::New(mIsolate, LogCallback));
+  
+  // Load Modules
+  addModule(boost::shared_ptr<AppModule>( new AppModule() ));
+  addModule(boost::shared_ptr<GLModule>( new GLModule() ));
   
   // Create a new context.
-  mMainContext = Context::New(mIsolate, NULL, global);
+  mMainContext = Context::New(mIsolate, NULL, mGlobal);
   
   if( jsFileContents.length() > 0 ){
-    std::cout << jsFileContents << std::endl;
     runJS( jsFileContents );
   }
 }
@@ -179,12 +178,13 @@ void CinderjsApp::runJS( std::string scriptStr ){
   // Run the script to get the result.
   Local<Value> result = script->Run();
   
+  // Check for script errors
   if(result.IsEmpty()){
     if(try_catch.HasCaught()){
-      v8::String::Utf8Value exception(try_catch.Exception());
+      //v8::String::Utf8Value exception(try_catch.Exception());
       v8::String::Utf8Value trace(try_catch.StackTrace());
       std::string ex = "JS Error: ";
-      ex.append(*exception);
+      //ex.append(*exception);
       ex.append(*trace);
       AppConsole::log( ex );
     }
