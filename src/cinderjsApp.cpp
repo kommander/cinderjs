@@ -1,11 +1,17 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
+#include "cinder/Filesystem.h"
 
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/thread/thread.hpp>
 
 #include <string.h>
+#include <fstream>
+#include <sstream>
+#include <cerrno>
+
+#include "AppConsole.h"
 
 #include "v8.h"
 
@@ -14,9 +20,13 @@ using namespace ci::app;
 using namespace std;
 using namespace v8;
 
-class cinderjsApp : public AppNative {
+namespace cjs {
+
+typedef boost::filesystem::path Path;
+  
+class CinderjsApp : public AppNative {
   public:
-  ~cinderjsApp(){
+  ~CinderjsApp(){
     v8::V8::Dispose();
     
     // Shutdown v8Thread
@@ -32,25 +42,33 @@ class cinderjsApp : public AppNative {
 	void draw();
   
   void v8Thread();
+  void runJS( std::string scriptStr );
   
   private:
+  
+  // Path
+  Path mCwd;
+  
+  // V8
   std::shared_ptr<std::thread> mV8Thread;
+  Isolate* mIsolate;
+  Local<Context> mMainContext;
   
   static void LogCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void test(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
-void cinderjsApp::LogCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void CinderjsApp::LogCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope handle_scope(isolate);
   
   v8::String::Utf8Value str(args[0]);
-  printf("%s", *str);
+  AppConsole::log( *str );
   
   return;
 }
 
-void cinderjsApp::test(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void CinderjsApp::test(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope handle_scope(isolate);
   
@@ -58,55 +76,133 @@ void cinderjsApp::test(const v8::FunctionCallbackInfo<v8::Value>& args) {
   ret.Set(v8::String::NewFromUtf8(isolate, "Hello World!"));
 }
 
-void cinderjsApp::setup()
+/**
+ * Setup
+ * If given a *.js file in the command line arguments, it will be run in the main context
+ * and can be used to setup things for other scripts or to mockup the main app.
+ */
+void CinderjsApp::setup()
 {
-  mV8Thread = make_shared<std::thread>( boost::bind( &cinderjsApp::v8Thread, this ) );
-}
-
-void cinderjsApp::v8Thread(){
-  ThreadSetup threadSetup;
+  // Init Console
+  AppConsole::initialize();
   
+  mV8Thread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8Thread, this ) );
+  
+  // Command line arguments
+  vector<std::string> args = getArgs();
+
+  mCwd = boost::filesystem::current_path();
+  AppConsole::log("Current Path: " + mCwd.string());
+  
+  #ifdef DEBUG
+  std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/lib/test.js";
+  #else
+  std::string jsMainFile;
+  #endif
+  
+  // Check argv arguments
+  int pos = 0;
+  for(std::vector<std::string>::iterator it = args.begin(); it != args.end(); ++it) {
+    AppConsole::log("argv " + std::to_string(pos) + ":" + *it);
+    pos++;
+   
+    std::string s = *it;
+    if( s.find(".js") != std::string::npos ){
+      jsMainFile = *it;
+    }
+  }
+  
+  // Do we have a js file to run?
+  std::string jsFileContents;
+  if(jsMainFile.length() > 0) {
+    AppConsole::log("Starting app with JS file at: " + jsMainFile);
+    
+    if( !cinder::fs::exists( jsMainFile ) ){
+      AppConsole::log("Could not find specified JS file!");
+    } else {
+      try {
+        std::ifstream in(jsMainFile, std::ios::in );
+        if (in)
+        {
+          std::ostringstream contents;
+          contents << in.rdbuf();
+          jsFileContents = contents.str();
+          in.close();
+        }
+      } catch(std::exception &e) {
+        std::string err = "Error: ";
+        err.append(e.what());
+        AppConsole::log( err );
+      }
+    }
+  }
+  
+  // Initialize V8 (implicit initialization was removed in an earlier revision)
   V8::Initialize();
   
   // Create a new Isolate and make it the current one.
-  Isolate* isolate = Isolate::New();
-  Isolate::Scope isolate_scope(isolate);
+  mIsolate = Isolate::New();
+  Isolate::Scope isolate_scope(mIsolate);
   
   // Create a stack-allocated handle scope.
-  HandleScope handle_scope(isolate);
+  HandleScope handle_scope(mIsolate);
   
+  // Set general globals for JS
   Local<ObjectTemplate> global = ObjectTemplate::New();
-  global->Set(v8::String::NewFromUtf8(isolate, "log"), FunctionTemplate::New(isolate, LogCallback));
-  global->Set(v8::String::NewFromUtf8(isolate, "test"), FunctionTemplate::New(isolate, test));
+  global->Set(v8::String::NewFromUtf8(mIsolate, "log"), FunctionTemplate::New(mIsolate, LogCallback));
+  global->Set(v8::String::NewFromUtf8(mIsolate, "test"), FunctionTemplate::New(mIsolate, test));
   
   // Create a new context.
-  Local<Context> context = Context::New(isolate, NULL, global);
+  mMainContext = Context::New(mIsolate, NULL, global);
   
+  if( jsFileContents.length() > 0 ){
+    std::cout << jsFileContents << std::endl;
+    runJS( jsFileContents );
+  }
+}
+
+void CinderjsApp::runJS( std::string scriptStr ){
   // Enter the context for compiling and running the hello world script.
-  Context::Scope context_scope(context);
+  Context::Scope context_scope(mMainContext);
   
   // Create a string containing the JavaScript source code.
-  Local<String> source = String::NewFromUtf8(isolate, "log(test())");
+  Local<String> source = String::NewFromUtf8( mIsolate, scriptStr.c_str() );
   
   // Compile the source code.
-  Local<Script> script = Script::Compile(source);
+  Local<Script> script = Script::Compile( source );
   
   // Run the script to get the result.
   Local<Value> result = script->Run();
 }
 
-void cinderjsApp::mouseDown( MouseEvent event )
+void CinderjsApp::v8Thread(){
+  ThreadSetup threadSetup;
+}
+
+void CinderjsApp::mouseDown( MouseEvent event )
 {
 }
 
-void cinderjsApp::update()
+void CinderjsApp::update()
 {
 }
 
-void cinderjsApp::draw()
+void CinderjsApp::draw()
 {
 	// clear out the window with black
-	gl::clear( Color( 0, 0, 0 ) ); 
+	gl::clear( Color( 0, 0, 0 ) );
+  
+  
+  // Draw Fps
+  //Vec2f fpsPos(0, 20);
+  //gl::drawString(to_string(getFrameRate()), fpsPos);
+  
+  // Draw console (TODO: if active)
+  Vec2f cPos;
+  cPos.y = getWindowHeight();
+  AppConsole::draw( cPos );
 }
+  
+} // namespace cjs
 
-CINDER_APP_NATIVE( cinderjsApp, RendererGl )
+CINDER_APP_NATIVE( cjs::CinderjsApp, RendererGl )
