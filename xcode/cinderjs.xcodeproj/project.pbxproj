@@ -35,6 +35,7 @@
 		9E9B3E3C19F022C000291CDE /* app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3819F022C000291CDE /* app.cpp */; };
 		9E9B3E3D19F022C000291CDE /* gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3A19F022C000291CDE /* gl.cpp */; };
 		9E9B3E4019F0233C00291CDE /* PipeModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3E19F0233C00291CDE /* PipeModule.cpp */; };
+		9E9B3E4419F0390000291CDE /* console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E4219F0390000291CDE /* console.cpp */; };
 		9EAF080919EDC4C600C02F65 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9EAF080819EDC4C600C02F65 /* README.md */; };
 		B6B86EEF243D496CAA6AC588 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = A16F000F7FC04E0DA0360B7B /* CinderApp.icns */; };
 /* End PBXBuildFile section */
@@ -78,6 +79,8 @@
 		9E9B3E3E19F0233C00291CDE /* PipeModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PipeModule.cpp; path = ../src/PipeModule.cpp; sourceTree = "<group>"; };
 		9E9B3E3F19F0233C00291CDE /* PipeModule.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PipeModule.hpp; path = ../src/PipeModule.hpp; sourceTree = "<group>"; };
 		9E9B3E4119F0240C00291CDE /* CinderAppBase.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CinderAppBase.hpp; path = ../src/CinderAppBase.hpp; sourceTree = "<group>"; };
+		9E9B3E4219F0390000291CDE /* console.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = console.cpp; path = ../src/modules/console.cpp; sourceTree = "<group>"; };
+		9E9B3E4319F0390000291CDE /* console.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = console.hpp; path = ../src/modules/console.hpp; sourceTree = "<group>"; };
 		9EAF080819EDC4C600C02F65 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		A16F000F7FC04E0DA0360B7B /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
 		B26520EF291B4336BEC87FD7 /* cinderjsApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = cinderjsApp.cpp; path = ../src/cinderjsApp.cpp; sourceTree = "<group>"; };
@@ -243,6 +246,7 @@
 		9E9B3E3619F022A800291CDE /* modules */ = {
 			isa = PBXGroup;
 			children = (
+				9E9B3E4219F0390000291CDE /* console.cpp */,
 				9E9B3E3819F022C000291CDE /* app.cpp */,
 				9E9B3E3A19F022C000291CDE /* gl.cpp */,
 			);
@@ -252,6 +256,7 @@
 		9E9B3E3719F022B000291CDE /* modules */ = {
 			isa = PBXGroup;
 			children = (
+				9E9B3E4319F0390000291CDE /* console.hpp */,
 				9E9B3E3919F022C000291CDE /* app.hpp */,
 				9E9B3E3B19F022C000291CDE /* gl.hpp */,
 			);
@@ -354,6 +359,7 @@
 				9E9B3E4019F0233C00291CDE /* PipeModule.cpp in Sources */,
 				9E9B3E3C19F022C000291CDE /* app.cpp in Sources */,
 				69CC5FFAB4E1488598E5D024 /* cinderjsApp.cpp in Sources */,
+				9E9B3E4419F0390000291CDE /* console.cpp in Sources */,
 				9E9B3E3D19F022C000291CDE /* gl.cpp in Sources */,
 				9E9B3E3219F002C200291CDE /* AppConsole.cpp in Sources */,
 			);
