@@ -30,6 +30,7 @@
 		9E7F713319EE0C67002DDCFF /* libicui18n.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E7F713019EE0C67002DDCFF /* libicui18n.dylib */; };
 		9E7F713419EE0C67002DDCFF /* libicuuc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E7F713119EE0C67002DDCFF /* libicuuc.dylib */; };
 		9E7F713519EE0C67002DDCFF /* libv8.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E7F713219EE0C67002DDCFF /* libv8.dylib */; };
+		9E9B3E3219F002C200291CDE /* AppConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3019F002C200291CDE /* AppConsole.cpp */; };
 		9EAF080919EDC4C600C02F65 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9EAF080819EDC4C600C02F65 /* README.md */; };
 		B6B86EEF243D496CAA6AC588 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = A16F000F7FC04E0DA0360B7B /* CinderApp.icns */; };
 /* End PBXBuildFile section */
@@ -63,6 +64,8 @@
 		9E7F713019EE0C67002DDCFF /* libicui18n.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicui18n.dylib; path = ../v8/out/x64.release/libicui18n.dylib; sourceTree = "<group>"; };
 		9E7F713119EE0C67002DDCFF /* libicuuc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicuuc.dylib; path = ../v8/out/x64.release/libicuuc.dylib; sourceTree = "<group>"; };
 		9E7F713219EE0C67002DDCFF /* libv8.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libv8.dylib; path = ../v8/out/x64.release/libv8.dylib; sourceTree = "<group>"; };
+		9E9B3E3019F002C200291CDE /* AppConsole.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppConsole.cpp; path = ../src/AppConsole.cpp; sourceTree = "<group>"; };
+		9E9B3E3119F002C200291CDE /* AppConsole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppConsole.h; path = ../src/AppConsole.h; sourceTree = "<group>"; };
 		9EAF080819EDC4C600C02F65 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		A16F000F7FC04E0DA0360B7B /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
 		B26520EF291B4336BEC87FD7 /* cinderjsApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = cinderjsApp.cpp; path = ../src/cinderjsApp.cpp; sourceTree = "<group>"; };
@@ -117,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				B26520EF291B4336BEC87FD7 /* cinderjsApp.cpp */,
+				9E9B3E3019F002C200291CDE /* AppConsole.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -171,6 +175,7 @@
 		29B97315FDCFA39411CA2CEA /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				9E9B3E3119F002C200291CDE /* AppConsole.h */,
 				BA220610E72E4B7FA515FBCC /* Resources.h */,
 				24A9E79E5BC84C47B0A6A38B /* cinderjs_Prefix.pch */,
 			);
@@ -302,6 +307,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				69CC5FFAB4E1488598E5D024 /* cinderjsApp.cpp in Sources */,
+				9E9B3E3219F002C200291CDE /* AppConsole.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
