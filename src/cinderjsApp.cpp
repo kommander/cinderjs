@@ -19,6 +19,8 @@
 // Modules
 #include "modules/app.hpp"
 #include "modules/gl.hpp"
+#include "modules/console.hpp"
+
 
 using namespace ci;
 using namespace ci::app;
@@ -57,20 +59,10 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   // V8
   std::shared_ptr<std::thread> mV8Thread;
   
-  static void LogCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
+  //static void LogCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 };
-
-void CinderjsApp::LogCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  v8::Isolate* isolate = args.GetIsolate();
-  v8::HandleScope handle_scope(isolate);
-  
-  v8::String::Utf8Value str(args[0]);
-  AppConsole::log( *str );
-  
-  return;
-}
 
 /**
  * Setup
@@ -146,11 +138,10 @@ void CinderjsApp::setup()
   // Set general globals for JS
   mGlobal = ObjectTemplate::New();
   
-  mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "log"), FunctionTemplate::New(mIsolate, LogCallback));
-  
   // Load Modules
   addModule(boost::shared_ptr<AppModule>( new AppModule() ));
   addModule(boost::shared_ptr<GLModule>( new GLModule() ));
+  addModule(boost::shared_ptr<ConsoleModule>( new ConsoleModule() ));
   
   // Create a new context.
   mMainContext = Context::New(mIsolate, NULL, mGlobal);
@@ -209,10 +200,10 @@ void CinderjsApp::draw()
 	// clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) );
   
-  
-  // Draw Fps
-  //Vec2f fpsPos(0, 20);
-  //gl::drawString(to_string(getFrameRate()), fpsPos);
+  // Draw modules
+  for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
+    it->get()->draw();
+  }
   
   // Draw console (TODO: if active)
   Vec2f cPos;
