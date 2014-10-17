@@ -50,6 +50,7 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   
   void v8Thread();
   void runJS( std::string scriptStr );
+  Local<Context> createMainContext(Isolate* isolate);
   
   private:
   
@@ -144,11 +145,22 @@ void CinderjsApp::setup()
   addModule(boost::shared_ptr<ConsoleModule>( new ConsoleModule() ));
   
   // Create a new context.
-  mMainContext = Context::New(mIsolate, NULL, mGlobal);
+  //mMainContext = Context::New(mIsolate, NULL, mGlobal);
+  mMainContext = createMainContext(mIsolate);
   
   if( jsFileContents.length() > 0 ){
     runJS( jsFileContents );
   }
+}
+
+Local<Context> CinderjsApp::createMainContext(Isolate* isolate) {
+  EscapableHandleScope handleScope(isolate);
+  
+  Local<Context> ct = Context::New(mIsolate, NULL, mGlobal);
+  Context::Scope scope(ct);
+  pContext.Reset(isolate, ct);
+  
+  return handleScope.Escape(ct);
 }
 
 /**
