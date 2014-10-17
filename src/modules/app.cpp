@@ -28,17 +28,42 @@ using namespace cinder;
 
 namespace cjs {
   
-v8::Local<v8::Function> AppModule::sDrawCallback;
+v8::Persistent<v8::Function> AppModule::sDrawCallback;
 
 void AppModule::draw(){
-  if( !sDrawCallback.IsEmpty() ){
+  
+  v8::Isolate::Scope isolate_scope(getIsolate());
+  
+  v8::HandleScope handleScope(getIsolate());
+  
+  v8::Local<v8::Context> context = v8::Local<v8::Context>::New(getIsolate(), *getContext());
+  
+  if(context.IsEmpty()){
+    AppConsole::log("Context is empty");
+    return;
+  }
+  
+  v8::Context::Scope ctxScope(context);
+  
+  v8::Local<v8::Function> callback = v8::Local<v8::Function>::New(getIsolate(), sDrawCallback);
+  
+  if( !callback.IsEmpty() ){
     // TODO: call draw callback in v8 context
+    v8::Handle<v8::Value> argv[0] = {};
+    v8::Handle<v8::Object> global = context->Global();
+    
+    if(global.IsEmpty()){
+      AppConsole::log("Global is empty.");
+      return;
+    }
+    
+    callback->Call(global, 0, argv);
   }
 }
 
 void AppModule::drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
-  v8::HandleScope handle_scope(isolate);
+  v8::EscapableHandleScope handleScope(isolate);
   
   if(!args[0]->IsFunction()){
     // TODO: throw js exception
@@ -46,7 +71,8 @@ void AppModule::drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
     return;
   }
   AppConsole::log("draw callback set.");
-  sDrawCallback = args[0].As<v8::Function>();
+  
+  sDrawCallback.Reset(isolate, args[0].As<v8::Function>());
   
   return;
 }

@@ -55,7 +55,9 @@ class AppConsole {
       cinder::TextLayout text;
       text.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
       
-      for(std::vector<std::string>::iterator it = sLines.end() - 10; it != sLines.end(); ++it) {
+      int end = sLines.size() > 10 ? 10 : sLines.size();
+      
+      for(std::vector<std::string>::iterator it = sLines.end() - end; it != sLines.end(); ++it) {
         text.addLine(*it);
         //pos.y -= 15;
       }

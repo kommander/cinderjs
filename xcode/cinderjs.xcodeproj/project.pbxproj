@@ -485,7 +485,7 @@
 					"\"$(V8_PATH_D)/libicudata.a\"",
 					"\"$(V8_PATH_D)/libicui18n.a\"",
 					"\"$(V8_PATH_D)/libicuuc.a\"",
-					"\"$(V8_PATH_D)/libv8_nosnapshot.a\"",
+					"\"$(V8_PATH_D)/libv8_snapshot.a\"",
 					"\"$(V8_PATH_D)/libv8_libbase.a\"",
 					"\"$(V8_PATH_D)/libv8_base.a\"",
 				);

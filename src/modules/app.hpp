@@ -48,7 +48,8 @@ class AppModule : public PipeModule {
   //
   private:
     static void drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static v8::Local<v8::Function> sDrawCallback;
+    static v8::Persistent<v8::Function> sDrawCallback;
+  
  };
   
 } // namespace cjs

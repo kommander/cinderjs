@@ -43,6 +43,7 @@ namespace cjs {
       inline bool addModule( boost::shared_ptr<PipeModule> mod )
       {
         mod->setIsolate( *mIsolate );
+        mod->setContext(&pContext);
         mod->loadGlobalJS( mGlobal );
         MODULES.push_back( mod );
         return true;
@@ -53,6 +54,7 @@ namespace cjs {
       v8::Isolate* mIsolate;
       v8::Local<v8::Context> mMainContext;
       v8::Local<v8::ObjectTemplate> mGlobal;
+      v8::Persistent<v8::Context> pContext;
     
   };
   

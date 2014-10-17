@@ -44,13 +44,21 @@ namespace cjs {
         return mIsolate;
       }
     
+      inline void setContext( v8::Persistent<v8::Context>* context ) {
+        ctx = context;
+      }
+    
+      inline v8::Persistent<v8::Context>* getContext() {
+        return ctx;
+      }
+    
       // Virtual Spec
       virtual void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) = 0;
       virtual void draw() = 0;
     
     private:
       v8::Isolate* mIsolate;
-    
+      v8::Persistent<v8::Context>* ctx;
   };
 }
 
