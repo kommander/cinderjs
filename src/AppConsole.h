@@ -30,6 +30,10 @@ class AppConsole {
   
     inline static void log( std::string str ) {
       sLines.push_back( str );
+      
+      if(sLines.size() > 100){
+  
+      }
       sChanged = true;
     }
     
@@ -51,9 +55,9 @@ class AppConsole {
       cinder::TextLayout text;
       text.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
       
-      for(std::vector<std::string>::iterator it = sLines.begin(); it != sLines.end(); ++it) {
+      for(std::vector<std::string>::iterator it = sLines.end() - 10; it != sLines.end(); ++it) {
         text.addLine(*it);
-        pos.y -= 15;
+        //pos.y -= 15;
       }
     
       cinder::gl::translate(2, pos.y - 100, 0);
