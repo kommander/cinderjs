@@ -32,32 +32,37 @@ v8::Persistent<v8::Function> AppModule::sDrawCallback;
 
 void AppModule::draw(){
   
+  // Isolate
   v8::Isolate::Scope isolate_scope(getIsolate());
-  
   v8::HandleScope handleScope(getIsolate());
   
-  v8::Local<v8::Context> context = v8::Local<v8::Context>::New(getIsolate(), *getContext());
+//  // Context
+//  v8::Local<v8::Context> context = v8::Local<v8::Context>::New(getIsolate(), *getContext());
+//  
+//  if(context.IsEmpty()){
+//    AppConsole::log("Context is empty");
+//    return;
+//  }
+//  
+//  v8::Context::Scope ctxScope(context);
+//  
+//  // Global
+//  v8::Handle<v8::Object> global = context->Global();
+//  
+//  if(global.IsEmpty()){
+//    AppConsole::log("Global is empty.");
+//    return;
+//  }
+
   
-  if(context.IsEmpty()){
-    AppConsole::log("Context is empty");
-    return;
-  }
-  
-  v8::Context::Scope ctxScope(context);
-  
+  // Callback
   v8::Local<v8::Function> callback = v8::Local<v8::Function>::New(getIsolate(), sDrawCallback);
   
   if( !callback.IsEmpty() ){
     // TODO: call draw callback in v8 context
     v8::Handle<v8::Value> argv[0] = {};
-    v8::Handle<v8::Object> global = context->Global();
     
-    if(global.IsEmpty()){
-      AppConsole::log("Global is empty.");
-      return;
-    }
-    
-    callback->Call(global, 0, argv);
+    callback->Call(callback->CreationContext()->Global(), 0, argv);
   }
 }
 
