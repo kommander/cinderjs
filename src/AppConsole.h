@@ -52,12 +52,6 @@ class AppConsole {
       
       cinder::gl::pushMatrices();
       
-      // FPS
-      cinder::TextLayout fpsText;
-      fpsText.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
-      fpsText.addRightLine( "FPS: " + std::to_string( cinder::app::getFrameRate() ) );
-      cinder::gl::draw( cinder::gl::Texture( fpsText.render() ) );
-      
       cinder::TextLayout text;
       text.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
       

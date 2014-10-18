@@ -30,6 +30,7 @@
 		9E7F713319EE0C67002DDCFF /* libicui18n.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E7F713019EE0C67002DDCFF /* libicui18n.dylib */; };
 		9E7F713419EE0C67002DDCFF /* libicuuc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E7F713119EE0C67002DDCFF /* libicuuc.dylib */; };
 		9E7F713519EE0C67002DDCFF /* libv8.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E7F713219EE0C67002DDCFF /* libv8.dylib */; };
+		9E9877F219F1EA19002DC7C8 /* particle.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E9877F119F1EA19002DC7C8 /* particle.js */; };
 		9E9B3E3219F002C200291CDE /* AppConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3019F002C200291CDE /* AppConsole.cpp */; };
 		9E9B3E3519F0122700291CDE /* test.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3419F0122700291CDE /* test.js */; };
 		9E9B3E3C19F022C000291CDE /* app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3819F022C000291CDE /* app.cpp */; };
@@ -69,6 +70,7 @@
 		9E7F713019EE0C67002DDCFF /* libicui18n.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicui18n.dylib; path = ../v8/out/x64.release/libicui18n.dylib; sourceTree = "<group>"; };
 		9E7F713119EE0C67002DDCFF /* libicuuc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicuuc.dylib; path = ../v8/out/x64.release/libicuuc.dylib; sourceTree = "<group>"; };
 		9E7F713219EE0C67002DDCFF /* libv8.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libv8.dylib; path = ../v8/out/x64.release/libv8.dylib; sourceTree = "<group>"; };
+		9E9877F119F1EA19002DC7C8 /* particle.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = particle.js; path = ../examples/particle.js; sourceTree = "<group>"; };
 		9E9B3E3019F002C200291CDE /* AppConsole.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppConsole.cpp; path = ../src/AppConsole.cpp; sourceTree = "<group>"; };
 		9E9B3E3119F002C200291CDE /* AppConsole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppConsole.h; path = ../src/AppConsole.h; sourceTree = "<group>"; };
 		9E9B3E3419F0122700291CDE /* test.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = test.js; path = ../lib/test.js; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 		29B97314FDCFA39411CA2CEA /* cinderjs */ = {
 			isa = PBXGroup;
 			children = (
+				9E9877F019F1EA06002DC7C8 /* examples */,
 				9E9B3E3319F0121D00291CDE /* lib */,
 				01B97315FEAEA392516A2CEA /* Blocks */,
 				29B97315FDCFA39411CA2CEA /* Headers */,
@@ -233,6 +236,14 @@
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9E9877F019F1EA06002DC7C8 /* examples */ = {
+			isa = PBXGroup;
+			children = (
+				9E9877F119F1EA19002DC7C8 /* particle.js */,
+			);
+			name = examples;
 			sourceTree = "<group>";
 		};
 		9E9B3E3319F0121D00291CDE /* lib */ = {
@@ -336,6 +347,7 @@
 			files = (
 				9E9B3E3519F0122700291CDE /* test.js in Resources */,
 				9EAF080919EDC4C600C02F65 /* README.md in Resources */,
+				9E9877F219F1EA19002DC7C8 /* particle.js in Resources */,
 				B6B86EEF243D496CAA6AC588 /* CinderApp.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

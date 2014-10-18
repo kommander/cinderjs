@@ -49,8 +49,24 @@ void GLModule::drawLine(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return;
 }
 
+void GLModule::drawSolidCircle(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::EscapableHandleScope handleScope(isolate);
+  
+  Local<Object> vec1 = args[0].As<Object>();
+  double radius = args[1].As<Object>()->NumberValue();
+  
+  double v1x = vec1->Get(String::NewFromUtf8(isolate, "x"))->NumberValue();
+  double v1y = vec1->Get(String::NewFromUtf8(isolate, "y"))->NumberValue();
+  
+  gl::drawSolidCircle(Vec2f(v1x, v1y), radius);
+  
+  return;
+}
+
 void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   global->Set(v8::String::NewFromUtf8(getIsolate(), "glDrawLine"), v8::FunctionTemplate::New(getIsolate(), drawLine));
+  global->Set(v8::String::NewFromUtf8(getIsolate(), "glDrawSolidCircle"), v8::FunctionTemplate::New(getIsolate(), drawSolidCircle));
 }
   
 } // namespace cjs
