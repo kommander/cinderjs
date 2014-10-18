@@ -31,7 +31,9 @@ using namespace cinder;
 using namespace v8;
 
 namespace cjs {
-  
+
+Vec2f GLModule::bufVec2f_1;
+
 void GLModule::drawLine(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::EscapableHandleScope handleScope(isolate);
@@ -50,16 +52,12 @@ void GLModule::drawLine(const v8::FunctionCallbackInfo<v8::Value>& args) {
 }
 
 void GLModule::drawSolidCircle(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  v8::Isolate* isolate = args.GetIsolate();
-  v8::EscapableHandleScope handleScope(isolate);
   
-  Local<Object> vec1 = args[0].As<Object>();
-  double radius = args[1].As<Object>()->NumberValue();
+  bufVec2f_1.x = args[0]->NumberValue();
+  bufVec2f_1.y = args[1]->NumberValue();
+  double radius = args[2]->NumberValue();
   
-  double v1x = vec1->Get(String::NewFromUtf8(isolate, "x"))->NumberValue();
-  double v1y = vec1->Get(String::NewFromUtf8(isolate, "y"))->NumberValue();
-  
-  gl::drawSolidCircle(Vec2f(v1x, v1y), radius);
+  gl::drawSolidCircle(bufVec2f_1, radius);
   
   return;
 }

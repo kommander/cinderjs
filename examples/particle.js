@@ -147,9 +147,6 @@ var ctxSize = {
 };
 
 var moveParticles = true;
-var mouse = Vec2();
-mouse.down = false;
-var mouseActive = false;
 
 var particles = [];
 function generateParticles( amt ){
@@ -177,30 +174,16 @@ var colorBuf = 0;
 draw(function(){
   for( i = particles.length - 1; i >= 0; i-- ) {
     particle = particles[i];
-    if(!particle) continue;
     if(particle.x < 0 || particle.x > ctxSize.x || particle.y < 0 || particle.y > ctxSize.y){
       particle.reverse();
     }
     if(moveParticles) {
-      var distance = particle.distance(mouse)
-      if(mouseActive && distance < 80) {
-        particle.rgb[0] = 1 - 2 / distance;
-        particle.rgb[1] = 1 - 1 / distance;
-        particle.rgb[2] = 1 - .5 / distance;
-        particle.angleTo(mouse);
-        if(mouse.down) {
-          particle.reverse();
-        }
-        particle.forward(particle.vel * 2 );
-      } else {
-        particle.forward(particle.vel);  
-      }
-      
+      particle.forward(particle.vel);
     }
     //gl.color(particle.rgb[0], particle.rgb[1], particle.rgb[2]);
-    glDrawSolidCircle( particle, particle.radius );
+    glDrawSolidCircle( particle.x, particle.y, particle.radius );
   }
 });
 
 // Add some particles
-generateParticles(10000);
+generateParticles(20000);
