@@ -75,7 +75,7 @@ void CinderjsApp::setup()
   // Init Console
   AppConsole::initialize();
   
-  mV8Thread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8Thread, this ) );
+  //mV8Thread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8Thread, this ) );
   
   // Command line arguments
   vector<std::string> args = getArgs();
@@ -85,7 +85,8 @@ void CinderjsApp::setup()
   
   // TODO: Choose between loading a script from asset folder or specified in command line
   #ifdef DEBUG
-  std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/lib/test.js";
+  //std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/lib/test.js";
+  std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js";
   #else
   std::string jsMainFile;
   #endif
@@ -128,6 +129,9 @@ void CinderjsApp::setup()
   }
   
   // Initialize V8 (implicit initialization was removed in an earlier revision)
+  v8::V8::InitializeICU();
+  //v8::Platform* platform;
+  //v8::V8::InitializePlatform(platform);
   V8::Initialize();
   
   // Create a new Isolate and make it the current one.
@@ -218,10 +222,16 @@ void CinderjsApp::draw()
     it->get()->draw();
   }
   
+  // FPS
+  cinder::TextLayout fpsText;
+  fpsText.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
+  fpsText.addRightLine( "FPS: " + std::to_string( cinder::app::AppBasic::getAverageFps() ) );
+  cinder::gl::draw( cinder::gl::Texture( fpsText.render() ) );
+  
   // Draw console (TODO: if active)
-  Vec2f cPos;
-  cPos.y = getWindowHeight();
-  AppConsole::draw( cPos );
+//  Vec2f cPos;
+//  cPos.y = getWindowHeight();
+//  AppConsole::draw( cPos );
 }
   
 } // namespace cjs

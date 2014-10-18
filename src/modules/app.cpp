@@ -49,7 +49,7 @@ void AppModule::draw(){
 
 void AppModule::drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
-  v8::EscapableHandleScope handleScope(isolate);
+  v8::HandleScope handleScope(isolate);
   
   if(!args[0]->IsFunction()){
     // TODO: throw js exception

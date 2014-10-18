@@ -50,7 +50,8 @@ class GLModule : public PipeModule {
   
     // Exposed
     static void drawLine(const v8::FunctionCallbackInfo<v8::Value>& args);
-    
+    static void drawSolidCircle(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
   private:
     //
   
