@@ -44,12 +44,19 @@ class AppModule : public PipeModule {
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
   
     void draw();
+    void mouseMove( cinder::app::MouseEvent evt );
+    void mouseDown( cinder::app::MouseEvent evt ){}
   
   //
   private:
-    static void drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static v8::Persistent<v8::Function> sDrawCallback;
   
+    // Bindings
+    static void drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void rawEventCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
+    // Callbacks
+    static v8::Persistent<v8::Function> sDrawCallback;
+    static v8::Persistent<v8::Function> sEventCallback;
  };
   
 } // namespace cjs

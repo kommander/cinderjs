@@ -27,6 +27,8 @@
 #include <boost/shared_array.hpp>
 #include <boost/shared_ptr.hpp>
 
+#include "cinder/app/Event.h"
+
 #include "v8.h"
 
 namespace cjs {
@@ -55,6 +57,8 @@ namespace cjs {
       // Virtual Spec
       virtual void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) = 0;
       virtual void draw() = 0;
+      virtual void mouseMove( cinder::app::MouseEvent ) = 0;
+      virtual void mouseDown( cinder::app::MouseEvent ) = 0;
     
     private:
       v8::Isolate* mIsolate;

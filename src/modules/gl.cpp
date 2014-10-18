@@ -39,8 +39,6 @@ Vec2f GLModule::bufVec2f_2;
  * drawLine( sx, sy, ex, ey );
  */
 void GLModule::drawLine(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  //v8::Isolate* isolate = args.GetIsolate();
-  //v8::EscapableHandleScope handleScope(isolate);
   
   bufVec2f_1.x = args[0]->NumberValue();
   bufVec2f_1.y = args[1]->NumberValue();

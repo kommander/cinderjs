@@ -149,6 +149,8 @@ var ctxSize = {
 var moveParticles = true;
 var drawMethod = 1;
 var lastParticle;
+var mouse = new Vec2();
+var mouseActive = true;
 
 var particles = [];
 function generateParticles( amt ){
@@ -174,14 +176,26 @@ var particle;
 var i;
 var colorBuf = 0;
 
-draw(function(){
+app.draw(function(){
   for( i = particles.length - 1; i >= 0; i-- ) {
     particle = particles[i];
     if(particle.x < 0 || particle.x > ctxSize.x || particle.y < 0 || particle.y > ctxSize.y){
       particle.reverse();
     }
     if(moveParticles) {
-      particle.forward(particle.vel);
+      var distance = particle.distance(mouse)
+      if(mouseActive && distance < 80) {
+        particle.rgb[0] = 1 - 2 / distance;
+        particle.rgb[1] = 1 - 1 / distance;
+        particle.rgb[2] = 1 - .5 / distance;
+        particle.angleTo(mouse);
+        if(mouse.down) {
+          particle.reverse();
+        }
+        particle.forward(particle.vel * 2 );
+      } else {
+        particle.forward(particle.vel);  
+      }
     }
     //gl.color(particle.rgb[0], particle.rgb[1], particle.rgb[2]);
     
@@ -194,5 +208,12 @@ draw(function(){
   }
 });
 
+app.rawEvent(function( type ){
+  if(type == 1) { // MouseMove
+    mouse.x = arguments[1];
+    mouse.y = arguments[2];
+  }
+});
+
 // Add some particles
-generateParticles(200);
+generateParticles(2000);

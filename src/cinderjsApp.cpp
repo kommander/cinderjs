@@ -46,6 +46,7 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   
 	void setup();
 	void mouseDown( MouseEvent event );	
+	void mouseMove( MouseEvent event );
 	void update();
 	void draw();
   
@@ -145,10 +146,13 @@ void CinderjsApp::setup()
   // Set general globals for JS
   mGlobal = ObjectTemplate::New();
   
+  
+  //
   // Load Modules
   addModule(boost::shared_ptr<AppModule>( new AppModule() ));
   addModule(boost::shared_ptr<GLModule>( new GLModule() ));
   addModule(boost::shared_ptr<ConsoleModule>( new ConsoleModule() ));
+  
   
   // Create a new context.
   //mMainContext = Context::New(mIsolate, NULL, mGlobal);
@@ -205,8 +209,20 @@ void CinderjsApp::v8Thread(){
   ThreadSetup threadSetup;
 }
 
+void CinderjsApp::mouseMove( MouseEvent event )
+{
+  // Push event to modules
+  for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
+    it->get()->mouseMove( event );
+  }
+}
+
 void CinderjsApp::mouseDown( MouseEvent event )
 {
+  // Push event to modules
+  for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
+    it->get()->mouseDown( event );
+  }
 }
 
 void CinderjsApp::update()
