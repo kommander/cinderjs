@@ -487,7 +487,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
 					"\"$(CINDER_PATH)/boost\"",
-					"\"$(V8_PATH)/include\"",
+					"\"$(V8_PATH)\"",
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -500,6 +500,7 @@
 					"\"$(V8_PATH_D)/libv8_snapshot.a\"",
 					"\"$(V8_PATH_D)/libv8_libbase.a\"",
 					"\"$(V8_PATH_D)/libv8_base.a\"",
+					"\"$(V8_PATH_D)/libv8_libplatform.a\"",
 				);
 				PRODUCT_NAME = cinderjs;
 				SYMROOT = ./build;
@@ -531,7 +532,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
 					"\"$(CINDER_PATH)/boost\"",
-					"\"$(V8_PATH)/include\"",
+					"\"$(V8_PATH)\"",
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -544,6 +545,7 @@
 					"\"$(V8_PATH_R)/libv8_nosnapshot.a\"",
 					"\"$(V8_PATH_R)/libv8_libbase.a\"",
 					"\"$(V8_PATH_R)/libv8_base.a\"",
+					"\"$(V8_PATH_R)/libv8_libplatform.a\"",
 				);
 				PRODUCT_NAME = cinderjs;
 				STRIP_INSTALLED_PRODUCT = YES;

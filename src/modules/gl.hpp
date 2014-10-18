@@ -54,6 +54,7 @@ class GLModule : public PipeModule {
   
   private:
     //
+    static Vec2f bufVec2f_1;
   
 };
   

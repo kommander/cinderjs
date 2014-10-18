@@ -15,6 +15,7 @@
 #include "CinderAppBase.hpp"
 
 #include "v8.h"
+#include "libplatform/libplatform.h"
 
 // Modules
 #include "modules/app.hpp"
@@ -130,8 +131,8 @@ void CinderjsApp::setup()
   
   // Initialize V8 (implicit initialization was removed in an earlier revision)
   v8::V8::InitializeICU();
-  //v8::Platform* platform;
-  //v8::V8::InitializePlatform(platform);
+  v8::Platform* platform = v8::platform::CreateDefaultPlatform(4);
+  v8::V8::InitializePlatform(platform);
   V8::Initialize();
   
   // Create a new Isolate and make it the current one.
@@ -229,9 +230,9 @@ void CinderjsApp::draw()
   cinder::gl::draw( cinder::gl::Texture( fpsText.render() ) );
   
   // Draw console (TODO: if active)
-//  Vec2f cPos;
-//  cPos.y = getWindowHeight();
-//  AppConsole::draw( cPos );
+  Vec2f cPos;
+  cPos.y = getWindowHeight();
+  AppConsole::draw( cPos );
 }
   
 } // namespace cjs
