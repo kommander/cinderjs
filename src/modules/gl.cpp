@@ -51,6 +51,9 @@ void GLModule::drawLine(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return;
 }
 
+/**
+ * drawSolidCircle( cx, cy, radius );
+ */
 void GLModule::drawSolidCircle(const v8::FunctionCallbackInfo<v8::Value>& args) {
   
   bufVec2f_1.x = args[0]->NumberValue();
@@ -63,8 +66,15 @@ void GLModule::drawSolidCircle(const v8::FunctionCallbackInfo<v8::Value>& args) 
 }
 
 void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
-  global->Set(v8::String::NewFromUtf8(getIsolate(), "glDrawLine"), v8::FunctionTemplate::New(getIsolate(), drawLine));
-  global->Set(v8::String::NewFromUtf8(getIsolate(), "glDrawSolidCircle"), v8::FunctionTemplate::New(getIsolate(), drawSolidCircle));
+  // Create global gl object
+  Handle<ObjectTemplate> glTemplate = ObjectTemplate::New(getIsolate());
+  
+  // gl methods
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawLine"), v8::FunctionTemplate::New(getIsolate(), drawLine));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawSolidCircle"), v8::FunctionTemplate::New(getIsolate(), drawSolidCircle));
+  
+  // Expose global gl object
+  global->Set(v8::String::NewFromUtf8(getIsolate(), "gl"), glTemplate);
 }
   
 } // namespace cjs

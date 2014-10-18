@@ -181,7 +181,7 @@ draw(function(){
       particle.forward(particle.vel);
     }
     //gl.color(particle.rgb[0], particle.rgb[1], particle.rgb[2]);
-    glDrawSolidCircle( particle.x, particle.y, particle.radius );
+    gl.drawSolidCircle( particle.x, particle.y, particle.radius );
   }
 });
 
