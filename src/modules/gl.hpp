@@ -48,6 +48,9 @@ class GLModule : public PipeModule {
   
     void draw(){}
   
+    // Exposed
+    static void drawLine(const v8::FunctionCallbackInfo<v8::Value>& args);
+    
   private:
     //
   

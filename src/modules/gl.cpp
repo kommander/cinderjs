@@ -28,11 +28,29 @@
 
 using namespace std;
 using namespace cinder;
+using namespace v8;
 
 namespace cjs {
   
-void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
+void GLModule::drawLine(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::EscapableHandleScope handleScope(isolate);
   
+  Local<Object> vec1 = args[0].As<Object>();
+  Local<Object> vec2 = args[1].As<Object>();
+  
+  double v1x = vec1->Get(String::NewFromUtf8(isolate, "x"))->NumberValue();
+  double v1y = vec1->Get(String::NewFromUtf8(isolate, "y"))->NumberValue();
+  double v2x = vec2->Get(String::NewFromUtf8(isolate, "x"))->NumberValue();
+  double v2y = vec2->Get(String::NewFromUtf8(isolate, "y"))->NumberValue();
+  
+  gl::drawLine(Vec2f(v1x, v1y), Vec2f(v2x, v2y));
+  
+  return;
+}
+
+void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
+  global->Set(v8::String::NewFromUtf8(getIsolate(), "glDrawLine"), v8::FunctionTemplate::New(getIsolate(), drawLine));
 }
   
 } // namespace cjs

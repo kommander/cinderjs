@@ -83,6 +83,7 @@ void CinderjsApp::setup()
   mCwd = boost::filesystem::current_path();
   AppConsole::log("Current Path: " + mCwd.string());
   
+  // TODO: Choose between loading a script from asset folder or specified in command line
   #ifdef DEBUG
   std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/lib/test.js";
   #else
