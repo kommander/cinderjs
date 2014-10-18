@@ -20,6 +20,12 @@
 #include <vector>
 #include <string>
 
+/**
+ * AppConsole
+ * Provides a visual logging interface component for the GL render context
+ * TODO: Optimize, currently very energy hungry due to the constant texture creation
+ */
+
 namespace cjs {
 
 class AppConsole {
