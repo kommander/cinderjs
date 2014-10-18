@@ -223,7 +223,7 @@ void CinderjsApp::draw()
     it->get()->draw();
   }
   
-  // FPS
+  // FPS (TODO: if active)
   cinder::TextLayout fpsText;
   fpsText.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
   fpsText.addRightLine( "FPS: " + std::to_string( cinder::app::AppBasic::getAverageFps() ) );
