@@ -33,20 +33,21 @@ using namespace v8;
 namespace cjs {
 
 Vec2f GLModule::bufVec2f_1;
+Vec2f GLModule::bufVec2f_2;
 
+/**
+ * drawLine( sx, sy, ex, ey );
+ */
 void GLModule::drawLine(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  v8::Isolate* isolate = args.GetIsolate();
-  v8::EscapableHandleScope handleScope(isolate);
+  //v8::Isolate* isolate = args.GetIsolate();
+  //v8::EscapableHandleScope handleScope(isolate);
   
-  Local<Object> vec1 = args[0].As<Object>();
-  Local<Object> vec2 = args[1].As<Object>();
+  bufVec2f_1.x = args[0]->NumberValue();
+  bufVec2f_1.y = args[1]->NumberValue();
+  bufVec2f_2.x = args[2]->NumberValue();
+  bufVec2f_2.y = args[3]->NumberValue();
   
-  double v1x = vec1->Get(String::NewFromUtf8(isolate, "x"))->NumberValue();
-  double v1y = vec1->Get(String::NewFromUtf8(isolate, "y"))->NumberValue();
-  double v2x = vec2->Get(String::NewFromUtf8(isolate, "x"))->NumberValue();
-  double v2y = vec2->Get(String::NewFromUtf8(isolate, "y"))->NumberValue();
-  
-  gl::drawLine(Vec2f(v1x, v1y), Vec2f(v2x, v2y));
+  gl::drawLine(bufVec2f_1, bufVec2f_2);
   
   return;
 }

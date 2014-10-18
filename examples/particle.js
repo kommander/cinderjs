@@ -147,12 +147,15 @@ var ctxSize = {
 };
 
 var moveParticles = true;
+var drawMethod = 1;
+var lastParticle;
 
 var particles = [];
 function generateParticles( amt ){
   for( var i = amt; i > 0; i-- ) {
     particles.push( newParticle() );
   }
+  lastParticle = particles[0];
 }
 
 function newParticle(){
@@ -181,9 +184,15 @@ draw(function(){
       particle.forward(particle.vel);
     }
     //gl.color(particle.rgb[0], particle.rgb[1], particle.rgb[2]);
-    gl.drawSolidCircle( particle.x, particle.y, particle.radius );
+    
+    if(drawMethod == 0) {
+     gl.drawSolidCircle( particle.x, particle.y, particle.radius );
+    } else if(drawMethod == 1) {
+      gl.drawLine(lastParticle.x, lastParticle.y, particle.x, particle.y);
+      lastParticle = particle;
+    }
   }
 });
 
 // Add some particles
-generateParticles(20000);
+generateParticles(200);

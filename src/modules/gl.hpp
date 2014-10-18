@@ -55,7 +55,7 @@ class GLModule : public PipeModule {
   private:
     //
     static Vec2f bufVec2f_1;
-  
+    static Vec2f bufVec2f_2;
 };
   
 } // namespace cjs
