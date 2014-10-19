@@ -105,7 +105,8 @@ void CinderjsApp::setup()
   // TODO: Choose between loading a script from asset folder or specified in command line
   #ifdef DEBUG
   //std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/lib/test.js";
-  std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js";
+  //std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js";
+  std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js";
   #else
   std::string jsMainFile;
   #endif
