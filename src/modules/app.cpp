@@ -43,17 +43,25 @@ void AppModule::draw(){
   
   // Callback
   v8::Local<v8::Function> callback = v8::Local<v8::Function>::New(getIsolate(), sDrawCallback);
-
+  
+  v8::Local<v8::Context> context = v8::Local<v8::Context>::New(getIsolate(), *getContext());
+  
+  if(context.IsEmpty()) return;
+  
+  Context::Scope ctxScope(context);
+  context->Enter();
+  
   if( !callback.IsEmpty() ){
     // TODO: call draw callback in v8 context
     v8::Handle<v8::Value> argv[0] = {};
     
-    callback->Call(callback->CreationContext()->Global(), 0, argv);
+    callback->Call(context->Global(), 0, argv);
     
     callback.Clear();
     argv->Clear();
   }
   
+  context->Exit();
 }
 
 /**
