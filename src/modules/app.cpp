@@ -102,6 +102,8 @@ void AppModule::rawEventCallback(const v8::FunctionCallbackInfo<v8::Value>& args
  * Handle a mouse move event on the application and push it to v8
  */
 void AppModule::mouseMove(cinder::app::MouseEvent evt){
+  v8::Locker lock(getIsolate());
+
   // Isolate
   v8::Isolate::Scope isolate_scope(getIsolate());
   v8::HandleScope handleScope(getIsolate());

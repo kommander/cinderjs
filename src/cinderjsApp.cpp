@@ -17,6 +17,10 @@
 #include "v8.h"
 #include "libplatform/libplatform.h"
 
+#ifdef __APPLE__
+#include <OpenGL/OpenGL.h>
+#endif
+
 // Modules
 #include "modules/app.hpp"
 #include "modules/gl.hpp"
@@ -42,6 +46,8 @@ typedef boost::filesystem::path Path;
 class CinderjsApp : public AppNative, public CinderAppBase  {
   public:
   ~CinderjsApp(){
+    mShouldQuit = true;
+    
     v8::V8::Dispose();
     
     // Shutdown v8Thread
@@ -57,12 +63,18 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
 	void update();
 	void draw();
   
-  void v8Thread();
+  void v8Thread( CGLContextObj currCtx );
   void runJS( std::string scriptStr );
   Local<Context> createMainContext(Isolate* isolate);
   
   private:
   
+  volatile bool mShouldQuit;
+  std::mutex mMainMutex;
+  std::condition_variable cvJSThread;
+  std::condition_variable cvMainThread;
+  volatile bool _v8Run = false;
+  volatile bool _mainRun = false;
   // Path
   Path mCwd;
   
@@ -92,8 +104,6 @@ void CinderjsApp::setup()
 {
   // Init Console
   AppConsole::initialize();
-  
-  //mV8Thread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8Thread, this ) );
   
   // Command line arguments
   vector<std::string> args = getArgs();
@@ -180,6 +190,10 @@ void CinderjsApp::setup()
   if( jsFileContents.length() > 0 ){
     runJS( jsFileContents );
   }
+  
+  CGLContextObj currCtx = CGLGetCurrentContext();
+  mV8Thread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8Thread, this, currCtx ) );
+  
 }
 
 Local<Context> CinderjsApp::createMainContext(Isolate* isolate) {
@@ -224,8 +238,40 @@ void CinderjsApp::runJS( std::string scriptStr ){
   
 }
 
-void CinderjsApp::v8Thread(){
+void CinderjsApp::v8Thread( CGLContextObj currCtx ){
   ThreadSetup threadSetup;
+  
+  CGLSetCurrentContext( currCtx );  //also important as it now sets newly created context for use in this thread
+  CGLEnable( currCtx, kCGLCEMPEngine ); //Apple's magic sauce that allows this OpenGL context  to run in a thread
+  
+  //
+  // Render Loop, do work if available
+  while( !mShouldQuit ) {
+    
+    // Wait for data to be processed...
+    {
+        std::unique_lock<std::mutex> lck( mMainMutex );
+        cvJSThread.wait(lck, [this]{ return _v8Run; });
+    }
+    
+    CGLLockContext( currCtx ); //not sure if this is necessary but Apple's docs seem to suggest it
+    
+    v8::Locker lock(mIsolate);
+    
+    // Draw modules
+    for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
+      it->get()->draw();
+    }
+    
+    CGLUnlockContext( currCtx );
+    
+    _v8Run = false;
+    _mainRun = true;
+    cvMainThread.notify_one();
+  }
+  
+  CGLDisable( currCtx, kCGLCEMPEngine );
+  
 }
 
 void CinderjsApp::mouseMove( MouseEvent event )
@@ -253,9 +299,13 @@ void CinderjsApp::draw()
 	// clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) );
   
-  // Draw modules
-  for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
-    it->get()->draw();
+  _v8Run = true;
+  cvJSThread.notify_one();
+  
+  // Wait for v8 thread to return...
+  {
+      std::unique_lock<std::mutex> lck( mMainMutex );
+      cvMainThread.wait(lck, [this]{ return _mainRun; });
   }
   
   // FPS (TODO: if active)
@@ -268,6 +318,8 @@ void CinderjsApp::draw()
   Vec2f cPos;
   cPos.y = getWindowHeight();
   AppConsole::draw( cPos );
+  
+  _mainRun = false;
 }
   
 } // namespace cjs
