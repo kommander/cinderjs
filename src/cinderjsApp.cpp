@@ -31,7 +31,14 @@ using namespace v8;
 namespace cjs {
 
 typedef boost::filesystem::path Path;
-  
+
+// TODO
+// - Use getIsolate()->AddGCPrologueCallback(<#GCPrologueCallback callback#>) to switch isolates/context on GC
+// - move v8 init to main to have a global handlescope (only osx support atm)
+// - Split cinderjsApp in header file
+// - load js modules with wrapper: "function (module, exports, __filename, ...) {"
+// - Expose versions object (cinder, v8, cinderjs)
+
 class CinderjsApp : public AppNative, public CinderAppBase  {
   public:
   ~CinderjsApp(){
@@ -64,8 +71,17 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   
   //static void LogCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
-
+  
+  // GC
+  static void gcEpilogueCb(Isolate *isolate, GCType type, GCCallbackFlags flags);
+  static int sGCRuns;
 };
+
+int CinderjsApp::sGCRuns = 0;
+void CinderjsApp::gcEpilogueCb(Isolate *isolate, GCType type, GCCallbackFlags flags) {
+  sGCRuns++;
+  //AppConsole::log("GC Epilogue " + std::to_string(sGCRuns));
+}
 
 /**
  * Setup
@@ -139,6 +155,9 @@ void CinderjsApp::setup()
   // Create a new Isolate and make it the current one.
   mIsolate = Isolate::New();
   Isolate::Scope isolate_scope(mIsolate);
+  
+  mIsolate->AddGCPrologueCallback(gcEpilogueCb);
+  
   
   // Create a stack-allocated handle scope.
   HandleScope handle_scope(mIsolate);

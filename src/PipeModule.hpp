@@ -33,6 +33,10 @@
 
 namespace cjs {
   
+  // TODO:
+  // - provide base methods to register as callback for draw, mouse/key events etc. -> registerMouseMove() -> vector<PipeModule> _mouseMoveModules;
+  // - force modules to have a name which they can be identified with
+  
   class PipeModule {
     public:
       PipeModule(){}

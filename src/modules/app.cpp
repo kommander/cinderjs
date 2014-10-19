@@ -43,13 +43,17 @@ void AppModule::draw(){
   
   // Callback
   v8::Local<v8::Function> callback = v8::Local<v8::Function>::New(getIsolate(), sDrawCallback);
-  
+
   if( !callback.IsEmpty() ){
     // TODO: call draw callback in v8 context
     v8::Handle<v8::Value> argv[0] = {};
     
     callback->Call(callback->CreationContext()->Global(), 0, argv);
+    
+    callback.Clear();
+    argv->Clear();
   }
+  
 }
 
 /**
@@ -60,13 +64,15 @@ void AppModule::drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::HandleScope handleScope(isolate);
   
   if(!args[0]->IsFunction()){
-    // TODO: throw js exception
-    AppConsole::log("draw callback expects one argument of type function.");
+    // throw js exception
+    isolate->ThrowException(v8::String::NewFromUtf8(isolate, "draw callback expects one argument of type function."));
     return;
   }
   AppConsole::log("draw callback set.");
   
   sDrawCallback.Reset(isolate, args[0].As<v8::Function>());
+  
+  // TODO: strip drawCallback from global obj, so only one main loop can be used
   
   return;
 }
@@ -79,13 +85,15 @@ void AppModule::rawEventCallback(const v8::FunctionCallbackInfo<v8::Value>& args
   v8::HandleScope handleScope(isolate);
   
   if(!args[0]->IsFunction()){
-    // TODO: throw js exception
-    AppConsole::log("event callback expects one argument of type function.");
+    // throw js exception
+    isolate->ThrowException(v8::String::NewFromUtf8(isolate, "event callback expects one argument of type function."));
     return;
   }
   AppConsole::log("event callback set.");
   
   sEventCallback.Reset(isolate, args[0].As<v8::Function>());
+  
+  // TODO: Remove event callback setter function from global context
   
   return;
 }

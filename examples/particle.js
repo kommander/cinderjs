@@ -175,6 +175,7 @@ removeParticles = function( amt ) {
 var particle;
 var i;
 var colorBuf = 0;
+var distance;
 
 app.draw(function(){
   for( i = particles.length - 1; i >= 0; i-- ) {
@@ -183,7 +184,7 @@ app.draw(function(){
       particle.reverse();
     }
     if(moveParticles) {
-      var distance = particle.distance(mouse)
+      distance = particle.distance(mouse)
       if(mouseActive && distance < 80) {
         particle.rgb[0] = 1 - 2 / distance;
         particle.rgb[1] = 1 - 1 / distance;
