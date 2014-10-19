@@ -73,14 +73,15 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   static void drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
   
   // GC
-  static void gcEpilogueCb(Isolate *isolate, GCType type, GCCallbackFlags flags);
+  static void gcPrologueCb(Isolate *isolate, GCType type, GCCallbackFlags flags);
   static int sGCRuns;
 };
 
 int CinderjsApp::sGCRuns = 0;
-void CinderjsApp::gcEpilogueCb(Isolate *isolate, GCType type, GCCallbackFlags flags) {
+void CinderjsApp::gcPrologueCb(Isolate *isolate, GCType type, GCCallbackFlags flags) {
   sGCRuns++;
-  //AppConsole::log("GC Epilogue " + std::to_string(sGCRuns));
+  //AppConsole::log("GC Prologue " + std::to_string(sGCRuns));
+  std::cout << "GC Prologue " << std::to_string(sGCRuns) << std::endl;
 }
 
 /**
@@ -156,7 +157,7 @@ void CinderjsApp::setup()
   mIsolate = Isolate::New();
   Isolate::Scope isolate_scope(mIsolate);
   
-  mIsolate->AddGCPrologueCallback(gcEpilogueCb);
+  mIsolate->AddGCPrologueCallback(gcPrologueCb);
   
   
   // Create a stack-allocated handle scope.
