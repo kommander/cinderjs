@@ -47,6 +47,11 @@ void GLModule::drawLine(const v8::FunctionCallbackInfo<v8::Value>& args) {
   
   gl::drawLine(bufVec2f_1, bufVec2f_2);
   
+  args[0].Clear();
+  args[1].Clear();
+  args[2].Clear();
+  args[3].Clear();
+  
   return;
 }
 
