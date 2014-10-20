@@ -62,6 +62,7 @@ void AppModule::draw(){
  */
 void AppModule::drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
+  v8::Locker lock(isolate);
   v8::HandleScope handleScope(isolate);
   
   if(!args[0]->IsFunction()){
@@ -83,6 +84,7 @@ void AppModule::drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
  */
 void AppModule::rawEventCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
+  v8::Locker lock(isolate);
   v8::HandleScope handleScope(isolate);
   
   if(!args[0]->IsFunction()){

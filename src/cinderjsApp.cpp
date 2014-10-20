@@ -73,6 +73,11 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   
   private:
   
+  volatile int v8Frames = 0;
+  volatile double v8FPS = 0;
+  volatile int mLastUpdate = 0;
+  volatile int mUpdateInterval = 1000;
+  
   volatile bool mShouldQuit;
   std::mutex mMainMutex;
   std::condition_variable cvJSThread;
@@ -168,6 +173,7 @@ void CinderjsApp::setup()
   
   // Create a new Isolate and make it the current one.
   mIsolate = Isolate::New();
+  v8::Locker lock(mIsolate);
   Isolate::Scope isolate_scope(mIsolate);
   
   mIsolate->AddGCPrologueCallback(gcEpilogueCb);
@@ -259,7 +265,16 @@ void CinderjsApp::v8Thread( CGLContextObj currCtx ){
     }
     
     if(!mShouldQuit){
-    
+      
+      // Gather some info...
+      double now = getElapsedSeconds() * 1000;
+      double elapsed = now - mLastUpdate;
+      if(elapsed > mUpdateInterval) {
+        v8FPS = v8Frames;
+        v8Frames = 0;
+        mLastUpdate = now;
+      }
+  
       CGLLockContext( currCtx ); //not sure if this is necessary but Apple's docs seem to suggest it
       
       v8::Locker lock(mIsolate);
@@ -278,12 +293,15 @@ void CinderjsApp::v8Thread( CGLContextObj currCtx ){
       cinder::TextLayout fpsText;
       fpsText.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
       fpsText.addRightLine( "FPS: " + std::to_string( cinder::app::AppBasic::getAverageFps() ) );
+      fpsText.addRightLine( "v8FPS: " + std::to_string( v8FPS ) );
       cinder::gl::draw( cinder::gl::Texture( fpsText.render() ) );
+//
+//      // Draw console (TODO: if active)
+//      Vec2f cPos;
+//      cPos.y = getWindowHeight();
+//      AppConsole::draw( cPos );
       
-      // Draw console (TODO: if active)
-      Vec2f cPos;
-      cPos.y = getWindowHeight();
-      AppConsole::draw( cPos );
+      v8Frames++;
       
       CGLUnlockContext( currCtx );
     }
