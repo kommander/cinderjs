@@ -17,6 +17,6 @@ var loop = function(){
   }
 }
 
-app.draw(function(){
+__draw__(function(){
   loop();
 });

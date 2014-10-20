@@ -42,10 +42,7 @@ class ConsoleModule : public PipeModule {
     }
   
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
-  
     void draw(){}
-    void mouseMove( cinder::app::MouseEvent evt ){}
-    void mouseDown( cinder::app::MouseEvent evt ){}
   
   //
   private:

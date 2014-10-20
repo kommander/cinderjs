@@ -218,10 +218,8 @@ __draw__(function(mx, my){
 });
 
 rawEvent(function( type ){
-  if(type == 1) { // MouseMove
-    
-  }
+  // TODO: rename to __event__ and encapsulate in event.js module
 });
 
 // Add some particles
-generateParticles(20000);
+generateParticles(2000);
