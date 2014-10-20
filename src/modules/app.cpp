@@ -124,6 +124,8 @@ void AppModule::mouseMove(cinder::app::MouseEvent evt){
     
     callback->Call(callback->CreationContext()->Global(), 3, argv);
   }
+  
+  v8::Unlocker unlock(getIsolate());
 }
 
 /**

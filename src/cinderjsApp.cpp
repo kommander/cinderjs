@@ -57,6 +57,12 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
       mV8Thread.reset();
     }
     
+    // Shutdown v8Thread
+    if( mV8RenderThread ) {
+      mV8RenderThread->join();
+      mV8RenderThread.reset();
+    }
+    
     v8::V8::Dispose();
     
   }
@@ -67,7 +73,8 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
 	void update();
 	void draw();
   
-  void v8Thread( CGLContextObj currCtx );
+  void v8Thread( std::string jsFileContents );
+  void v8RenderThread();
   void runJS( std::string scriptStr );
   Local<Context> createMainContext(Isolate* isolate);
   
@@ -82,12 +89,15 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   std::mutex mMainMutex;
   std::condition_variable cvJSThread;
   volatile bool _v8Run = false;
-
+  
+  RendererRef glRenderer;
+  
   // Path
   Path mCwd;
   
   // V8
   std::shared_ptr<std::thread> mV8Thread;
+  std::shared_ptr<std::thread> mV8RenderThread;
   
   //static void LogCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -164,44 +174,14 @@ void CinderjsApp::setup()
     }
   }
   
-  // Initialize V8 (implicit initialization was removed in an earlier revision)
-  v8::V8::InitializeICU();
-  v8::Platform* platform = v8::platform::CreateDefaultPlatform(4);
-  v8::V8::InitializePlatform(platform);
-  V8::Initialize();
   
-  // Create a new Isolate and make it the current one.
-  mIsolate = Isolate::New();
-  v8::Locker lock(mIsolate);
-  Isolate::Scope isolate_scope(mIsolate);
+  // clear out the window with black
+  gl::clear( Color( 0, 0, 0 ) );
   
-  mIsolate->AddGCPrologueCallback(gcEpilogueCb);
+  glRenderer = getRenderer();
   
-  
-  // Create a stack-allocated handle scope.
-  HandleScope handle_scope(mIsolate);
-  
-  // Set general globals for JS
-  mGlobal = ObjectTemplate::New();
-  
-  
-  //
-  // Load Modules
-  addModule(boost::shared_ptr<AppModule>( new AppModule() ));
-  addModule(boost::shared_ptr<GLModule>( new GLModule() ));
-  addModule(boost::shared_ptr<ConsoleModule>( new ConsoleModule() ));
-  
-  
-  // Create a new context.
-  //mMainContext = Context::New(mIsolate, NULL, mGlobal);
-  mMainContext = createMainContext(mIsolate);
-  
-  if( jsFileContents.length() > 0 ){
-    runJS( jsFileContents );
-  }
-  
-  CGLContextObj currCtx = CGLGetCurrentContext();
-  mV8Thread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8Thread, this, currCtx ) );
+  //CGLContextObj currCtx = CGLGetCurrentContext();
+  mV8Thread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8Thread, this, jsFileContents ) );
   
 }
 
@@ -247,9 +227,52 @@ void CinderjsApp::runJS( std::string scriptStr ){
   
 }
 
-void CinderjsApp::v8Thread( CGLContextObj currCtx ){
+void CinderjsApp::v8Thread( std::string jsFileContents ){
   ThreadSetup threadSetup;
   
+  // Initialize V8 (implicit initialization was removed in an earlier revision)
+  v8::V8::InitializeICU();
+  v8::Platform* platform = v8::platform::CreateDefaultPlatform(4);
+  v8::V8::InitializePlatform(platform);
+  V8::Initialize();
+  
+  // Create a new Isolate and make it the current one.
+  mIsolate = Isolate::New();
+  v8::Locker lock(mIsolate);
+  Isolate::Scope isolate_scope(mIsolate);
+  
+  mIsolate->AddGCPrologueCallback(gcEpilogueCb);
+  
+  
+  // Create a stack-allocated handle scope.
+  HandleScope handle_scope(mIsolate);
+  
+  // Set general globals for JS
+  mGlobal = ObjectTemplate::New();
+  
+  
+  //
+  // Load Modules
+  addModule(boost::shared_ptr<AppModule>( new AppModule() ));
+  addModule(boost::shared_ptr<GLModule>( new GLModule() ));
+  addModule(boost::shared_ptr<ConsoleModule>( new ConsoleModule() ));
+  
+  
+  // Create a new context.
+  //mMainContext = Context::New(mIsolate, NULL, mGlobal);
+  mMainContext = createMainContext(mIsolate);
+  
+  if( jsFileContents.length() > 0 ){
+    runJS( jsFileContents );
+  }
+
+  mV8RenderThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8RenderThread, this ) );
+}
+
+void CinderjsApp::v8RenderThread(){
+  ThreadSetup threadSetup;
+  
+  CGLContextObj currCtx = glRenderer->getCglContext();
   CGLSetCurrentContext( currCtx );  //also important as it now sets newly created context for use in this thread
   CGLEnable( currCtx, kCGLCEMPEngine ); //Apple's magic sauce that allows this OpenGL context  to run in a thread
   
@@ -302,6 +325,7 @@ void CinderjsApp::v8Thread( CGLContextObj currCtx ){
       
       v8Frames++;
       
+      //glRenderer->finishDraw();
       CGLUnlockContext( currCtx );
     }
     
