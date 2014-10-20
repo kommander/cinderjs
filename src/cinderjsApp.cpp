@@ -89,6 +89,8 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   std::mutex mMainMutex;
   std::condition_variable cvJSThread;
   volatile bool _v8Run = false;
+  std::condition_variable cvMainThread;
+  volatile bool _mainRun = false;
   
   RendererRef glRenderer;
   
@@ -330,6 +332,8 @@ void CinderjsApp::v8RenderThread(){
     }
     
     _v8Run = false;
+    _mainRun = true;
+    cvMainThread.notify_one();
   }
   
   std::cout << "V8 Render thread ending" << std::endl;
@@ -366,6 +370,13 @@ void CinderjsApp::draw()
     cvJSThread.notify_one();
   }
   
+  // Wait for data to be processed...
+//  {
+//      std::unique_lock<std::mutex> lck( mMainMutex );
+//      cvMainThread.wait(lck, [this]{ return _mainRun; });
+//  }
+  
+  _mainRun = false;
 }
   
 } // namespace cjs
