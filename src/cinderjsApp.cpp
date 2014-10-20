@@ -105,14 +105,15 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   static void drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
   
   // GC
-  static void gcEpilogueCb(Isolate *isolate, GCType type, GCCallbackFlags flags);
+  static void gcPrologueCb(Isolate *isolate, GCType type, GCCallbackFlags flags);
   static int sGCRuns;
 };
 
 int CinderjsApp::sGCRuns = 0;
-void CinderjsApp::gcEpilogueCb(Isolate *isolate, GCType type, GCCallbackFlags flags) {
+void CinderjsApp::gcPrologueCb(Isolate *isolate, GCType type, GCCallbackFlags flags) {
   sGCRuns++;
-  //AppConsole::log("GC Epilogue " + std::to_string(sGCRuns));
+  //AppConsole::log("GC Prologue " + std::to_string(sGCRuns));
+  std::cout << "GC Prologue " << std::to_string(sGCRuns) << std::endl;
 }
 
 /**
@@ -134,7 +135,8 @@ void CinderjsApp::setup()
   // TODO: Choose between loading a script from asset folder or specified in command line
   #ifdef DEBUG
   //std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/lib/test.js";
-  std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js";
+  //std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js";
+  std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js";
   #else
   std::string jsMainFile;
   #endif
@@ -175,7 +177,6 @@ void CinderjsApp::setup()
       }
     }
   }
-  
   
   // clear out the window with black
   gl::clear( Color( 0, 0, 0 ) );
@@ -243,7 +244,7 @@ void CinderjsApp::v8Thread( std::string jsFileContents ){
   v8::Locker lock(mIsolate);
   Isolate::Scope isolate_scope(mIsolate);
   
-  mIsolate->AddGCPrologueCallback(gcEpilogueCb);
+  mIsolate->AddGCPrologueCallback(gcPrologueCb);
   
   
   // Create a stack-allocated handle scope.
