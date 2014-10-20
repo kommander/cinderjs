@@ -336,24 +336,11 @@ void CinderjsApp::update()
 
 void CinderjsApp::draw()
 {
-	// clear out the window with black
-	//gl::clear( Color( 0, 0, 0 ) );
   
   if(!_v8Run){
     _v8Run = true;
     cvJSThread.notify_one();
   }
-  
-//  // FPS (TODO: if active)
-//  cinder::TextLayout fpsText;
-//  fpsText.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
-//  fpsText.addRightLine( "FPS: " + std::to_string( cinder::app::AppBasic::getAverageFps() ) );
-//  cinder::gl::draw( cinder::gl::Texture( fpsText.render() ) );
-//  
-//  // Draw console (TODO: if active)
-//  Vec2f cPos;
-//  cPos.y = getWindowHeight();
-//  AppConsole::draw( cPos );
   
 }
   
