@@ -177,7 +177,7 @@ var i;
 var colorBuf = 0;
 var distance;
 
-app.draw(function(){
+var loop = function(){
   for( i = particles.length - 1; i >= 0; i-- ) {
     particle = particles[i];
     if(particle.x < 0 || particle.x > ctxSize.x || particle.y < 0 || particle.y > ctxSize.y){
@@ -207,6 +207,10 @@ app.draw(function(){
       lastParticle = particle;
     }
   }
+}
+
+app.draw(function(){
+  loop();
 });
 
 app.rawEvent(function( type ){
