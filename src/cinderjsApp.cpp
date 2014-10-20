@@ -48,13 +48,17 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   ~CinderjsApp(){
     mShouldQuit = true;
     
-    v8::V8::Dispose();
+    _v8Run = true;
+    cvJSThread.notify_one();
     
     // Shutdown v8Thread
     if( mV8Thread ) {
       mV8Thread->join();
       mV8Thread.reset();
     }
+    
+    v8::V8::Dispose();
+    
   }
   
 	void setup();
@@ -254,21 +258,42 @@ void CinderjsApp::v8Thread( CGLContextObj currCtx ){
         cvJSThread.wait(lck, [this]{ return _v8Run; });
     }
     
-    CGLLockContext( currCtx ); //not sure if this is necessary but Apple's docs seem to suggest it
+    if(!mShouldQuit){
     
-    v8::Locker lock(mIsolate);
+      CGLLockContext( currCtx ); //not sure if this is necessary but Apple's docs seem to suggest it
+      
+      v8::Locker lock(mIsolate);
+      
+      // clear out the window with black
+      gl::clear( Color( 0, 0, 0 ) );
     
-    // Draw modules
-    for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
-      it->get()->draw();
+      // Draw modules
+      for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
+        it->get()->draw();
+      }
+      
+      v8::Unlocker unlock(mIsolate);
+      
+      // FPS (TODO: if active)
+      cinder::TextLayout fpsText;
+      fpsText.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
+      fpsText.addRightLine( "FPS: " + std::to_string( cinder::app::AppBasic::getAverageFps() ) );
+      cinder::gl::draw( cinder::gl::Texture( fpsText.render() ) );
+      
+      // Draw console (TODO: if active)
+      Vec2f cPos;
+      cPos.y = getWindowHeight();
+      AppConsole::draw( cPos );
+      
+      CGLUnlockContext( currCtx );
     }
     
-    CGLUnlockContext( currCtx );
-    
     _v8Run = false;
-    _mainRun = true;
-    cvMainThread.notify_one();
+//    _mainRun = true;
+//    cvMainThread.notify_one();
   }
+  
+  std::cout << "V8 Render thread ending" << std::endl;
   
   CGLDisable( currCtx, kCGLCEMPEngine );
   
@@ -297,27 +322,29 @@ void CinderjsApp::update()
 void CinderjsApp::draw()
 {
 	// clear out the window with black
-	gl::clear( Color( 0, 0, 0 ) );
+	//gl::clear( Color( 0, 0, 0 ) );
   
-  _v8Run = true;
-  cvJSThread.notify_one();
-  
-  // Wait for v8 thread to return...
-  {
-      std::unique_lock<std::mutex> lck( mMainMutex );
-      cvMainThread.wait(lck, [this]{ return _mainRun; });
+  if(!_v8Run){
+    _v8Run = true;
+    cvJSThread.notify_one();
   }
   
-  // FPS (TODO: if active)
-  cinder::TextLayout fpsText;
-  fpsText.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
-  fpsText.addRightLine( "FPS: " + std::to_string( cinder::app::AppBasic::getAverageFps() ) );
-  cinder::gl::draw( cinder::gl::Texture( fpsText.render() ) );
+  // Wait for v8 thread to return...
+//  {
+//      std::unique_lock<std::mutex> lck( mMainMutex );
+//      cvMainThread.wait(lck, [this]{ return _mainRun; });
+//  }
   
-  // Draw console (TODO: if active)
-  Vec2f cPos;
-  cPos.y = getWindowHeight();
-  AppConsole::draw( cPos );
+//  // FPS (TODO: if active)
+//  cinder::TextLayout fpsText;
+//  fpsText.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
+//  fpsText.addRightLine( "FPS: " + std::to_string( cinder::app::AppBasic::getAverageFps() ) );
+//  cinder::gl::draw( cinder::gl::Texture( fpsText.render() ) );
+//  
+//  // Draw console (TODO: if active)
+//  Vec2f cPos;
+//  cPos.y = getWindowHeight();
+//  AppConsole::draw( cPos );
   
   _mainRun = false;
 }

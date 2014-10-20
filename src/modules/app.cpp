@@ -36,7 +36,8 @@ v8::Persistent<v8::Function> AppModule::sEventCallback;
  * Draw
  */
 void AppModule::draw(){
-  
+  v8::Locker lock(getIsolate());
+
   // Isolate
   v8::Isolate::Scope isolate_scope(getIsolate());
   v8::HandleScope handleScope(getIsolate());
