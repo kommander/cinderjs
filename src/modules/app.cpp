@@ -29,125 +29,17 @@ using namespace v8;
 
 namespace cjs {
   
-v8::Persistent<v8::Function> AppModule::sDrawCallback;
-v8::Persistent<v8::Function> AppModule::sEventCallback;
-
-/**
- * Draw
- */
-void AppModule::draw(){
-  v8::Locker lock(getIsolate());
-
-  // Isolate
-  v8::Isolate::Scope isolate_scope(getIsolate());
-  v8::HandleScope handleScope(getIsolate());
-  
-  // Callback
-  v8::Local<v8::Function> callback = v8::Local<v8::Function>::New(getIsolate(), sDrawCallback);
-  
-  v8::Local<v8::Context> context = v8::Local<v8::Context>::New(getIsolate(), *getContext());
-  
-  if(context.IsEmpty()) return;
-  
-  Context::Scope ctxScope(context);
-  context->Enter();
-  
-  if( !callback.IsEmpty() ){
-    // TODO: call draw callback in v8 context
-    v8::Handle<v8::Value> argv[0] = {};
-    
-    callback->Call(context->Global(), 0, argv);
-    
-    callback.Clear();
-    argv->Clear();
-  }
-  
-  context->Exit();
-}
-
-/**
- * Set the draw callback from javascript
- */
-void AppModule::drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  v8::Isolate* isolate = args.GetIsolate();
-  v8::Locker lock(isolate);
-  v8::HandleScope handleScope(isolate);
-  
-  if(!args[0]->IsFunction()){
-    // throw js exception
-    isolate->ThrowException(v8::String::NewFromUtf8(isolate, "draw callback expects one argument of type function."));
-    return;
-  }
-  AppConsole::log("draw callback set.");
-  
-  sDrawCallback.Reset(isolate, args[0].As<v8::Function>());
-  
-  // TODO: strip drawCallback from global obj, so only one main loop can be used
-  
-  return;
-}
-
-/**
- * Set event callback from javascript to push mouse/key events to
- */
-void AppModule::rawEventCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  v8::Isolate* isolate = args.GetIsolate();
-  v8::Locker lock(isolate);
-  v8::HandleScope handleScope(isolate);
-  
-  if(!args[0]->IsFunction()){
-    // throw js exception
-    isolate->ThrowException(v8::String::NewFromUtf8(isolate, "event callback expects one argument of type function."));
-    return;
-  }
-  AppConsole::log("event callback set.");
-  
-  sEventCallback.Reset(isolate, args[0].As<v8::Function>());
-  
-  // TODO: Remove event callback setter function from global context
-  
-  return;
-}
-
-/**
- * Handle a mouse move event on the application and push it to v8
- */
-void AppModule::mouseMove(cinder::app::MouseEvent evt){
-  v8::Locker lock(getIsolate());
-
-  // Isolate
-  v8::Isolate::Scope isolate_scope(getIsolate());
-  v8::HandleScope handleScope(getIsolate());
-  
-  // Callback
-  v8::Local<v8::Function> callback = v8::Local<v8::Function>::New(getIsolate(), sEventCallback);
-  
-  if( !callback.IsEmpty() ) {
-    
-    v8::Handle<v8::Value> argv[3] = {
-      v8::Number::New(getIsolate(), 1),
-      v8::Number::New(getIsolate(), evt.getX()),
-      v8::Number::New(getIsolate(), evt.getY())
-    };
-    
-    callback->Call(callback->CreationContext()->Global(), 3, argv);
-  }
-  
-  v8::Unlocker unlock(getIsolate());
-}
 
 /**
  * Load bindings onto global js object
  */
 void AppModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
-  // Create global gl object
+  // Create global app object
   Handle<ObjectTemplate> appTemplate = ObjectTemplate::New(getIsolate());
   
-  // gl methods
-  appTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "draw"), v8::FunctionTemplate::New(getIsolate(), drawCallback));
-  appTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "rawEvent"), v8::FunctionTemplate::New(getIsolate(), rawEventCallback));
+  //appTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "_example"), v8::FunctionTemplate::New(getIsolate(), exampleFn));
   
-  // Expose global gl object
+  // Expose global app object
   global->Set(v8::String::NewFromUtf8(getIsolate(), "app"), appTemplate);
 }
 

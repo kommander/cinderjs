@@ -51,7 +51,9 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
     mShouldQuit = true;
     
     _v8Run = true;
-    cvJSThread.notify_one();
+    cvJSThread.notify_all();
+    _eventRun = true;
+    cvEventThread.notify_all();
     
     // Shutdown v8Thread
     if( mV8Thread ) {
@@ -87,8 +89,14 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   void runJS( std::string scriptStr );
   Local<Context> createMainContext(Isolate* isolate);
   
+  //
   private:
   
+  // v8 thread methods
+  void v8Draw();
+
+  
+  // Stats
   volatile int v8Frames = 0;
   volatile double v8FPS = 0;
   volatile int mLastUpdate = 0;
@@ -105,7 +113,9 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   
   RendererRef glRenderer;
   
+  // Eventing
   ConcurrentCircularBuffer<MouseEvent> mMouseMoveBuf;
+  volatile Vec2f mousePosBuf;
   
   // Path
   Path mCwd;
@@ -115,13 +125,22 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   std::shared_ptr<std::thread> mV8RenderThread;
   std::shared_ptr<std::thread> mV8EventThread;
   
-  //static void LogCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
-  
   // GC
   static void gcPrologueCb(Isolate *isolate, GCType type, GCCallbackFlags flags);
   static int sGCRuns;
+  
+  // Default Bindings
+  static void setDrawCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void rawEventCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
+
+  // Default Callbacks
+  static v8::Persistent<v8::Function> sDrawCallback;
+  static v8::Persistent<v8::Function> sEventCallback; // TODO: only push events that were subscribed to in v8
+  
 };
+
+v8::Persistent<v8::Function> CinderjsApp::sDrawCallback;
+v8::Persistent<v8::Function> CinderjsApp::sEventCallback;
 
 int CinderjsApp::sGCRuns = 0;
 void CinderjsApp::gcPrologueCb(Isolate *isolate, GCType type, GCCallbackFlags flags) {
@@ -202,6 +221,9 @@ void CinderjsApp::setup()
   
 }
 
+/**
+ *
+ */
 Local<Context> CinderjsApp::createMainContext(Isolate* isolate) {
   EscapableHandleScope handleScope(isolate);
   
@@ -244,6 +266,9 @@ void CinderjsApp::runJS( std::string scriptStr ){
   
 }
 
+/**
+ *
+ */
 void CinderjsApp::v8Thread( std::string jsFileContents ){
   ThreadSetup threadSetup;
   
@@ -267,6 +292,8 @@ void CinderjsApp::v8Thread( std::string jsFileContents ){
   // Set general globals for JS
   mGlobal = ObjectTemplate::New();
   
+  mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "__draw__"), v8::FunctionTemplate::New(mIsolate, setDrawCallback));
+  mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "rawEvent"), v8::FunctionTemplate::New(mIsolate, rawEventCallback));
   
   //
   // Load Modules
@@ -287,6 +314,9 @@ void CinderjsApp::v8Thread( std::string jsFileContents ){
   mV8EventThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8EventThread, this ) );
 }
 
+/**
+ *
+ */
 void CinderjsApp::v8RenderThread(){
   ThreadSetup threadSetup;
   
@@ -322,10 +352,14 @@ void CinderjsApp::v8RenderThread(){
       
       // clear out the window with black
       gl::clear( Color( 0, 0, 0 ) );
+      
+      // JS Draw callback
+      v8Draw();
+      
       // Draw modules
-      for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
-        it->get()->draw();
-      }
+//      for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
+//        it->get()->draw();
+//      }
       
       v8::Unlocker unlock(mIsolate);
       
@@ -335,11 +369,12 @@ void CinderjsApp::v8RenderThread(){
       fpsText.addRightLine( "FPS: " + std::to_string( cinder::app::AppBasic::getAverageFps() ) );
       fpsText.addRightLine( "v8FPS: " + std::to_string( v8FPS ) );
       cinder::gl::draw( cinder::gl::Texture( fpsText.render() ) );
-//
-//      // Draw console (TODO: if active)
-//      Vec2f cPos;
-//      cPos.y = getWindowHeight();
-//      AppConsole::draw( cPos );
+
+      // Draw console (TODO: if active)
+      Vec2f cPos;
+      // TODO: Still running in shutdown and fails because window is already gone... improve thread shutdown
+      cPos.y = getWindowHeight();
+      AppConsole::draw( cPos );
       
       v8Frames++;
       
@@ -358,6 +393,9 @@ void CinderjsApp::v8RenderThread(){
   
 }
 
+/**
+ *
+ */
 void CinderjsApp::v8EventThread(){
   ThreadSetup threadSetup;
   
@@ -373,13 +411,13 @@ void CinderjsApp::v8EventThread(){
       
       // TODO: try transfering mouse move with draw callback,
       //       - use event thread only for pushing events that do not occur that often
-      if(mMouseMoveBuf.isNotEmpty()){
-        MouseEvent evt;
-        mMouseMoveBuf.popBack(&evt);
-        for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
-          it->get()->mouseMove( evt );
-        }
-      }
+//      if(mMouseMoveBuf.isNotEmpty()){
+//        MouseEvent evt;
+//        mMouseMoveBuf.popBack(&evt);
+//        for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
+//          it->get()->mouseMove( evt );
+//        }
+//      }
       
     }
     
@@ -389,13 +427,21 @@ void CinderjsApp::v8EventThread(){
   std::cout << "V8 Event thread ending" << std::endl;
 }
 
+/**
+ *
+ */
 void CinderjsApp::mouseMove( MouseEvent event )
 {
-  mMouseMoveBuf.tryPushFront(event);
-  _eventRun = true;
-  cvEventThread.notify_one();
+//  mMouseMoveBuf.tryPushFront(event);
+//  _eventRun = true;
+//  cvEventThread.notify_one();
+  mousePosBuf.x = event.getX();
+  mousePosBuf.y = event.getY();
 }
 
+/**
+ *
+ */
 void CinderjsApp::mouseDown( MouseEvent event )
 {
   // Push event to modules
@@ -404,10 +450,17 @@ void CinderjsApp::mouseDown( MouseEvent event )
   }
 }
 
+/**
+ *
+ */
 void CinderjsApp::update()
 {
 }
 
+/**
+ * Cinder draw loop
+ * Triggers the v8 render thread
+ */
 void CinderjsApp::draw()
 {
   
@@ -417,6 +470,87 @@ void CinderjsApp::draw()
     cvJSThread.notify_one();
   }
   
+}
+
+/**
+ * V8 Draw
+ * Called by v8 render thread
+ */
+void CinderjsApp::v8Draw(){
+  v8::Locker lock(mIsolate);
+
+  // Isolate
+  v8::Isolate::Scope isolate_scope(mIsolate);
+  v8::HandleScope handleScope(mIsolate);
+  
+  // Callback
+  v8::Local<v8::Function> callback = v8::Local<v8::Function>::New(mIsolate, sDrawCallback);
+  
+  v8::Local<v8::Context> context = v8::Local<v8::Context>::New(mIsolate, pContext);
+  
+  if(context.IsEmpty()) return;
+  
+  Context::Scope ctxScope(context);
+  context->Enter();
+  
+  if( !callback.IsEmpty() ){
+    
+    v8::Handle<v8::Value> argv[2] = {
+      v8::Number::New(mIsolate, mousePosBuf.x),
+      v8::Number::New(mIsolate, mousePosBuf.y)
+    };
+    
+    callback->Call(context->Global(), 2, argv);
+    
+    callback.Clear();
+    argv->Clear();
+  }
+  
+  context->Exit();
+}
+
+/**
+ * Set the draw callback from javascript
+ */
+void CinderjsApp::setDrawCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::Locker lock(isolate);
+  v8::HandleScope handleScope(isolate);
+  
+  if(!args[0]->IsFunction()){
+    // throw js exception
+    isolate->ThrowException(v8::String::NewFromUtf8(isolate, "draw callback expects one argument of type function."));
+    return;
+  }
+  AppConsole::log("draw callback set.");
+  
+  sDrawCallback.Reset(isolate, args[0].As<v8::Function>());
+  
+  // TODO: strip drawCallback from global obj, so only one main loop can be used
+  
+  return;
+}
+
+/**
+ * Set event callback from javascript to push mouse/key events to
+ */
+void CinderjsApp::rawEventCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::Locker lock(isolate);
+  v8::HandleScope handleScope(isolate);
+  
+  if(!args[0]->IsFunction()){
+    // throw js exception
+    isolate->ThrowException(v8::String::NewFromUtf8(isolate, "event callback expects one argument of type function."));
+    return;
+  }
+  AppConsole::log("event callback set.");
+  
+  sEventCallback.Reset(isolate, args[0].As<v8::Function>());
+  
+  // TODO: Remove event callback setter function from global context
+  
+  return;
 }
   
 } // namespace cjs

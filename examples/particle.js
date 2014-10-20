@@ -209,14 +209,17 @@ var loop = function(){
   }
 }
 
-app.draw(function(){
+__draw__(function(mx, my){
+  // Update mouse position
+  mouse.x = mx;
+  mouse.y = my;
+  
   loop();
 });
 
-app.rawEvent(function( type ){
+rawEvent(function( type ){
   if(type == 1) { // MouseMove
-    mouse.x = arguments[1];
-    mouse.y = arguments[2];
+    
   }
 });
 
