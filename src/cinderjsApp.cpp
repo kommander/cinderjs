@@ -81,9 +81,8 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   volatile bool mShouldQuit;
   std::mutex mMainMutex;
   std::condition_variable cvJSThread;
-  std::condition_variable cvMainThread;
   volatile bool _v8Run = false;
-  volatile bool _mainRun = false;
+
   // Path
   Path mCwd;
   
@@ -307,8 +306,6 @@ void CinderjsApp::v8Thread( CGLContextObj currCtx ){
     }
     
     _v8Run = false;
-//    _mainRun = true;
-//    cvMainThread.notify_one();
   }
   
   std::cout << "V8 Render thread ending" << std::endl;
@@ -347,12 +344,6 @@ void CinderjsApp::draw()
     cvJSThread.notify_one();
   }
   
-  // Wait for v8 thread to return...
-//  {
-//      std::unique_lock<std::mutex> lck( mMainMutex );
-//      cvMainThread.wait(lck, [this]{ return _mainRun; });
-//  }
-  
 //  // FPS (TODO: if active)
 //  cinder::TextLayout fpsText;
 //  fpsText.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
@@ -364,7 +355,6 @@ void CinderjsApp::draw()
 //  cPos.y = getWindowHeight();
 //  AppConsole::draw( cPos );
   
-  _mainRun = false;
 }
   
 } // namespace cjs
