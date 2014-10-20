@@ -217,4 +217,4 @@ app.rawEvent(function( type ){
 });
 
 // Add some particles
-generateParticles(2000);
+generateParticles(20000);

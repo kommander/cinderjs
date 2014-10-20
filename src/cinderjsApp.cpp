@@ -300,6 +300,7 @@ void CinderjsApp::v8RenderThread(){
       }
   
       CGLLockContext( currCtx ); //not sure if this is necessary but Apple's docs seem to suggest it
+      glRenderer->startDraw();
       
       v8::Locker lock(mIsolate);
       
@@ -327,7 +328,7 @@ void CinderjsApp::v8RenderThread(){
       
       v8Frames++;
       
-      //glRenderer->finishDraw();
+      glRenderer->finishDraw();
       CGLUnlockContext( currCtx );
     }
     
@@ -346,7 +347,7 @@ void CinderjsApp::mouseMove( MouseEvent event )
 {
   // Push event to modules
   for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
-    it->get()->mouseMove( event );
+    //it->get()->mouseMove( event );
   }
 }
 
