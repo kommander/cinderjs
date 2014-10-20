@@ -38,8 +38,7 @@ namespace cjs {
 typedef boost::filesystem::path Path;
 
 // TODO
-// - Use getIsolate()->AddGCPrologueCallback(<#GCPrologueCallback callback#>) to switch isolates/context on GC
-// - move v8 init to main to have a global handlescope (only osx support atm)
+// - Fix resize GL context handling! (eventually interrupt and restart thread)
 // - Split cinderjsApp in header file
 // - load js modules with wrapper: "function (module, exports, __filename, ...) {"
 // - Expose versions object (cinder, v8, cinderjs)
@@ -371,10 +370,10 @@ void CinderjsApp::v8RenderThread(){
       cinder::gl::draw( cinder::gl::Texture( fpsText.render() ) );
 
       // Draw console (TODO: if active)
-      Vec2f cPos;
-      // TODO: Still running in shutdown and fails because window is already gone... improve thread shutdown
-      cPos.y = getWindowHeight();
-      AppConsole::draw( cPos );
+//      Vec2f cPos;
+//      // TODO: Still running in shutdown and fails because window is already gone... improve thread shutdown
+//      cPos.y = getWindowHeight();
+//      AppConsole::draw( cPos );
       
       v8Frames++;
       
@@ -409,15 +408,7 @@ void CinderjsApp::v8EventThread(){
     
     if(!mShouldQuit){
       
-      // TODO: try transfering mouse move with draw callback,
-      //       - use event thread only for pushing events that do not occur that often
-//      if(mMouseMoveBuf.isNotEmpty()){
-//        MouseEvent evt;
-//        mMouseMoveBuf.popBack(&evt);
-//        for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
-//          it->get()->mouseMove( evt );
-//        }
-//      }
+      // TODO: If available, push mouse/key/resize events to v8
       
     }
     
@@ -432,9 +423,7 @@ void CinderjsApp::v8EventThread(){
  */
 void CinderjsApp::mouseMove( MouseEvent event )
 {
-//  mMouseMoveBuf.tryPushFront(event);
-//  _eventRun = true;
-//  cvEventThread.notify_one();
+  // Update mouse position (pushed to v8 with draw callback)
   mousePosBuf.x = event.getX();
   mousePosBuf.y = event.getY();
 }
@@ -444,10 +433,9 @@ void CinderjsApp::mouseMove( MouseEvent event )
  */
 void CinderjsApp::mouseDown( MouseEvent event )
 {
-  // Push event to modules
-  for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
-    it->get()->mouseDown( event );
-  }
+  // TODO: Use event thread to push event to v8
+  //  _eventRun = true;
+  //  cvEventThread.notify_one();
 }
 
 /**

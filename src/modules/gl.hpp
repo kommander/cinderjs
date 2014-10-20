@@ -45,10 +45,7 @@ class GLModule : public PipeModule {
     }
   
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
-  
     void draw(){}
-    void mouseMove( cinder::app::MouseEvent evt ){}
-    void mouseDown( cinder::app::MouseEvent evt ){}
   
     // Exposed
     static void drawLine(const v8::FunctionCallbackInfo<v8::Value>& args);
