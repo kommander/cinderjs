@@ -1,6 +1,7 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Filesystem.h"
+#include "cinder/ConcurrentCircularBuffer.h"
 
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
@@ -45,6 +46,7 @@ typedef boost::filesystem::path Path;
 
 class CinderjsApp : public AppNative, public CinderAppBase  {
   public:
+  CinderjsApp() : mMouseMoveBuf(1) {}
   ~CinderjsApp(){
     mShouldQuit = true;
     
@@ -57,10 +59,16 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
       mV8Thread.reset();
     }
     
-    // Shutdown v8Thread
+    // Shutdown v8RenderThread
     if( mV8RenderThread ) {
       mV8RenderThread->join();
       mV8RenderThread.reset();
+    }
+
+    // Shutdown v8EventThread
+    if( mV8EventThread ) {
+      mV8EventThread->join();
+      mV8EventThread.reset();
     }
     
     v8::V8::Dispose();
@@ -75,6 +83,7 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   
   void v8Thread( std::string jsFileContents );
   void v8RenderThread();
+  void v8EventThread();
   void runJS( std::string scriptStr );
   Local<Context> createMainContext(Isolate* isolate);
   
@@ -91,8 +100,12 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   volatile bool _v8Run = false;
   std::condition_variable cvMainThread;
   volatile bool _mainRun = false;
+  std::condition_variable cvEventThread;
+  volatile bool _eventRun = false;
   
   RendererRef glRenderer;
+  
+  ConcurrentCircularBuffer<MouseEvent> mMouseMoveBuf;
   
   // Path
   Path mCwd;
@@ -100,6 +113,7 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   // V8
   std::shared_ptr<std::thread> mV8Thread;
   std::shared_ptr<std::thread> mV8RenderThread;
+  std::shared_ptr<std::thread> mV8EventThread;
   
   //static void LogCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void drawCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -135,8 +149,8 @@ void CinderjsApp::setup()
   // TODO: Choose between loading a script from asset folder or specified in command line
   #ifdef DEBUG
   //std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/lib/test.js";
-  //std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js";
-  std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js";
+  std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js";
+  //std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js";
   #else
   std::string jsMainFile;
   #endif
@@ -244,7 +258,7 @@ void CinderjsApp::v8Thread( std::string jsFileContents ){
   v8::Locker lock(mIsolate);
   Isolate::Scope isolate_scope(mIsolate);
   
-  mIsolate->AddGCPrologueCallback(gcPrologueCb);
+  //mIsolate->AddGCPrologueCallback(gcPrologueCb);
   
   
   // Create a stack-allocated handle scope.
@@ -270,6 +284,7 @@ void CinderjsApp::v8Thread( std::string jsFileContents ){
   }
 
   mV8RenderThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8RenderThread, this ) );
+  mV8EventThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8EventThread, this ) );
 }
 
 void CinderjsApp::v8RenderThread(){
@@ -307,7 +322,6 @@ void CinderjsApp::v8RenderThread(){
       
       // clear out the window with black
       gl::clear( Color( 0, 0, 0 ) );
-    
       // Draw modules
       for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
         it->get()->draw();
@@ -344,12 +358,42 @@ void CinderjsApp::v8RenderThread(){
   
 }
 
+void CinderjsApp::v8EventThread(){
+  ThreadSetup threadSetup;
+  
+  while( !mShouldQuit ) {
+    
+    // Wait for data to be processed...
+    {
+        std::unique_lock<std::mutex> lck( mMainMutex );
+        cvEventThread.wait(lck, [this]{ return _eventRun; });
+    }
+    
+    if(!mShouldQuit){
+      
+      // TODO: try transfering mouse move with draw callback,
+      //       - use event thread only for pushing events that do not occur that often
+      if(mMouseMoveBuf.isNotEmpty()){
+        MouseEvent evt;
+        mMouseMoveBuf.popBack(&evt);
+        for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
+          it->get()->mouseMove( evt );
+        }
+      }
+      
+    }
+    
+    _eventRun = false;
+  }
+  
+  std::cout << "V8 Event thread ending" << std::endl;
+}
+
 void CinderjsApp::mouseMove( MouseEvent event )
 {
-  // Push event to modules
-  for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
-    //it->get()->mouseMove( event );
-  }
+  mMouseMoveBuf.tryPushFront(event);
+  _eventRun = true;
+  cvEventThread.notify_one();
 }
 
 void CinderjsApp::mouseDown( MouseEvent event )
@@ -367,18 +411,12 @@ void CinderjsApp::update()
 void CinderjsApp::draw()
 {
   
+  // Trigger v8 draw if not running already...
   if(!_v8Run){
     _v8Run = true;
     cvJSThread.notify_one();
   }
   
-  // Wait for data to be processed...
-//  {
-//      std::unique_lock<std::mutex> lck( mMainMutex );
-//      cvMainThread.wait(lck, [this]{ return _mainRun; });
-//  }
-  
-  _mainRun = false;
 }
   
 } // namespace cjs
