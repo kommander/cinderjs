@@ -52,6 +52,7 @@ enum EventType {
 // TODO
 // - Split cinderjsApp in header file
 // - load js modules with wrapper: "function (module, exports, __filename, ...) {"
+// - Expose Env info like OS etc.
 // - Expose versions object (cinder, v8, cinderjs)
 
 class CinderjsApp : public AppNative, public CinderAppBase  {
