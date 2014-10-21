@@ -217,8 +217,12 @@ __draw__(function(mx, my){
   loop();
 });
 
-rawEvent(function( type ){
-  // TODO: rename to __event__ and encapsulate in event.js module
+__event__(function( type ){
+  // Resize Event
+  if(type == 10){
+    ctxSize.x = arguments[1];
+    ctxSize.y = arguments[2];
+  }
 });
 
 // Add some particles
