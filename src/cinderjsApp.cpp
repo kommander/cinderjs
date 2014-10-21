@@ -37,6 +37,12 @@ namespace cjs {
 
 typedef boost::filesystem::path Path;
 
+struct BufferedEvent {
+  int type;
+  MouseEvent mEvt;
+  KeyEvent kEvt;
+};
+
 // TODO
 // - Fix resize GL context handling! (eventually interrupt and restart thread)
 // - Split cinderjsApp in header file
@@ -45,7 +51,7 @@ typedef boost::filesystem::path Path;
 
 class CinderjsApp : public AppNative, public CinderAppBase  {
   public:
-  CinderjsApp() : mMouseMoveBuf(1) {}
+  CinderjsApp() : mEventQueue(32) {}
   ~CinderjsApp(){
     mShouldQuit = true;
     
@@ -81,6 +87,7 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
 	void mouseMove( MouseEvent event );
 	void update();
 	void draw();
+  void resize();
   
   void v8Thread( std::string jsFileContents );
   void v8RenderThread();
@@ -113,7 +120,7 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   RendererRef glRenderer;
   
   // Eventing
-  ConcurrentCircularBuffer<MouseEvent> mMouseMoveBuf;
+  ConcurrentCircularBuffer<BufferedEvent> mEventQueue;
   volatile Vec2f mousePosBuf;
   
   // Path
@@ -130,7 +137,7 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   
   // Default Bindings
   static void setDrawCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void rawEventCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void setEventCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   // Default Callbacks
   static v8::Persistent<v8::Function> sDrawCallback;
@@ -292,7 +299,7 @@ void CinderjsApp::v8Thread( std::string jsFileContents ){
   mGlobal = ObjectTemplate::New();
   
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "__draw__"), v8::FunctionTemplate::New(mIsolate, setDrawCallback));
-  mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "rawEvent"), v8::FunctionTemplate::New(mIsolate, rawEventCallback));
+  mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "__event__"), v8::FunctionTemplate::New(mIsolate, setEventCallback));
   
   //
   // Load Modules
@@ -372,10 +379,10 @@ void CinderjsApp::v8RenderThread(){
       cinder::gl::draw( cinder::gl::Texture( fpsText.render() ) );
 
       // Draw console (TODO: if active)
-//      Vec2f cPos;
-//      // TODO: Still running in shutdown and fails because window is already gone... improve thread shutdown
-//      cPos.y = getWindowHeight();
-//      AppConsole::draw( cPos );
+      Vec2f cPos;
+      // TODO: Still running in shutdown and fails because window is already gone... improve thread shutdown
+      cPos.y = getWindowHeight();
+      AppConsole::draw( cPos );
       
       v8Frames++;
       
@@ -408,16 +415,68 @@ void CinderjsApp::v8EventThread(){
         cvEventThread.wait(lck, [this]{ return _eventRun; });
     }
     
-    if(!mShouldQuit){
+    if(!mShouldQuit && mEventQueue.isNotEmpty()){
       
       // TODO: If available, push mouse/key/resize events to v8
+      v8::Locker lock(mIsolate);
+
+      // Isolate
+      v8::Isolate::Scope isolate_scope(mIsolate);
+      v8::HandleScope handleScope(mIsolate);
       
+      // Callback
+      // TODO: initialize on thread start and reuse
+      v8::Local<v8::Function> callback = v8::Local<v8::Function>::New(mIsolate, sEventCallback);
+      
+      v8::Local<v8::Context> context = v8::Local<v8::Context>::New(mIsolate, pContext);
+      
+      if(context.IsEmpty()) return;
+      
+      Context::Scope ctxScope(context);
+      context->Enter();
+      
+      if( !callback.IsEmpty() ){
+        
+        while(mEventQueue.isNotEmpty()){
+          BufferedEvent evt;
+          mEventQueue.popBack(&evt);
+          
+          // Resize Event
+          if(evt.type == 10){
+            v8::Handle<v8::Value> argv[3] = {
+              v8::Number::New(mIsolate, 10),
+              v8::Number::New(mIsolate, getWindowWidth()),
+              v8::Number::New(mIsolate, getWindowHeight())
+            };
+            callback->Call(context->Global(), 3, argv);
+            argv->Clear();
+          }
+        
+        }
+        
+        callback.Clear();
+      }
+      
+      context->Exit();
+      v8::Unlocker unlock(mIsolate);
     }
     
     _eventRun = false;
   }
   
   std::cout << "V8 Event thread ending" << std::endl;
+}
+
+/**
+ *
+ */
+void CinderjsApp::resize()
+{
+  BufferedEvent evt;
+  evt.type = 10;
+  mEventQueue.pushFront(evt);
+  _eventRun = true;
+  cvEventThread.notify_one();
 }
 
 /**
@@ -524,7 +583,7 @@ void CinderjsApp::setDrawCallback(const v8::FunctionCallbackInfo<v8::Value>& arg
 /**
  * Set event callback from javascript to push mouse/key events to
  */
-void CinderjsApp::rawEventCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void CinderjsApp::setEventCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::Locker lock(isolate);
   v8::HandleScope handleScope(isolate);
