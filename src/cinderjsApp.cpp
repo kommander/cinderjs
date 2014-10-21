@@ -44,7 +44,6 @@ struct BufferedEvent {
 };
 
 // TODO
-// - Fix resize GL context handling! (eventually interrupt and restart thread)
 // - Split cinderjsApp in header file
 // - load js modules with wrapper: "function (module, exports, __filename, ...) {"
 // - Expose versions object (cinder, v8, cinderjs)
@@ -53,6 +52,7 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   public:
   CinderjsApp() : mEventQueue(32) {}
   ~CinderjsApp(){
+    mConsoleActive = false;
     mShouldQuit = true;
     
     _v8Run = true;
@@ -82,6 +82,7 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
     
   }
   
+  // Cinder App
 	void setup();
 	void mouseDown( MouseEvent event );	
 	void mouseMove( MouseEvent event );
@@ -89,9 +90,12 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
 	void draw();
   void resize();
   
+  // Threads
   void v8Thread( std::string jsFileContents );
   void v8RenderThread();
   void v8EventThread();
+  
+  // V8 Setup
   void runJS( std::string scriptStr );
   Local<Context> createMainContext(Isolate* isolate);
   
@@ -108,6 +112,7 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   volatile int mLastUpdate = 0;
   volatile int mUpdateInterval = 1000;
   
+  // Threading
   volatile bool mShouldQuit;
   std::mutex mMainMutex;
   std::condition_variable cvJSThread;
@@ -142,6 +147,9 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   // Default Callbacks
   static v8::Persistent<v8::Function> sDrawCallback;
   static v8::Persistent<v8::Function> sEventCallback; // TODO: only push events that were subscribed to in v8
+  
+  // Console
+  bool mConsoleActive = true;
   
 };
 
@@ -378,11 +386,12 @@ void CinderjsApp::v8RenderThread(){
       fpsText.addRightLine( "v8FPS: " + std::to_string( v8FPS ) );
       cinder::gl::draw( cinder::gl::Texture( fpsText.render() ) );
 
-      // Draw console (TODO: if active)
-      Vec2f cPos;
-      // TODO: Still running in shutdown and fails because window is already gone... improve thread shutdown
-      cPos.y = getWindowHeight();
-      AppConsole::draw( cPos );
+      // Draw console (if active)
+      if(mConsoleActive){
+        Vec2f cPos;
+        cPos.y = getWindowHeight();
+        AppConsole::draw( cPos );
+      }
       
       v8Frames++;
       
@@ -395,6 +404,8 @@ void CinderjsApp::v8RenderThread(){
     cvMainThread.notify_one();
   }
   
+  // FIXME: sometimes the threads just end shortly after startup already...
+  //        Don't know how to reproduce.
   std::cout << "V8 Render thread ending" << std::endl;
   
   CGLDisable( currCtx, kCGLCEMPEngine );
