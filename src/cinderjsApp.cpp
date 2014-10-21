@@ -78,7 +78,6 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   
   // V8 Setup
   void runJS( std::string scriptStr );
-  Local<Context> createMainContext(Isolate* isolate);
   
   //
   private:
@@ -132,6 +131,9 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   static v8::Persistent<v8::Function> sDrawCallback;
   static v8::Persistent<v8::Function> sEventCallback; // TODO: only push events that were subscribed to in v8
   
+  //
+  static v8::Persistent<v8::Object> sEmptyObject;
+  
   // Console
   static volatile bool sConsoleActive;
   static volatile bool sV8StatsActive;
@@ -147,6 +149,8 @@ bool CinderjsApp::sQuitRequested = false;
 
 v8::Persistent<v8::Function> CinderjsApp::sDrawCallback;
 v8::Persistent<v8::Function> CinderjsApp::sEventCallback;
+
+v8::Persistent<v8::Object> CinderjsApp::sEmptyObject;
 
 int CinderjsApp::sGCRuns = 0;
 void CinderjsApp::gcPrologueCb(Isolate *isolate, GCType type, GCCallbackFlags flags) {
@@ -209,9 +213,9 @@ void CinderjsApp::setup()
   // TODO: Choose between loading a script from asset folder or specified in command line
   #ifdef DEBUG
   //std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/lib/test.js";
-  //std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js";
+  std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js";
   //std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js";
-  std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js";
+  //std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js";
   #else
   std::string jsMainFile;
   #endif
@@ -261,19 +265,6 @@ void CinderjsApp::setup()
   //CGLContextObj currCtx = CGLGetCurrentContext();
   mV8Thread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8Thread, this, jsFileContents ) );
   
-}
-
-/**
- *
- */
-Local<Context> CinderjsApp::createMainContext(Isolate* isolate) {
-  EscapableHandleScope handleScope(isolate);
-  
-  Local<Context> ct = Context::New(mIsolate, NULL, mGlobal);
-  Context::Scope scope(ct);
-  pContext.Reset(isolate, ct);
-  
-  return handleScope.Escape(ct);
 }
 
 /**
@@ -333,7 +324,6 @@ void CinderjsApp::v8Thread( std::string jsFileContents ){
   
   // Set general globals for JS
   mGlobal = ObjectTemplate::New();
-  
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "__draw__"), v8::FunctionTemplate::New(mIsolate, setDrawCallback));
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "__event__"), v8::FunctionTemplate::New(mIsolate, setEventCallback));
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "toggleAppConsole"), v8::FunctionTemplate::New(mIsolate, toggleAppConsole));
@@ -348,8 +338,14 @@ void CinderjsApp::v8Thread( std::string jsFileContents ){
   
   
   // Create a new context.
-  //mMainContext = Context::New(mIsolate, NULL, mGlobal);
-  mMainContext = createMainContext(mIsolate);
+  mMainContext = Context::New(mIsolate, NULL, mGlobal);
+  Context::Scope scope(mMainContext);
+  pContext.Reset(mIsolate, mMainContext);
+  
+  // Setup global empty object for function callbacks
+  Local<ObjectTemplate> emptyObj = ObjectTemplate::New();
+  Handle<Object> emptyObjInstance = emptyObj->NewInstance();
+  sEmptyObject.Reset(mIsolate, emptyObjInstance);
   
   if( jsFileContents.length() > 0 ){
     runJS( jsFileContents );
@@ -665,7 +661,10 @@ void CinderjsApp::v8Draw( double timePassed ){
 
     v8::TryCatch try_catch;
 
-    callback->Call(context->Global(), 3, argv);
+    Local<Object> emptyObj = Local<Object>::New(mIsolate, sEmptyObject);
+
+    //callback->Call(context->Global(), 3, argv);
+    callback->Call(emptyObj, 3, argv);
     
     // Check for errors
     if(try_catch.HasCaught()){
