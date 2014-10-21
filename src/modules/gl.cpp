@@ -34,6 +34,8 @@ namespace cjs {
 
 Vec2f GLModule::bufVec2f_1;
 Vec2f GLModule::bufVec2f_2;
+Vec3f GLModule::bufVec3f_1;
+Vec3f GLModule::bufVec3f_2;
 
 /**
  * drawLine( sx, sy, ex, ey );
@@ -73,6 +75,172 @@ void GLModule::drawSolidCircle(const v8::FunctionCallbackInfo<v8::Value>& args) 
   return;
 }
 
+/**
+ *
+ */
+void GLModule::pushMatrices(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::pushMatrices();
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::popMatrices(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::popMatrices();
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::begin(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::begin(args[0]->NumberValue());
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::end(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::end();
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::translate(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  if(args.Length() == 2){
+    bufVec2f_1.x = args[0]->NumberValue();
+    bufVec2f_1.y = args[1]->NumberValue();
+    gl::translate(bufVec2f_1);
+    return;
+  }
+  
+  bufVec3f_1.x = args[0]->NumberValue();
+  bufVec3f_1.y = args[1]->NumberValue();
+  bufVec3f_1.z = args[2]->NumberValue();
+  gl::translate(bufVec3f_1);
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::scale(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  if(args.Length() == 2){
+    bufVec2f_1.x = args[0]->NumberValue();
+    bufVec2f_1.y = args[1]->NumberValue();
+    gl::scale(bufVec2f_1);
+    return;
+  }
+  
+  bufVec3f_1.x = args[0]->NumberValue();
+  bufVec3f_1.y = args[1]->NumberValue();
+  bufVec3f_1.z = args[2]->NumberValue();
+  gl::scale(bufVec3f_1);
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::rotate(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  if(args.Length() == 3){
+    bufVec3f_1.x = args[0]->NumberValue();
+    bufVec3f_1.y = args[1]->NumberValue();
+    bufVec3f_1.z = args[2]->NumberValue();
+    gl::rotate(bufVec3f_1);
+    
+    return;
+  }
+  
+  gl::rotate(args[0]->NumberValue());
+  
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::vertex(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  if(args.Length() == 2){
+    bufVec2f_1.x = args[0]->NumberValue();
+    bufVec2f_1.y = args[1]->NumberValue();
+    gl::vertex(bufVec2f_1);
+    return;
+  }
+  
+  bufVec3f_1.x = args[0]->NumberValue();
+  bufVec3f_1.y = args[1]->NumberValue();
+  bufVec3f_1.z = args[2]->NumberValue();
+  gl::vertex(bufVec3f_1);
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::color(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  if(args.Length() == 3){
+    gl::color(args[0]->NumberValue(), args[1]->NumberValue(), args[2]->NumberValue());
+    return;
+  }
+  
+  gl::color(args[0]->NumberValue(), args[1]->NumberValue(), args[2]->NumberValue(), args[3]->NumberValue());
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::enableWireframe(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::enableWireframe();
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::disableWireframe(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::disableWireframe();
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::drawCube(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  bufVec3f_1.x = args[0]->NumberValue();
+  bufVec3f_1.y = args[1]->NumberValue();
+  bufVec3f_1.z = args[2]->NumberValue();
+  
+  bufVec3f_2.x = args[3]->NumberValue();
+  bufVec3f_2.y = args[4]->NumberValue();
+  bufVec3f_2.z = args[5]->NumberValue();
+  
+  gl::drawCube(bufVec3f_1, bufVec3f_2);
+  
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::drawTorus(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::drawTorus(args[0]->NumberValue(), args[1]->NumberValue(), args[2]->NumberValue(), args[3]->NumberValue());
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::drawCylinder(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::drawCylinder(args[0]->NumberValue(), args[1]->NumberValue(), args[2]->NumberValue(), args[3]->NumberValue(), args[3]->NumberValue());
+  return;
+}
+
 void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   // Create global gl object
   Handle<ObjectTemplate> glTemplate = ObjectTemplate::New(getIsolate());
@@ -80,6 +248,20 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   // gl methods
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawLine"), v8::FunctionTemplate::New(getIsolate(), drawLine));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawSolidCircle"), v8::FunctionTemplate::New(getIsolate(), drawSolidCircle));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "pushMatrices"), v8::FunctionTemplate::New(getIsolate(), pushMatrices));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "popMatrices"), v8::FunctionTemplate::New(getIsolate(), popMatrices));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "translate"), v8::FunctionTemplate::New(getIsolate(), translate));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "scale"), v8::FunctionTemplate::New(getIsolate(), scale));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "rotate"), v8::FunctionTemplate::New(getIsolate(), rotate));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "begin"), v8::FunctionTemplate::New(getIsolate(), begin));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "end"), v8::FunctionTemplate::New(getIsolate(), end));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "vertex"), v8::FunctionTemplate::New(getIsolate(), vertex));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "color"), v8::FunctionTemplate::New(getIsolate(), color));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "enableWireframe"), v8::FunctionTemplate::New(getIsolate(), enableWireframe));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "disableWireframe"), v8::FunctionTemplate::New(getIsolate(), disableWireframe));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawCube"), v8::FunctionTemplate::New(getIsolate(), drawCube));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawTorus"), v8::FunctionTemplate::New(getIsolate(), drawTorus));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawCylinder"), v8::FunctionTemplate::New(getIsolate(), drawCylinder));
   
   // Expose global gl object
   global->Set(v8::String::NewFromUtf8(getIsolate(), "gl"), glTemplate);

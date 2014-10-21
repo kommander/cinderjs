@@ -50,11 +50,27 @@ class GLModule : public PipeModule {
     // Exposed
     static void drawLine(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void drawSolidCircle(const v8::FunctionCallbackInfo<v8::Value>& args);
-  
+    static void pushMatrices(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void popMatrices(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void translate(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void scale(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void rotate(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void begin(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void end(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void vertex(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void color(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void enableWireframe(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void disableWireframe(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void drawCube(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void drawTorus(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void drawCylinder(const v8::FunctionCallbackInfo<v8::Value>& args);
+
   private:
     //
     static Vec2f bufVec2f_1;
     static Vec2f bufVec2f_2;
+    static Vec3f bufVec3f_1;
+    static Vec3f bufVec3f_2;
 };
   
 } // namespace cjs
