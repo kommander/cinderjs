@@ -227,6 +227,11 @@ __event__(function( type ){
   else if(type == 20){
     var charCode = arguments[1];
     var char = arguments[2];
+    
+    if(charCode == 99) {
+      toggleAppConsole();
+    }
+    
     log("KeyDown " + charCode + " / " + char);
   }
   // Key Up
