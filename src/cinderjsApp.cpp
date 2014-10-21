@@ -43,6 +43,12 @@ struct BufferedEvent {
   KeyEvent kEvt;
 };
 
+enum EventType {
+  CJS_RESIZE = 10,
+  CJS_KEY_DOWN = 20,
+  CJS_KEY_UP = 30
+};
+
 // TODO
 // - Split cinderjsApp in header file
 // - load js modules with wrapper: "function (module, exports, __filename, ...) {"
@@ -86,6 +92,8 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
 	void setup();
 	void mouseDown( MouseEvent event );	
 	void mouseMove( MouseEvent event );
+  void keyDown( KeyEvent event );
+  void keyUp( KeyEvent event );
 	void update();
 	void draw();
   void resize();
@@ -453,11 +461,35 @@ void CinderjsApp::v8EventThread(){
           mEventQueue.popBack(&evt);
           
           // Resize Event
-          if(evt.type == 10){
+          if(evt.type == CJS_RESIZE){
             v8::Handle<v8::Value> argv[3] = {
-              v8::Number::New(mIsolate, 10),
+              v8::Number::New(mIsolate, CJS_RESIZE),
               v8::Number::New(mIsolate, getWindowWidth()),
               v8::Number::New(mIsolate, getWindowHeight())
+            };
+            callback->Call(context->Global(), 3, argv);
+            argv->Clear();
+          }
+          
+          // Key down
+          else if(evt.type == CJS_KEY_DOWN){
+            v8::Handle<v8::Value> argv[3] = {
+              v8::Number::New(mIsolate, CJS_KEY_DOWN),
+              v8::Number::New(mIsolate, evt.kEvt.getCode()),
+              v8::Number::New(mIsolate, evt.kEvt.getChar())
+              // ... TODO: Push more event info
+            };
+            callback->Call(context->Global(), 3, argv);
+            argv->Clear();
+          }
+          
+          // Key up
+          else if(evt.type == CJS_KEY_UP){
+            v8::Handle<v8::Value> argv[3] = {
+              v8::Number::New(mIsolate, CJS_KEY_UP),
+              v8::Number::New(mIsolate, evt.kEvt.getCode()),
+              v8::Number::New(mIsolate, evt.kEvt.getChar())
+              // ... TODO: Push more event info
             };
             callback->Call(context->Global(), 3, argv);
             argv->Clear();
@@ -484,7 +516,7 @@ void CinderjsApp::v8EventThread(){
 void CinderjsApp::resize()
 {
   BufferedEvent evt;
-  evt.type = 10;
+  evt.type = CJS_RESIZE;
   mEventQueue.pushFront(evt);
   _eventRun = true;
   cvEventThread.notify_one();
@@ -508,6 +540,32 @@ void CinderjsApp::mouseDown( MouseEvent event )
   // TODO: Use event thread to push event to v8
   //  _eventRun = true;
   //  cvEventThread.notify_one();
+}
+
+/**
+ * Key down
+ */
+void CinderjsApp::keyDown( KeyEvent event )
+{
+  BufferedEvent evt;
+  evt.type = CJS_KEY_DOWN;
+  evt.kEvt = event;
+  mEventQueue.pushFront(evt);
+  _eventRun = true;
+  cvEventThread.notify_one();
+}
+
+/**
+ * Key up
+ */
+void CinderjsApp::keyUp( KeyEvent event )
+{
+  BufferedEvent evt;
+  evt.type = CJS_KEY_UP;
+  evt.kEvt = event;
+  mEventQueue.pushFront(evt);
+  _eventRun = true;
+  cvEventThread.notify_one();
 }
 
 /**
