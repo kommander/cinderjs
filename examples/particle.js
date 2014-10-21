@@ -205,6 +205,8 @@ var loop = function(timePassed){
     } else if(drawMethod == 1) {
       gl.drawLine(lastParticle.x, lastParticle.y, particle.x, particle.y);
       lastParticle = particle;
+    } else if(drawMethod == 2) {
+      gl.drawCube(particle.x, particle.y, 0, 20, 20, 20);
     }
   }
 }
@@ -235,10 +237,9 @@ __event__(function( type ){
     } else if(charCode == 108) { // L
       removeParticles(1000);
     } else if(charCode == 114) { // R
-      if(drawMethod == 0){
-        drawMethod = 1;
-      } else {
-        drawMethod = 0;
+      drawMethod++
+      if(drawMethod > 2){
+        drawMethod = 0
       }
     } else if(charCode == 27) { // ESC
       quit();
