@@ -201,7 +201,7 @@ var loop = function(){
     //gl.color(particle.rgb[0], particle.rgb[1], particle.rgb[2]);
     
     if(drawMethod == 0) {
-     gl.drawSolidCircle( particle.x, particle.y, particle.radius );
+      gl.drawSolidCircle( particle.x, particle.y, particle.radius );
     } else if(drawMethod == 1) {
       gl.drawLine(lastParticle.x, lastParticle.y, particle.x, particle.y);
       lastParticle = particle;
@@ -228,8 +228,18 @@ __event__(function( type ){
     var charCode = arguments[1];
     var char = arguments[2];
     
-    if(charCode == 99) {
+    if(charCode == 99) { // C
       toggleAppConsole();
+    } else if(charCode == 109) { // M
+      generateParticles(1000);
+    } else if(charCode == 108) { // L
+      removeParticles(1000);
+    } else if(charCode == 114) { // R
+      if(drawMethod == 0){
+        drawMethod = 1;
+      } else {
+        drawMethod = 0;
+      }
     }
     
     log("KeyDown " + charCode + " / " + char);
