@@ -151,15 +151,18 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   // Default Bindings
   static void setDrawCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void setEventCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void toggleAppConsole(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   // Default Callbacks
   static v8::Persistent<v8::Function> sDrawCallback;
   static v8::Persistent<v8::Function> sEventCallback; // TODO: only push events that were subscribed to in v8
   
   // Console
-  bool mConsoleActive = true;
+  static volatile bool mConsoleActive;
   
 };
+
+volatile bool CinderjsApp::mConsoleActive = true;
 
 v8::Persistent<v8::Function> CinderjsApp::sDrawCallback;
 v8::Persistent<v8::Function> CinderjsApp::sEventCallback;
@@ -316,6 +319,7 @@ void CinderjsApp::v8Thread( std::string jsFileContents ){
   
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "__draw__"), v8::FunctionTemplate::New(mIsolate, setDrawCallback));
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "__event__"), v8::FunctionTemplate::New(mIsolate, setEventCallback));
+  mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "toggleAppConsole"), v8::FunctionTemplate::New(mIsolate, toggleAppConsole));
   
   //
   // Load Modules
@@ -668,6 +672,14 @@ void CinderjsApp::setEventCallback(const v8::FunctionCallbackInfo<v8::Value>& ar
   
   // TODO: Remove event callback setter function from global context
   
+  return;
+}
+
+/**
+ * Toggle the AppConsole view on/off
+ */
+void CinderjsApp::toggleAppConsole(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  mConsoleActive = !mConsoleActive;
   return;
 }
   
