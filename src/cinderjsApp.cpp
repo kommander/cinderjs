@@ -320,8 +320,10 @@ void CinderjsApp::v8RenderThread(){
   ThreadSetup threadSetup;
   
   CGLContextObj currCtx = glRenderer->getCglContext();
-  CGLSetCurrentContext( currCtx );  //also important as it now sets newly created context for use in this thread
-  CGLEnable( currCtx, kCGLCEMPEngine ); //Apple's magic sauce that allows this OpenGL context  to run in a thread
+  
+  // Not having the following two in seems to work fine as well and resizing works also
+  //  CGLSetCurrentContext( currCtx );  //also important as it now sets newly created context for use in this thread
+  //  CGLEnable( currCtx, kCGLCEMPEngine ); //Apple's magic sauce that allows this OpenGL context  to run in a thread
   
   //
   // Render Loop, do work if available
