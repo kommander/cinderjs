@@ -28,19 +28,69 @@ using namespace cinder;
 using namespace v8;
 
 namespace cjs {
+
+std::map<uint32_t, boost::shared_ptr<SimpleText>> UtilsModule::sTextObjects;
+uint32_t UtilsModule::sTextObjectIds = 0;
+Vec3f UtilsModule::bufVec3f_1;
+
+void UtilsModule::createSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
   
+  v8::String::Utf8Value str(args[0]);
+  
+  uint32_t id = ++sTextObjectIds;
+  
+  boost::shared_ptr<SimpleText> newText( new SimpleText() );
+  newText->setText( *str );
+  
+  sTextObjects[id] = newText;
+  
+  args.GetReturnValue().Set(v8::Uint32::New(isolate, id));
+}
+
+void UtilsModule::drawSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  uint32_t id = args[0]->Uint32Value();
+  boost::shared_ptr<SimpleText> textObj = sTextObjects[id];
+  if( textObj ){
+    textObj->draw();
+  }
+}
+
+void UtilsModule::updateSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  uint32_t id = args[0]->Uint32Value();
+  boost::shared_ptr<SimpleText> textObj = sTextObjects[id];
+  if( textObj ){
+    v8::String::Utf8Value str(args[1]);
+    textObj->setText( *str );
+  }
+}
+
+void UtilsModule::setSimpleTextPos(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  uint32_t id = args[0]->Uint32Value();
+  boost::shared_ptr<SimpleText> textObj = sTextObjects[id];
+  if( textObj ){
+    bufVec3f_1.x = args[1]->NumberValue();
+    bufVec3f_1.y = args[2]->NumberValue();
+    bufVec3f_1.z = args[3]->NumberValue();
+    textObj->setPosition(bufVec3f_1);
+  }
+}
 
 /**
  * Load bindings onto global js object
  */
 void UtilsModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   // Create global utils object
-  Handle<ObjectTemplate> appTemplate = ObjectTemplate::New(getIsolate());
+  Handle<ObjectTemplate> utilsTemplate = ObjectTemplate::New(getIsolate());
   
-  //appTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "_example"), v8::FunctionTemplate::New(getIsolate(), exampleFn));
+  utilsTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "createSimpleText"), v8::FunctionTemplate::New(getIsolate(), createSimpleText));
+  utilsTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawSimpleText"), v8::FunctionTemplate::New(getIsolate(), drawSimpleText));
+  utilsTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "updateSimpleText"), v8::FunctionTemplate::New(getIsolate(), updateSimpleText));
+  utilsTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setSimpleTextPosition"), v8::FunctionTemplate::New(getIsolate(), setSimpleTextPos));
   
   // Expose global utils object
-  global->Set(v8::String::NewFromUtf8(getIsolate(), "utils"), appTemplate);
+  global->Set(v8::String::NewFromUtf8(getIsolate(), "utils"), utilsTemplate);
 }
 
  

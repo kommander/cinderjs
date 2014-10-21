@@ -27,7 +27,7 @@
 using namespace std;
 using namespace cinder;
 
-namespace cinderpipe {
+namespace cjs {
   
   // TODO: Extend SyncedObject
   class SceneObject {
@@ -35,12 +35,15 @@ namespace cinderpipe {
       SceneObject(){}
       ~SceneObject(){}
     
-      int32_t x = 0;
-      int32_t y = 0;
-      int32_t z = 0;
+      inline void setPosition( Vec3f newPos ){
+        pos.set(newPos);
+      }
+    
+    protected:
+      Vec3f pos;
       bool active = true;
     
-      void draw();
+      virtual void draw() = 0;
   };
   
   class SimpleText : public SceneObject {
@@ -55,13 +58,12 @@ namespace cinderpipe {
         TextLayout tl;
         tl.setColor( ColorA( 1, 1, 1, 1 ) );
         tl.addLine( _text );
-        Surface surf = tl.render();
-        _texture = gl::Texture( surf );
+        _texture = gl::Texture( tl.render() );
       }
     
       inline void draw() {
         gl::pushMatrices();
-        gl::translate( x, y, z );
+        gl::translate( pos );
         gl::draw( _texture );
         gl::popMatrices();
       }

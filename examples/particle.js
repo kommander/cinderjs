@@ -177,6 +177,11 @@ var i;
 var colorBuf = 0;
 var distance;
 
+// NOTE: Utility methods like these can be wrapped
+//       in a convinience js object when modules have arrived...
+var textId = utils.createSimpleText("Particles: 2000");
+utils.setSimpleTextPosition(textId, 0, 40, 0);
+
 var loop = function(timePassed){
   for( i = particles.length - 1; i >= 0; i-- ) {
     particle = particles[i];
@@ -209,6 +214,9 @@ var loop = function(timePassed){
       gl.drawCube(particle.x, particle.y, 0, 20, 20, 20);
     }
   }
+  
+  // Draw the earlier created text object...
+  utils.drawSimpleText(textId);
 }
 
 __draw__(function(timePassed, mx, my){
@@ -234,8 +242,10 @@ __event__(function( type ){
       toggleAppConsole();
     } else if(charCode == 109) { // M
       generateParticles(1000);
+      utils.updateSimpleText(textId, "Particles: " + particles.length);
     } else if(charCode == 108) { // L
       removeParticles(1000);
+      utils.updateSimpleText(textId, "Particles: " + particles.length);
     } else if(charCode == 114) { // R
       drawMethod++
       if(drawMethod > 2){
@@ -247,13 +257,12 @@ __event__(function( type ){
       toggleV8Stats();
     }
     
-    log("KeyDown " + charCode + " / " + char);
   }
   // Key Up
   else if(type == 30){
     var charCode = arguments[1];
     var char = arguments[2];
-    log("KeyUp " + charCode + " / " + char);
+    // ...
   }
 });
 
