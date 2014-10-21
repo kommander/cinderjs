@@ -57,39 +57,11 @@ enum EventType {
 class CinderjsApp : public AppNative, public CinderAppBase  {
   public:
   CinderjsApp() : mEventQueue(32) {}
-  ~CinderjsApp(){
-    mConsoleActive = false;
-    mShouldQuit = true;
-    
-    _v8Run = true;
-    cvJSThread.notify_all();
-    _eventRun = true;
-    cvEventThread.notify_all();
-    
-    // Shutdown v8Thread
-    if( mV8Thread ) {
-      mV8Thread->join();
-      mV8Thread.reset();
-    }
-    
-    // Shutdown v8RenderThread
-    if( mV8RenderThread ) {
-      mV8RenderThread->join();
-      mV8RenderThread.reset();
-    }
-
-    // Shutdown v8EventThread
-    if( mV8EventThread ) {
-      mV8EventThread->join();
-      mV8EventThread.reset();
-    }
-    
-    v8::V8::Dispose();
-    
-  }
+  ~CinderjsApp(){}
   
   // Cinder App
 	void setup();
+  void shutdown();
 	void mouseDown( MouseEvent event );	
 	void mouseMove( MouseEvent event );
   void keyDown( KeyEvent event );
@@ -111,7 +83,7 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   private:
   
   // v8 thread methods
-  void v8Draw();
+  void v8Draw( double timePassed );
 
   
   // Stats
@@ -172,6 +144,41 @@ void CinderjsApp::gcPrologueCb(Isolate *isolate, GCType type, GCCallbackFlags fl
   sGCRuns++;
   //AppConsole::log("GC Prologue " + std::to_string(sGCRuns));
   std::cout << "GC Prologue " << std::to_string(sGCRuns) << std::endl;
+}
+
+
+/**
+ * Shutdown
+ */
+void CinderjsApp::shutdown()
+{
+  mConsoleActive = false;
+  mShouldQuit = true;
+  
+  _v8Run = true;
+  cvJSThread.notify_all();
+  _eventRun = true;
+  cvEventThread.notify_all();
+  
+  // Shutdown v8Thread
+  if( mV8Thread ) {
+    mV8Thread->join();
+    mV8Thread.reset();
+  }
+  
+  // Shutdown v8RenderThread
+  if( mV8RenderThread ) {
+    mV8RenderThread->join();
+    mV8RenderThread.reset();
+  }
+
+  // Shutdown v8EventThread
+  if( mV8EventThread ) {
+    mV8EventThread->join();
+    mV8EventThread.reset();
+  }
+  
+  v8::V8::Dispose();
 }
 
 /**
@@ -352,6 +359,10 @@ void CinderjsApp::v8RenderThread(){
   //  CGLSetCurrentContext( currCtx );  //also important as it now sets newly created context for use in this thread
   //  CGLEnable( currCtx, kCGLCEMPEngine ); //Apple's magic sauce that allows this OpenGL context  to run in a thread
   
+  double now;
+  double lastFrame = getElapsedSeconds() * 1000;
+  double timePassed;
+  
   //
   // Render Loop, do work if available
   while( !mShouldQuit ) {
@@ -365,7 +376,9 @@ void CinderjsApp::v8RenderThread(){
     if(!mShouldQuit){
       
       // Gather some info...
-      double now = getElapsedSeconds() * 1000;
+      now = getElapsedSeconds() * 1000;
+      timePassed = now - lastFrame;
+      lastFrame = now;
       double elapsed = now - mLastUpdate;
       if(elapsed > mUpdateInterval) {
         v8FPS = v8Frames;
@@ -382,7 +395,7 @@ void CinderjsApp::v8RenderThread(){
       gl::clear( Color( 0, 0, 0 ) );
       
       // JS Draw callback
-      v8Draw();
+      v8Draw( timePassed );
       
       // Draw modules
 //      for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
@@ -401,6 +414,7 @@ void CinderjsApp::v8RenderThread(){
       // Draw console (if active)
       if(mConsoleActive){
         Vec2f cPos;
+        // TODO: this still fails sometimes on shutdown
         cPos.y = getWindowHeight();
         AppConsole::draw( cPos );
       }
@@ -598,7 +612,7 @@ void CinderjsApp::draw()
  * V8 Draw
  * Called by v8 render thread
  */
-void CinderjsApp::v8Draw(){
+void CinderjsApp::v8Draw( double timePassed ){
   v8::Locker lock(mIsolate);
 
   // Isolate
@@ -617,12 +631,13 @@ void CinderjsApp::v8Draw(){
   
   if( !callback.IsEmpty() ){
     
-    v8::Handle<v8::Value> argv[2] = {
+    v8::Handle<v8::Value> argv[3] = {
+      v8::Number::New(mIsolate, timePassed),
       v8::Number::New(mIsolate, mousePosBuf.x),
       v8::Number::New(mIsolate, mousePosBuf.y)
     };
     
-    callback->Call(context->Global(), 2, argv);
+    callback->Call(context->Global(), 3, argv);
     
     callback.Clear();
     argv->Clear();

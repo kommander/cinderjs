@@ -177,7 +177,7 @@ var i;
 var colorBuf = 0;
 var distance;
 
-var loop = function(){
+var loop = function(timePassed){
   for( i = particles.length - 1; i >= 0; i-- ) {
     particle = particles[i];
     if(particle.x < 0 || particle.x > ctxSize.x || particle.y < 0 || particle.y > ctxSize.y){
@@ -193,9 +193,9 @@ var loop = function(){
         if(mouse.down) {
           particle.reverse();
         }
-        particle.forward(particle.vel * 2 );
+        particle.forward(particle.vel * 2 * timePassed / 40);
       } else {
-        particle.forward(particle.vel);  
+        particle.forward(particle.vel * timePassed / 40);
       }
     }
     //gl.color(particle.rgb[0], particle.rgb[1], particle.rgb[2]);
@@ -209,12 +209,12 @@ var loop = function(){
   }
 }
 
-__draw__(function(mx, my){
+__draw__(function(timePassed, mx, my){
   // Update mouse position
   mouse.x = mx;
   mouse.y = my;
   
-  loop();
+  loop(timePassed);
 });
 
 __event__(function( type ){
