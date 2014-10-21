@@ -139,8 +139,8 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   static bool sQuitRequested;
 };
 
-volatile bool CinderjsApp::sConsoleActive = true;
-volatile bool CinderjsApp::sV8StatsActive = true;
+volatile bool CinderjsApp::sConsoleActive = false;
+volatile bool CinderjsApp::sV8StatsActive = false;
 
 bool CinderjsApp::sQuitRequested = false;
 
@@ -208,8 +208,9 @@ void CinderjsApp::setup()
   // TODO: Choose between loading a script from asset folder or specified in command line
   #ifdef DEBUG
   //std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/lib/test.js";
-  std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js";
+  //std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js";
   //std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js";
+  std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js";
   #else
   std::string jsMainFile;
   #endif
@@ -638,7 +639,7 @@ void CinderjsApp::draw()
  */
 void CinderjsApp::v8Draw( double timePassed ){
   v8::Locker lock(mIsolate);
-
+  
   // Isolate
   v8::Isolate::Scope isolate_scope(mIsolate);
   v8::HandleScope handleScope(mIsolate);
@@ -660,9 +661,19 @@ void CinderjsApp::v8Draw( double timePassed ){
       v8::Number::New(mIsolate, mousePosBuf.x),
       v8::Number::New(mIsolate, mousePosBuf.y)
     };
-    
+
+    v8::TryCatch try_catch;
+
     callback->Call(context->Global(), 3, argv);
     
+    // Check for errors
+    if(try_catch.HasCaught()){
+      v8::String::Utf8Value trace(try_catch.StackTrace());
+      std::string ex = "JS Error: ";
+      ex.append(*trace);
+      AppConsole::log( ex );
+    }
+
     callback.Clear();
     argv->Clear();
   }
