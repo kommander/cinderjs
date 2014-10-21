@@ -78,7 +78,7 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   void v8EventThread();
   
   // V8 Setup
-  void runJS( std::string scriptStr, Local<Context> context );
+  void executeScriptString( std::string scriptStr, Local<Context> context );
   
   //
   private:
@@ -271,7 +271,7 @@ void CinderjsApp::setup()
 /**
  * Runs a JS string and prints eventual errors to the AppConsole
  */
-void CinderjsApp::runJS( std::string scriptStr, v8::Local<v8::Context> context ){
+void CinderjsApp::executeScriptString( std::string scriptStr, v8::Local<v8::Context> context ){
   v8::TryCatch try_catch;
   
   // Enter the context for compiling and running the hello world script.
@@ -349,10 +349,22 @@ void CinderjsApp::v8Thread( std::string jsFileContents ){
   Handle<Object> emptyObjInstance = emptyObj->NewInstance();
   sEmptyObject.Reset(mIsolate, emptyObjInstance);
   
+  // Grab GL context to execute the entry script and allow gl setup
+  CGLContextObj currCtx = glRenderer->getCglContext();
+  CGLSetCurrentContext( currCtx );
+  CGLEnable( currCtx, kCGLCEMPEngine );
+  CGLLockContext( currCtx );
+  
+  // Execute entry script
   if( jsFileContents.length() > 0 ){
-    runJS( jsFileContents, mMainContext );
+    executeScriptString( jsFileContents, mMainContext );
   }
-
+  
+  // Get rid of gl context again
+  CGLUnlockContext( currCtx );
+  CGLDisable( currCtx, kCGLCEMPEngine );
+  
+  // Start sub threads
   mV8RenderThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8RenderThread, this ) );
   mV8EventThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8EventThread, this ) );
 }
@@ -464,6 +476,26 @@ void CinderjsApp::v8RenderThread(){
 void CinderjsApp::v8EventThread(){
   ThreadSetup threadSetup;
   
+  // Create a separte GL context to be used event callbacks that are invoked here
+  CGLContextObj newCtx;
+  
+  CGDirectDisplayID display = CGMainDisplayID(); // 1
+  CGOpenGLDisplayMask myDisplayMask = CGDisplayIDToOpenGLDisplayMask( display ); // 2
+  
+  // Check capabilities of display represented by display mask
+  CGLPixelFormatAttribute attribs[] = { kCGLPFADisplayMask,
+    (CGLPixelFormatAttribute)myDisplayMask,
+    (CGLPixelFormatAttribute)0 }; // 3
+  
+  CGLPixelFormatObj pixelFormat = NULL;
+  GLint numPixelFormats = 0;
+  CGLChoosePixelFormat( attribs, &pixelFormat, &numPixelFormats );
+  CGLCreateContext( pixelFormat, glRenderer->getCglContext(), &newCtx );
+  CGLLockContext( newCtx );
+  CGLSetCurrentContext( newCtx );
+  CGLEnable( newCtx, kCGLCEMPEngine );
+  
+  // Thread loop
   while( !mShouldQuit ) {
     
     // Wait for data to be processed...
@@ -544,6 +576,10 @@ void CinderjsApp::v8EventThread(){
     
     _eventRun = false;
   }
+  
+  CGLUnlockContext( newCtx );
+  CGLDisable( newCtx, kCGLCEMPEngine );
+  CGLDestroyContext( newCtx );
   
   std::cout << "V8 Event thread ending" << std::endl;
 }

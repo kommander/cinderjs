@@ -26,7 +26,10 @@
 
 #define UTILS_MOD_ID 3
 
+#include <map>
+
 #include "../PipeModule.hpp"
+#include "../utils/TextHelpers.cpp"
 
 using namespace cinder;
 
@@ -47,7 +50,16 @@ class UtilsModule : public PipeModule {
   //
   private:
   
+    // Simple Text Helpers
+    static void createSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void drawSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void updateSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void setSimpleTextPos(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static std::map<uint32_t, boost::shared_ptr<SimpleText>> sTextObjects;
+    static uint32_t sTextObjectIds;
   
+    // Buffers
+    static Vec3f bufVec3f_1;
  };
   
 } // namespace cjs
