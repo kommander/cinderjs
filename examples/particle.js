@@ -223,6 +223,18 @@ __event__(function( type ){
     ctxSize.x = arguments[1];
     ctxSize.y = arguments[2];
   }
+  // Key Down
+  else if(type == 20){
+    var charCode = arguments[1];
+    var char = arguments[2];
+    log("KeyDown " + charCode + " / " + char);
+  }
+  // Key Up
+  else if(type == 30){
+    var charCode = arguments[1];
+    var char = arguments[2];
+    log("KeyUp " + charCode + " / " + char);
+  }
 });
 
 // Add some particles

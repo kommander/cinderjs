@@ -62,7 +62,7 @@ class AppConsole {
         //pos.y -= 15;
       }
     
-      cinder::gl::translate(2, pos.y - 100, 0);
+      cinder::gl::translate(2, pos.y - 120, 0);
       cinder::gl::draw( cinder::gl::Texture( cinder::gl::Texture( text.render() ) ) );
       
       
