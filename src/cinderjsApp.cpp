@@ -420,8 +420,8 @@ void CinderjsApp::v8RenderThread(){
       // FPS (TODO: if active)
       cinder::TextLayout fpsText;
       fpsText.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
-      fpsText.addRightLine( "FPS: " + std::to_string( cinder::app::AppBasic::getAverageFps() ) );
-      fpsText.addRightLine( "v8FPS: " + std::to_string( v8FPS ) );
+      fpsText.addLine( "Ci FPS: " + std::to_string( cinder::app::AppBasic::getAverageFps() ) );
+      fpsText.addLine( "V8 FPS: " + std::to_string( v8FPS ) );
       
       if(sV8StatsActive){
         fpsText.addLine( "V8 Heap limit: " + std::to_string( stats.heap_size_limit() ) );

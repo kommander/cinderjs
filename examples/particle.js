@@ -242,6 +242,8 @@ __event__(function( type ){
       }
     } else if(charCode == 27) { // ESC
       quit();
+    } else if(charCode == 118) { // V
+      toggleV8Stats();
     }
     
     log("KeyDown " + charCode + " / " + char);
