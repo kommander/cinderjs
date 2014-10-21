@@ -240,6 +240,8 @@ __event__(function( type ){
       } else {
         drawMethod = 0;
       }
+    } else if(charCode == 27) { // ESC
+      quit();
     }
     
     log("KeyDown " + charCode + " / " + char);

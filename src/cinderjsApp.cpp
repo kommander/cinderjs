@@ -125,6 +125,7 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   static void setEventCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toggleAppConsole(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toggleV8Stats(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void requestQuit(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   // Default Callbacks
   static v8::Persistent<v8::Function> sDrawCallback;
@@ -133,10 +134,15 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   // Console
   static volatile bool sConsoleActive;
   static volatile bool sV8StatsActive;
+  
+  // Quit
+  static bool sQuitRequested;
 };
 
 volatile bool CinderjsApp::sConsoleActive = true;
 volatile bool CinderjsApp::sV8StatsActive = true;
+
+bool CinderjsApp::sQuitRequested = false;
 
 v8::Persistent<v8::Function> CinderjsApp::sDrawCallback;
 v8::Persistent<v8::Function> CinderjsApp::sEventCallback;
@@ -330,6 +336,7 @@ void CinderjsApp::v8Thread( std::string jsFileContents ){
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "__event__"), v8::FunctionTemplate::New(mIsolate, setEventCallback));
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "toggleAppConsole"), v8::FunctionTemplate::New(mIsolate, toggleAppConsole));
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "toggleV8Stats"), v8::FunctionTemplate::New(mIsolate, toggleV8Stats));
+  mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "quit"), v8::FunctionTemplate::New(mIsolate, requestQuit));
   
   //
   // Load Modules
@@ -604,6 +611,10 @@ void CinderjsApp::keyUp( KeyEvent event )
  */
 void CinderjsApp::update()
 {
+  // Quit if requested
+  if(sQuitRequested) {
+    quit();
+  }
 }
 
 /**
@@ -716,6 +727,14 @@ void CinderjsApp::toggleAppConsole(const v8::FunctionCallbackInfo<v8::Value>& ar
  */
 void CinderjsApp::toggleV8Stats(const v8::FunctionCallbackInfo<v8::Value>& args) {
   sV8StatsActive = !sV8StatsActive;
+  return;
+}
+
+/**
+ * Allow JS to quit the App
+ */
+void CinderjsApp::requestQuit(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  sQuitRequested = true;
   return;
 }
   
