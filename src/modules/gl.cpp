@@ -66,6 +66,10 @@ void GLModule::drawSolidCircle(const v8::FunctionCallbackInfo<v8::Value>& args) 
   
   gl::drawSolidCircle(bufVec2f_1, radius);
   
+  args[0].Clear();
+  args[1].Clear();
+  args[2].Clear();
+  
   return;
 }
 

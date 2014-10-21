@@ -124,17 +124,19 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   static void setDrawCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void setEventCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toggleAppConsole(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void toggleV8Stats(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   // Default Callbacks
   static v8::Persistent<v8::Function> sDrawCallback;
   static v8::Persistent<v8::Function> sEventCallback; // TODO: only push events that were subscribed to in v8
   
   // Console
-  static volatile bool mConsoleActive;
-  
+  static volatile bool sConsoleActive;
+  static volatile bool sV8StatsActive;
 };
 
-volatile bool CinderjsApp::mConsoleActive = true;
+volatile bool CinderjsApp::sConsoleActive = true;
+volatile bool CinderjsApp::sV8StatsActive = true;
 
 v8::Persistent<v8::Function> CinderjsApp::sDrawCallback;
 v8::Persistent<v8::Function> CinderjsApp::sEventCallback;
@@ -152,7 +154,7 @@ void CinderjsApp::gcPrologueCb(Isolate *isolate, GCType type, GCCallbackFlags fl
  */
 void CinderjsApp::shutdown()
 {
-  mConsoleActive = false;
+  sConsoleActive = false;
   mShouldQuit = true;
   
   _v8Run = true;
@@ -327,6 +329,7 @@ void CinderjsApp::v8Thread( std::string jsFileContents ){
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "__draw__"), v8::FunctionTemplate::New(mIsolate, setDrawCallback));
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "__event__"), v8::FunctionTemplate::New(mIsolate, setEventCallback));
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "toggleAppConsole"), v8::FunctionTemplate::New(mIsolate, toggleAppConsole));
+  mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "toggleV8Stats"), v8::FunctionTemplate::New(mIsolate, toggleV8Stats));
   
   //
   // Load Modules
@@ -363,6 +366,8 @@ void CinderjsApp::v8RenderThread(){
   double lastFrame = getElapsedSeconds() * 1000;
   double timePassed;
   
+  v8::HeapStatistics stats;
+  
   //
   // Render Loop, do work if available
   while( !mShouldQuit ) {
@@ -384,6 +389,7 @@ void CinderjsApp::v8RenderThread(){
         v8FPS = v8Frames;
         v8Frames = 0;
         mLastUpdate = now;
+        if(sV8StatsActive) mIsolate->GetHeapStatistics(&stats);
       }
   
       CGLLockContext( currCtx ); //not sure if this is necessary but Apple's docs seem to suggest it
@@ -409,10 +415,17 @@ void CinderjsApp::v8RenderThread(){
       fpsText.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
       fpsText.addRightLine( "FPS: " + std::to_string( cinder::app::AppBasic::getAverageFps() ) );
       fpsText.addRightLine( "v8FPS: " + std::to_string( v8FPS ) );
+      
+      if(sV8StatsActive){
+        fpsText.addLine( "V8 Heap limit: " + std::to_string( stats.heap_size_limit() ) );
+        fpsText.addLine( "V8 Heap total: " + std::to_string( stats.total_heap_size() ) );
+        fpsText.addLine( "V8 Heap Used: " + std::to_string( stats.used_heap_size() ) );
+      }
+      
       cinder::gl::draw( cinder::gl::Texture( fpsText.render() ) );
 
       // Draw console (if active)
-      if(mConsoleActive){
+      if(sConsoleActive){
         Vec2f cPos;
         // TODO: this still fails sometimes on shutdown
         cPos.y = getWindowHeight();
@@ -694,7 +707,15 @@ void CinderjsApp::setEventCallback(const v8::FunctionCallbackInfo<v8::Value>& ar
  * Toggle the AppConsole view on/off
  */
 void CinderjsApp::toggleAppConsole(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  mConsoleActive = !mConsoleActive;
+  sConsoleActive = !sConsoleActive;
+  return;
+}
+
+/**
+ * Toggle v8 stats on/off
+ */
+void CinderjsApp::toggleV8Stats(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  sV8StatsActive = !sV8StatsActive;
   return;
 }
   
