@@ -26,6 +26,7 @@
 #include "modules/app.hpp"
 #include "modules/gl.hpp"
 #include "modules/console.hpp"
+#include "modules/utils.hpp"
 
 
 using namespace ci;
@@ -77,7 +78,7 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   void v8EventThread();
   
   // V8 Setup
-  void runJS( std::string scriptStr );
+  void runJS( std::string scriptStr, Local<Context> context );
   
   //
   private:
@@ -270,11 +271,11 @@ void CinderjsApp::setup()
 /**
  * Runs a JS string and prints eventual errors to the AppConsole
  */
-void CinderjsApp::runJS( std::string scriptStr ){
+void CinderjsApp::runJS( std::string scriptStr, v8::Local<v8::Context> context ){
   v8::TryCatch try_catch;
   
   // Enter the context for compiling and running the hello world script.
-  Context::Scope context_scope(mMainContext);
+  Context::Scope context_scope(context);
   
   // Create a string containing the JavaScript source code.
   Local<String> source = String::NewFromUtf8( mIsolate, scriptStr.c_str() );
@@ -335,10 +336,11 @@ void CinderjsApp::v8Thread( std::string jsFileContents ){
   addModule(boost::shared_ptr<AppModule>( new AppModule() ));
   addModule(boost::shared_ptr<GLModule>( new GLModule() ));
   addModule(boost::shared_ptr<ConsoleModule>( new ConsoleModule() ));
+  addModule(boost::shared_ptr<UtilsModule>( new UtilsModule() ));
   
   
   // Create a new context.
-  mMainContext = Context::New(mIsolate, NULL, mGlobal);
+  v8::Local<v8::Context> mMainContext = Context::New(mIsolate, NULL, mGlobal);
   Context::Scope scope(mMainContext);
   pContext.Reset(mIsolate, mMainContext);
   
@@ -348,7 +350,7 @@ void CinderjsApp::v8Thread( std::string jsFileContents ){
   sEmptyObject.Reset(mIsolate, emptyObjInstance);
   
   if( jsFileContents.length() > 0 ){
-    runJS( jsFileContents );
+    runJS( jsFileContents, mMainContext );
   }
 
   mV8RenderThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8RenderThread, this ) );

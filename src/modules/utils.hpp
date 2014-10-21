@@ -19,43 +19,36 @@
  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef _CinderAppBase_hpp_
-#define _CinderAppBase_hpp_
+#ifndef _UtilsModule_hpp_
+#define _UtilsModule_hpp_
 
 #pragma once
 
-#include <boost/shared_ptr.hpp>
+#define UTILS_MOD_ID 3
 
-#include "v8.h"
-#include "PipeModule.hpp"
+#include "../PipeModule.hpp"
+
+using namespace cinder;
 
 namespace cjs {
-
-  class CinderAppBase {
-    public:
-      CinderAppBase(){}
-      ~CinderAppBase(){}
-    
-      /**
-       * Add a module
-       * Returns true if module successfully added
-       */
-      inline bool addModule( boost::shared_ptr<PipeModule> mod )
-      {
-        mod->setIsolate( *mIsolate );
-        mod->setContext(&pContext);
-        mod->loadGlobalJS( mGlobal );
-        MODULES.push_back( mod );
-        return true;
-      }
-
-    protected:
-      std::vector<boost::shared_ptr<PipeModule>> MODULES;
-      v8::Isolate* mIsolate;
-      v8::Local<v8::ObjectTemplate> mGlobal;
-      v8::Persistent<v8::Context> pContext;
-    
-  };
+  
+class UtilsModule : public PipeModule {
+  public:
+    UtilsModule(){}
+    ~UtilsModule(){}
+  
+    inline int moduleId() {
+      return UTILS_MOD_ID;
+    }
+  
+    void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
+    void draw(){};
+  
+  //
+  private:
+  
+  
+ };
   
 } // namespace cjs
 
