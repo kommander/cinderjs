@@ -41,6 +41,7 @@
 		9ED123C419F72B02007786A6 /* cinder.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123C319F72B02007786A6 /* cinder.js */; };
 		9ED123C919F72D4F007786A6 /* test.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123C819F72D4F007786A6 /* test.js */; };
 		9ED123CB19F7309A007786A6 /* prebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123CA19F7309A007786A6 /* prebuild.sh */; };
+		9ED123CF19F78F85007786A6 /* path.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123CE19F78F85007786A6 /* path.js */; };
 		B6B86EEF243D496CAA6AC588 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = A16F000F7FC04E0DA0360B7B /* CinderApp.icns */; };
 /* End PBXBuildFile section */
 
@@ -94,6 +95,7 @@
 		9ED123C619F72B2B007786A6 /* js2c.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = js2c.py; path = ../tools/js2c.py; sourceTree = "<group>"; };
 		9ED123C819F72D4F007786A6 /* test.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = test.js; path = ../examples/test.js; sourceTree = "<group>"; };
 		9ED123CA19F7309A007786A6 /* prebuild.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = prebuild.sh; path = ../tools/prebuild.sh; sourceTree = "<group>"; };
+		9ED123CE19F78F85007786A6 /* path.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = path.js; path = ../lib/path.js; sourceTree = "<group>"; };
 		9EFB3A3A19F480BB00013216 /* lines.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = lines.js; path = ../examples/lines.js; sourceTree = "<group>"; };
 		A16F000F7FC04E0DA0360B7B /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
 		B26520EF291B4336BEC87FD7 /* cinderjsApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = cinderjsApp.cpp; path = ../src/cinderjsApp.cpp; sourceTree = "<group>"; };
@@ -265,6 +267,7 @@
 		9E9B3E3319F0121D00291CDE /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				9ED123CE19F78F85007786A6 /* path.js */,
 				9ED123C319F72B02007786A6 /* cinder.js */,
 			);
 			name = lib;
@@ -384,6 +387,7 @@
 				9EAF080919EDC4C600C02F65 /* README.md in Resources */,
 				B6B86EEF243D496CAA6AC588 /* CinderApp.icns in Resources */,
 				9ED123CB19F7309A007786A6 /* prebuild.sh in Resources */,
+				9ED123CF19F78F85007786A6 /* path.js in Resources */,
 				9ED123C919F72D4F007786A6 /* test.js in Resources */,
 				9ED123C419F72B02007786A6 /* cinder.js in Resources */,
 			);
