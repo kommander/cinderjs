@@ -928,9 +928,9 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
   Local<String> moduleName = args[0]->ToString();
   
   if (moduleName.IsEmpty()) {
-      std::string except = "NativeBinding needs a module name. fail.";
-      isolate->ThrowException(String::NewFromUtf8(isolate, except.c_str()));
-      return;
+    std::string except = "NativeBinding needs a module name. fail.";
+    isolate->ThrowException(String::NewFromUtf8(isolate, except.c_str()));
+    return;
   }
   
   Local<Object> cache = Local<Object>::New(isolate, sModuleCache);
@@ -945,7 +945,7 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
   v8::String::Utf8Value strModuleName(moduleName);
   std::string cmpModName(*strModuleName);
   
-  // Add to chache
+  // Add to list
   std::string buf = "Native ";
   buf.append(*strModuleName);
   
@@ -968,10 +968,6 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
   }
   
   if (found) {
-    std::string except = "Found module ";
-    except.append(mod.name);
-    AppConsole::log(except);
-  
     exports = Object::New(isolate);
     Local<Value> modResult = executeScriptString(mod.source, isolate, isolate->GetCurrentContext());
     
@@ -981,6 +977,7 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
       except.append(*strModuleName);
     
       isolate->ThrowException(String::NewFromUtf8(isolate, except.c_str()));
+      // TODO: remove from module list again
       return;
     }
     
@@ -997,6 +994,7 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
     
     if(tryCatch.HasCaught()){
       handleV8TryCatch(tryCatch);
+      // TODO: remove from module list again
       return;
     }
     
@@ -1006,6 +1004,7 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
     except.append(*strModuleName);
   
     isolate->ThrowException(String::NewFromUtf8(isolate, except.c_str()));
+    // TODO: remove from module list again
     return;
   }
 
