@@ -227,7 +227,8 @@ void CinderjsApp::setup()
   for(std::vector<std::string>::iterator it = args.begin(); it != args.end(); ++it) {
     AppConsole::log("argv " + std::to_string(pos) + ":" + *it);
     pos++;
-   
+    
+    // Everything after the js app file can be handed forward to the app
     std::string s = *it;
     if( s.find(".js") != std::string::npos ){
       jsMainFile = *it;
@@ -265,11 +266,13 @@ void CinderjsApp::setup()
   glRenderer = getRenderer();
   
   // Get cinder.js main native
-  std::string mainJS(cinder_native);
-  
-  
-  mV8Thread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8Thread, this, mainJS ) );
-  
+  if(cinder_native && sizeof(cinder_native) > 0) {
+    std::string mainJS(cinder_native);
+    mV8Thread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8Thread, this, mainJS ) );
+  } else {
+    // FATAL: No main entry source
+    quit();
+  }
 }
 
 /**
