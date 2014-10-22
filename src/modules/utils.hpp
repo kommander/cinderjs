@@ -51,6 +51,7 @@ class UtilsModule : public PipeModule {
   private:
   
     // Simple Text Helpers
+    // Using reference numbers to internal C++ Object to avoid wrapping/unwrapping of v8::Objects (slow)
     static void createSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void drawSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void updateSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args);
