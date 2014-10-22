@@ -1,3 +1,5 @@
+log('>>> LINES.JS START <<<');
+
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -8,15 +10,23 @@ var ctxSize = {
   y: 480
 };
 
-var loop = function(){
-  for(var i = 0; i < 10000; i++){
-    gl.drawLine(
-      getRandomInt(0, ctxSize.x), getRandomInt(0, ctxSize.y),
-      getRandomInt(0, ctxSize.x), getRandomInt(0, ctxSize.y)
-    );
+try {
+
+  var loop = function(){
+    for(var i = 0; i < 10000; i++){
+      gl.drawLine(
+        getRandomInt(0, ctxSize.x), getRandomInt(0, ctxSize.y),
+        getRandomInt(0, ctxSize.x), getRandomInt(0, ctxSize.y)
+      );
+    }
   }
+
+  __draw__(function(){
+    loop();
+  });
+} catch(ex) {
+  log("Error: " + ex);
+  return;
 }
 
-__draw__(function(){
-  loop();
-});
+log('>>> LINES.JS END <<<');

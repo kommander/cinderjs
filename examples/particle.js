@@ -219,6 +219,8 @@ var loop = function(timePassed){
   utils.drawSimpleText(textId);
 }
 
+log('>>> PARTICLE.JS <<<');
+
 __draw__(function(timePassed, mx, my){
   // Update mouse position
   mouse.x = mx;
