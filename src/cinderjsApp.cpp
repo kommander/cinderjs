@@ -79,7 +79,7 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   void v8EventThread();
   
   // V8 Setup
-  void executeScriptString( std::string scriptStr, Local<Context> context );
+  static v8::Local<v8::Value> executeScriptString( std::string scriptStr, Isolate* isolate, Local<Context> context );
   
   //
   private:
@@ -113,10 +113,14 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   // Path
   Path mCwd;
   
-  // V8
+  // V8 Threads
   std::shared_ptr<std::thread> mV8Thread;
   std::shared_ptr<std::thread> mV8RenderThread;
   std::shared_ptr<std::thread> mV8EventThread;
+  
+  // Modules
+  static v8::Persistent<v8::Object> sModuleCache;
+  static v8::Persistent<v8::Array> sModuleList;
   
   // GC
   static void gcPrologueCb(Isolate *isolate, GCType type, GCCallbackFlags flags);
@@ -128,6 +132,9 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   static void toggleAppConsole(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toggleV8Stats(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void requestQuit(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
+  // Default Process Bindings
+  static void NativeBinding(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   // Default Callbacks
   static v8::Persistent<v8::Function> sDrawCallback;
@@ -140,15 +147,25 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   static volatile bool sConsoleActive;
   static volatile bool sV8StatsActive;
   
+  // Error Handling
+  static void handleV8TryCatch( v8::TryCatch &tryCatch );
+  
   // Quit
   static bool sQuitRequested;
 };
 
+#ifdef DEBUG
+volatile bool CinderjsApp::sConsoleActive = true;
+#else
 volatile bool CinderjsApp::sConsoleActive = false;
+#endif
 volatile bool CinderjsApp::sV8StatsActive = false;
 
 bool CinderjsApp::sQuitRequested = false;
 
+v8::Persistent<v8::Object> CinderjsApp::sModuleCache;
+v8::Persistent<v8::Array> CinderjsApp::sModuleList;
+  
 v8::Persistent<v8::Function> CinderjsApp::sDrawCallback;
 v8::Persistent<v8::Function> CinderjsApp::sEventCallback;
 
@@ -159,6 +176,13 @@ void CinderjsApp::gcPrologueCb(Isolate *isolate, GCType type, GCCallbackFlags fl
   sGCRuns++;
   //AppConsole::log("GC Prologue " + std::to_string(sGCRuns));
   std::cout << "GC Prologue " << std::to_string(sGCRuns) << std::endl;
+}
+
+void CinderjsApp::handleV8TryCatch( v8::TryCatch &tryCatch ) {
+  v8::String::Utf8Value trace(tryCatch.StackTrace());
+  std::string ex = "JS Error: ";
+  ex.append(*trace);
+  AppConsole::log( ex );
 }
 
 
@@ -278,14 +302,16 @@ void CinderjsApp::setup()
 /**
  * Runs a JS string and prints eventual errors to the AppConsole
  */
-void CinderjsApp::executeScriptString( std::string scriptStr, v8::Local<v8::Context> context ){
+v8::Local<v8::Value> CinderjsApp::executeScriptString( std::string scriptStr, Isolate* isolate, v8::Local<v8::Context> context ){
+  EscapableHandleScope scope(isolate);
+
   v8::TryCatch try_catch;
   
-  // Enter the context for compiling and running the hello world script.
+  // Enter the context for compiling and running
   Context::Scope context_scope(context);
   
   // Create a string containing the JavaScript source code.
-  Local<String> source = String::NewFromUtf8( mIsolate, scriptStr.c_str() );
+  Local<String> source = String::NewFromUtf8( isolate, scriptStr.c_str() );
   
   // Compile the source code.
   Local<Script> script = Script::Compile( source );
@@ -294,21 +320,15 @@ void CinderjsApp::executeScriptString( std::string scriptStr, v8::Local<v8::Cont
   Local<Value> result = script->Run();
   
   // Check for script errors
-  if(result.IsEmpty()){
-    if(try_catch.HasCaught()){
-      //v8::String::Utf8Value exception(try_catch.Exception());
-      v8::String::Utf8Value trace(try_catch.StackTrace());
-      std::string ex = "JS Error: ";
-      //ex.append(*exception);
-      ex.append(*trace);
-      AppConsole::log( ex );
-    }
+  if(try_catch.HasCaught()){
+    handleV8TryCatch(try_catch);
   }
   
+  return scope.Escape(result);
 }
 
 /**
- *
+ * Setup V8
  */
 void CinderjsApp::v8Thread( std::string mainJS ){
   ThreadSetup threadSetup;
@@ -338,6 +358,12 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "toggleV8Stats"), v8::FunctionTemplate::New(mIsolate, toggleV8Stats));
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "quit"), v8::FunctionTemplate::New(mIsolate, requestQuit));
   
+  // Setup process object
+  v8::Local<v8::ObjectTemplate> processObj = ObjectTemplate::New();
+  
+  // TODO: add process argv
+  mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "process"), processObj);
+  
   //
   // Load Modules
   addModule(boost::shared_ptr<AppModule>( new AppModule() ));
@@ -351,6 +377,11 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   Context::Scope scope(mMainContext);
   pContext.Reset(mIsolate, mMainContext);
   
+  // Initialize module list and set on process
+  Local<Array> list = Array::New(mIsolate);
+  sModuleList.Reset(mIsolate, list);
+  processObj->Set(v8::String::NewFromUtf8(mIsolate, "modules"), list);
+  
   // Setup global empty object for function callbacks
   Local<ObjectTemplate> emptyObj = ObjectTemplate::New();
   Handle<Object> emptyObjInstance = emptyObj->NewInstance();
@@ -363,7 +394,27 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   CGLLockContext( currCtx );
   
   // Execute entry script
-  executeScriptString( mainJS, mMainContext );
+  Local<Value> mainResult = executeScriptString( mainJS, mIsolate, mMainContext );
+  
+  // Call wrapper function with process object
+  if(mainResult->IsFunction()){
+    Local<Function> mainFn = mainResult.As<Function>();
+    Local<Value> arg = mMainContext->Global()->Get(v8::String::NewFromUtf8(mIsolate, "process"));
+    
+    v8::TryCatch tryCatch;
+    
+    mainFn->Call(mMainContext->Global(), 1, &arg);
+    
+    if(tryCatch.HasCaught()){
+      handleV8TryCatch(tryCatch);
+    }
+    
+    // TODO: process.nextFrame(fn) method, which pushes a v8 callack to the execution stack and runs it in the v8 event thread in the next draw cycle
+    //       -> Then this execution does not necessarily need a GL context wrap
+  } else {
+    // FATAL: Main script not a function
+    quit();
+  }
   
   // Get rid of gl context again
   CGLUnlockContext( currCtx );
@@ -711,10 +762,7 @@ void CinderjsApp::v8Draw( double timePassed ){
     
     // Check for errors
     if(try_catch.HasCaught()){
-      v8::String::Utf8Value trace(try_catch.StackTrace());
-      std::string ex = "JS Error: ";
-      ex.append(*trace);
-      AppConsole::log( ex );
+      handleV8TryCatch(try_catch);
     }
 
     callback.Clear();
@@ -772,6 +820,12 @@ void CinderjsApp::setEventCallback(const v8::FunctionCallbackInfo<v8::Value>& ar
  * Toggle the AppConsole view on/off
  */
 void CinderjsApp::toggleAppConsole(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  if(args.Length() > 0) {
+    bool active = args[0]->ToBoolean()->Value();
+    sConsoleActive = active;
+    return;
+  }
+
   sConsoleActive = !sConsoleActive;
   return;
 }
@@ -790,6 +844,75 @@ void CinderjsApp::toggleV8Stats(const v8::FunctionCallbackInfo<v8::Value>& args)
 void CinderjsApp::requestQuit(const v8::FunctionCallbackInfo<v8::Value>& args) {
   sQuitRequested = true;
   return;
+}
+
+/**
+ * Load a native js module (lib)
+ */
+void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
+  Isolate* isolate = args.GetIsolate();
+  HandleScope handle_scope(isolate);
+ 
+  Local<String> moduleName = args[0]->ToString();
+  v8::String::Utf8Value strModuleName(moduleName);
+
+  Local<Object> cache = Local<Object>::New(isolate, sModuleCache);
+  Local<Object> exports;
+
+  if (cache->Has(moduleName)) {
+    exports = cache->Get(moduleName)->ToObject();
+    args.GetReturnValue().Set(exports);
+    return;
+  }
+
+  // Add to chache
+  std::string buf = "Native ";
+  buf.append(*strModuleName);
+  
+  Local<Array> moduleList = Local<Array>::New(isolate, sModuleList);
+  uint32_t len = moduleList->Length();
+  moduleList->Set(len, String::NewFromUtf8(isolate, buf.c_str()));
+  
+  // Lookup native modules
+  _native mod;
+  bool found = false;
+  for(int i = 0; i < sizeof(natives); i++) {
+    if(strcmp(natives[i].name, *strModuleName)){
+      mod = natives[i];
+    }
+  }
+  
+  if (found) {
+    exports = Object::New(isolate);
+    Local<Value> modResult = executeScriptString(mod.source, isolate, isolate->GetCurrentContext());
+    
+    // Check native module validity
+    if(!modResult->IsFunction()){
+      std::string except = "Native module not a function: ";
+      except.append(*strModuleName);
+    
+      isolate->ThrowException(String::NewFromUtf8(isolate, except.c_str()));
+      return;
+    }
+    
+    Local<Function> modFn = modResult.As<Function>();
+    
+    // Call
+    Local<Value> argv[1] = {
+      exports
+    };
+    modFn->Call(isolate->GetCurrentContext()->Global(), 1, argv);
+    
+    cache->Set(moduleName, exports);
+  } else {
+    std::string except = "No such native module: ";
+    except.append(*strModuleName);
+  
+    isolate->ThrowException(String::NewFromUtf8(isolate, except.c_str()));
+    return;
+  }
+
+  args.GetReturnValue().Set(exports);
 }
   
 } // namespace cjs
