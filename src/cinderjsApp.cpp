@@ -237,27 +237,11 @@ void CinderjsApp::setup()
   mCwd = boost::filesystem::current_path();
   AppConsole::log("Current Path: " + mCwd.string());
   
-  // TODO: Choose between loading a script from asset folder or specified in command line
-  #ifdef DEBUG
-  //std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/lib/test.js";
-  std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js";
-  //std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js";
-  //std::string jsMainFile = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js";
-  #else
-  std::string jsMainFile;
-  #endif
-  
   // Check argv arguments
+  // TODO: Check for debug flag
   int pos = 0;
   for(std::vector<std::string>::iterator it = args.begin(); it != args.end(); ++it) {
-    AppConsole::log("argv " + std::to_string(pos) + ":" + *it);
     pos++;
-    
-    // Everything after the js app file can be handed forward to the app
-    std::string s = *it;
-    if( s.find(".js") != std::string::npos ){
-      jsMainFile = *it;
-    }
   }
   
   // Do we have a js file to run?
@@ -361,8 +345,6 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   
   // Setup process object
   v8::Local<v8::ObjectTemplate> processObj = ObjectTemplate::New();
-  
-  // TODO: add process argv
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "process"), processObj);
   
   //
@@ -378,10 +360,30 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   Context::Scope scope(mMainContext);
   pContext.Reset(mIsolate, mMainContext);
   
+  // Get process object instance and set additional values
+  Local<Value> processObjInstance = mMainContext->Global()->Get(v8::String::NewFromUtf8(mIsolate, "process"));
+  
   // Initialize module list and set on process
   Local<Array> list = Array::New(mIsolate);
   sModuleList.Reset(mIsolate, list);
-  processObj->Set(v8::String::NewFromUtf8(mIsolate, "modules"), list);
+  processObjInstance.As<Object>()->Set(v8::String::NewFromUtf8(mIsolate, "modules"), list);
+  
+  // add process.argv
+  vector<std::string> argv = getArgs();
+  
+  #ifdef DEBUG
+  // For development loading...
+  //argv[2] = "/Users/sebastian/Dropbox/+Projects/cinderjs/lib/test.js";
+  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js");
+  //argv[2] = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js";
+  //argv[2] = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js";
+  #endif
+  
+  Local<Array> argvArr = Array::New(mIsolate);
+  for (int i = 0; i < argv.size(); ++i) {
+    argvArr->Set(i, String::NewFromUtf8(mIsolate, argv[i].c_str()));
+  }
+  processObjInstance.As<Object>()->Set(v8::String::NewFromUtf8(mIsolate, "argv"), argvArr);
   
   // Setup global empty object for function callbacks
   Local<ObjectTemplate> emptyObj = ObjectTemplate::New();
@@ -400,11 +402,10 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   // Call wrapper function with process object
   if(mainResult->IsFunction()){
     Local<Function> mainFn = mainResult.As<Function>();
-    Local<Value> arg = mMainContext->Global()->Get(v8::String::NewFromUtf8(mIsolate, "process"));
     
     v8::TryCatch tryCatch;
     
-    mainFn->Call(mMainContext->Global(), 1, &arg);
+    mainFn->Call(mMainContext->Global(), 1, &processObjInstance);
     
     if(tryCatch.HasCaught()){
       handleV8TryCatch(tryCatch);
