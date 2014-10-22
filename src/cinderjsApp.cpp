@@ -28,6 +28,8 @@
 #include "modules/gl.hpp"
 #include "modules/console.hpp"
 #include "modules/utils.hpp"
+#include "modules/fs.hpp"
+#include "modules/vm.hpp"
 
 
 using namespace ci;
@@ -266,31 +268,6 @@ void CinderjsApp::setup()
     pos++;
   }
   
-  // Do we have a js file to run?
-//  std::string jsFileContents;
-//  if(jsMainFile.length() > 0) {
-//    AppConsole::log("Starting app with JS file at: " + jsMainFile);
-//    
-//    if( !cinder::fs::exists( jsMainFile ) ){
-//      AppConsole::log("Could not find specified JS file!");
-//    } else {
-//      try {
-//        std::ifstream in(jsMainFile, std::ios::in );
-//        if (in)
-//        {
-//          std::ostringstream contents;
-//          contents << in.rdbuf();
-//          jsFileContents = contents.str();
-//          in.close();
-//        }
-//      } catch(std::exception &e) {
-//        std::string err = "Error: ";
-//        err.append(e.what());
-//        AppConsole::log( err );
-//      }
-//    }
-//  }
-  
   // clear out the window with black
   gl::clear( Color( 0, 0, 0 ) );
   
@@ -389,6 +366,8 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   addModule(boost::shared_ptr<GLModule>( new GLModule() ));
   addModule(boost::shared_ptr<ConsoleModule>( new ConsoleModule() ));
   addModule(boost::shared_ptr<UtilsModule>( new UtilsModule() ));
+  addModule(boost::shared_ptr<FSModule>( new FSModule() ));
+  addModule(boost::shared_ptr<VMModule>( new VMModule() ));
   
   
   // Create a new context.
@@ -416,7 +395,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   // For development loading...
   //argv[2] = "/Users/sebastian/Dropbox/+Projects/cinderjs/lib/test.js";
   argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js");
-  //argv[2] = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js";
+  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js");
   //argv[2] = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js";
   #endif
   
@@ -1024,7 +1003,7 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
       v8::String::NewFromUtf8(isolate, filename.c_str()) );
     
     // Check native module validity
-    if(!modResult->IsFunction()){
+    if(modResult.IsEmpty() || !modResult->IsFunction()){
       std::string except = "Native module not a function: ";
       except.append(*strModuleName);
     
@@ -1042,7 +1021,8 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
       v8::Local<v8::Value>::Cast(v8::FunctionTemplate::New(isolate, NativeBinding)->GetFunction())
     };
     
-    modFn->Call(isolate->GetCurrentContext()->Global(), 2, argv);
+    // Try: v8::Local<Context>::New(isolate, pContext)
+    modFn->Call(isolate->GetCallingContext()->Global(), 2, argv);
     
     if(tryCatch.HasCaught()){
       handleV8TryCatch(tryCatch);
