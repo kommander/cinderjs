@@ -194,9 +194,16 @@ void CinderjsApp::gcPrologueCb(Isolate *isolate, GCType type, GCCallbackFlags fl
 }
 
 void CinderjsApp::handleV8TryCatch( v8::TryCatch &tryCatch ) {
-  v8::String::Utf8Value trace(tryCatch.StackTrace());
+  std::string msg;
+  if(tryCatch.StackTrace().IsEmpty()){
+    v8::String::Utf8Value except(tryCatch.Exception());
+    msg = *except;
+  } else {
+    v8::String::Utf8Value trace(tryCatch.StackTrace());
+    msg = *trace;
+  }
   std::string ex = "JS Error: ";
-  ex.append(*trace);
+  ex.append(msg);
   AppConsole::log( ex );
 }
 
@@ -360,6 +367,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   // Setup process object
   v8::Local<v8::ObjectTemplate> processObj = ObjectTemplate::New();
   processObj->Set(v8::String::NewFromUtf8(mIsolate, "nextFrame"), v8::FunctionTemplate::New(mIsolate, nextFrameJS));
+  processObj->Set(v8::String::NewFromUtf8(mIsolate, "nativeBinding"), v8::FunctionTemplate::New(mIsolate, NativeBinding));
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "process"), processObj);
   
   //
@@ -382,6 +390,11 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   Local<Array> list = Array::New(mIsolate);
   sModuleList.Reset(mIsolate, list);
   processObjInstance.As<Object>()->Set(v8::String::NewFromUtf8(mIsolate, "modules"), list);
+  
+  // Initialize module cache
+  Local<Object> obj = Object::New(mIsolate);
+  sModuleCache.Reset(mIsolate, obj);
+  processObjInstance.As<Object>()->Set(v8::String::NewFromUtf8(mIsolate, "_moduleCache"), obj);
   
   // add process.argv
   vector<std::string> argv = getArgs();
@@ -605,7 +618,6 @@ void CinderjsApp::v8EventThread(){
         // Callback
         v8::Local<v8::Function> callback;
         if(evt->type == CJS_NEXT_FRAME) {
-          AppConsole::log("Got next...");
           callback = v8::Local<v8::Function>::New(mIsolate, evt->v8Fn);
           evt->v8Fn.Reset(); // Get rid of persistent
         } else {
@@ -648,7 +660,6 @@ void CinderjsApp::v8EventThread(){
         
         // Next Frame
         else if(evt->type == CJS_NEXT_FRAME){
-          AppConsole::log("Executing next frame...");
           v8::Handle<v8::Value> argv[0] = {};
           callback->Call(context->Global(), 0, argv);
         }
@@ -911,10 +922,17 @@ void CinderjsApp::nextFrameJS(const v8::FunctionCallbackInfo<v8::Value>& args) {
 void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
   Isolate* isolate = args.GetIsolate();
   HandleScope handle_scope(isolate);
- 
+  
+  Locker lock(isolate);
+  
   Local<String> moduleName = args[0]->ToString();
-  v8::String::Utf8Value strModuleName(moduleName);
-
+  
+  if (moduleName.IsEmpty()) {
+      std::string except = "NativeBinding needs a module name. fail.";
+      isolate->ThrowException(String::NewFromUtf8(isolate, except.c_str()));
+      return;
+  }
+  
   Local<Object> cache = Local<Object>::New(isolate, sModuleCache);
   Local<Object> exports;
 
@@ -923,7 +941,10 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
     args.GetReturnValue().Set(exports);
     return;
   }
-
+  
+  v8::String::Utf8Value strModuleName(moduleName);
+  std::string cmpModName(*strModuleName);
+  
   // Add to chache
   std::string buf = "Native ";
   buf.append(*strModuleName);
@@ -936,12 +957,21 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
   _native mod;
   bool found = false;
   for(int i = 0; i < sizeof(natives); i++) {
-    if(strcmp(natives[i].name, *strModuleName)){
+    if(natives[i].name == NULL) break;
+    std::string cmp(natives[i].name);
+    if(cmp == "cinder") continue;
+    if(cmp == cmpModName){
       mod = natives[i];
+      found = true;
+      break;
     }
   }
   
   if (found) {
+    std::string except = "Found module ";
+    except.append(mod.name);
+    AppConsole::log(except);
+  
     exports = Object::New(isolate);
     Local<Value> modResult = executeScriptString(mod.source, isolate, isolate->GetCurrentContext());
     
@@ -960,7 +990,15 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
     Local<Value> argv[1] = {
       exports
     };
+    
+    v8::TryCatch tryCatch;
+    
     modFn->Call(isolate->GetCurrentContext()->Global(), 1, argv);
+    
+    if(tryCatch.HasCaught()){
+      handleV8TryCatch(tryCatch);
+      return;
+    }
     
     cache->Set(moduleName, exports);
   } else {
