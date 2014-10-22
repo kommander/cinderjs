@@ -39,13 +39,23 @@ namespace cjs {
 
 typedef boost::filesystem::path Path;
 
-struct BufferedEvent {
+class BufferedEventHolder {
+  public:
   int type;
   MouseEvent mEvt;
   KeyEvent kEvt;
+  v8::Persistent<v8::Function> v8Fn;
 };
+typedef boost::shared_ptr<BufferedEventHolder> BufferedEvent;
+
+class NextFrameFnHolder {
+  public:
+  v8::Persistent<v8::Function> v8Fn;
+};
+typedef boost::shared_ptr<NextFrameFnHolder> NextFrameFn;
 
 enum EventType {
+  CJS_NEXT_FRAME = 1,
   CJS_RESIZE = 10,
   CJS_KEY_DOWN = 20,
   CJS_KEY_UP = 30
@@ -60,7 +70,7 @@ enum EventType {
 
 class CinderjsApp : public AppNative, public CinderAppBase  {
   public:
-  CinderjsApp() : mEventQueue(32) {}
+  CinderjsApp() : mEventQueue(1024) {}
   ~CinderjsApp(){}
   
   // Cinder App
@@ -109,6 +119,7 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   
   // Eventing
   ConcurrentCircularBuffer<BufferedEvent> mEventQueue;
+  static ConcurrentCircularBuffer<NextFrameFn> sExecutionQueue;
   volatile Vec2f mousePosBuf;
   
   // Path
@@ -133,6 +144,7 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   static void toggleAppConsole(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toggleV8Stats(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void requestQuit(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void nextFrameJS(const v8::FunctionCallbackInfo<v8::Value>& args);
   
   // Default Process Bindings
   static void NativeBinding(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -171,6 +183,8 @@ v8::Persistent<v8::Function> CinderjsApp::sDrawCallback;
 v8::Persistent<v8::Function> CinderjsApp::sEventCallback;
 
 v8::Persistent<v8::Object> CinderjsApp::sEmptyObject;
+
+ConcurrentCircularBuffer<NextFrameFn> CinderjsApp::sExecutionQueue(1024);
 
 int CinderjsApp::sGCRuns = 0;
 void CinderjsApp::gcPrologueCb(Isolate *isolate, GCType type, GCCallbackFlags flags) {
@@ -345,6 +359,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   
   // Setup process object
   v8::Local<v8::ObjectTemplate> processObj = ObjectTemplate::New();
+  processObj->Set(v8::String::NewFromUtf8(mIsolate, "nextFrame"), v8::FunctionTemplate::New(mIsolate, nextFrameJS));
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "process"), processObj);
   
   //
@@ -573,9 +588,6 @@ void CinderjsApp::v8EventThread(){
       v8::Isolate::Scope isolate_scope(mIsolate);
       v8::HandleScope handleScope(mIsolate);
       
-      // Callback
-      // TODO: initialize on thread start and reuse
-      v8::Local<v8::Function> callback = v8::Local<v8::Function>::New(mIsolate, sEventCallback);
       
       v8::Local<v8::Context> context = v8::Local<v8::Context>::New(mIsolate, pContext);
       
@@ -584,50 +596,63 @@ void CinderjsApp::v8EventThread(){
       Context::Scope ctxScope(context);
       context->Enter();
       
-      if( !callback.IsEmpty() ){
+      
         
-        while(mEventQueue.isNotEmpty()){
-          BufferedEvent evt;
-          mEventQueue.popBack(&evt);
-          
-          // Resize Event
-          if(evt.type == CJS_RESIZE){
-            v8::Handle<v8::Value> argv[3] = {
-              v8::Number::New(mIsolate, CJS_RESIZE),
-              v8::Number::New(mIsolate, getWindowWidth()),
-              v8::Number::New(mIsolate, getWindowHeight())
-            };
-            callback->Call(context->Global(), 3, argv);
-            argv->Clear();
-          }
-          
-          // Key down
-          else if(evt.type == CJS_KEY_DOWN){
-            v8::Handle<v8::Value> argv[3] = {
-              v8::Number::New(mIsolate, CJS_KEY_DOWN),
-              v8::Number::New(mIsolate, evt.kEvt.getCode()),
-              v8::Number::New(mIsolate, evt.kEvt.getChar())
-              // ... TODO: Push more event info
-            };
-            callback->Call(context->Global(), 3, argv);
-            argv->Clear();
-          }
-          
-          // Key up
-          else if(evt.type == CJS_KEY_UP){
-            v8::Handle<v8::Value> argv[3] = {
-              v8::Number::New(mIsolate, CJS_KEY_UP),
-              v8::Number::New(mIsolate, evt.kEvt.getCode()),
-              v8::Number::New(mIsolate, evt.kEvt.getChar())
-              // ... TODO: Push more event info
-            };
-            callback->Call(context->Global(), 3, argv);
-            argv->Clear();
-          }
+      while(mEventQueue.isNotEmpty()){
+        BufferedEvent evt(new BufferedEventHolder());
+        mEventQueue.popBack(&evt);
         
+        // Callback
+        v8::Local<v8::Function> callback;
+        if(evt->type == CJS_NEXT_FRAME) {
+          AppConsole::log("Got next...");
+          callback = v8::Local<v8::Function>::New(mIsolate, evt->v8Fn);
+          evt->v8Fn.Reset(); // Get rid of persistent
+        } else {
+          callback = v8::Local<v8::Function>::New(mIsolate, sEventCallback);
         }
         
-        callback.Clear();
+        if(callback.IsEmpty()) continue;
+        
+        // Resize Event
+        if(evt->type == CJS_RESIZE){
+          v8::Handle<v8::Value> argv[3] = {
+            v8::Number::New(mIsolate, CJS_RESIZE),
+            v8::Number::New(mIsolate, getWindowWidth()),
+            v8::Number::New(mIsolate, getWindowHeight())
+          };
+          callback->Call(context->Global(), 3, argv);
+        }
+        
+        // Key down
+        else if(evt->type == CJS_KEY_DOWN){
+          v8::Handle<v8::Value> argv[3] = {
+            v8::Number::New(mIsolate, CJS_KEY_DOWN),
+            v8::Number::New(mIsolate, evt->kEvt.getCode()),
+            v8::Number::New(mIsolate, evt->kEvt.getChar())
+            // ... TODO: Push more event info
+          };
+          callback->Call(context->Global(), 3, argv);
+        }
+        
+        // Key up
+        else if(evt->type == CJS_KEY_UP){
+          v8::Handle<v8::Value> argv[3] = {
+            v8::Number::New(mIsolate, CJS_KEY_UP),
+            v8::Number::New(mIsolate, evt->kEvt.getCode()),
+            v8::Number::New(mIsolate, evt->kEvt.getChar())
+            // ... TODO: Push more event info
+          };
+          callback->Call(context->Global(), 3, argv);
+        }
+        
+        // Next Frame
+        else if(evt->type == CJS_NEXT_FRAME){
+          AppConsole::log("Executing next frame...");
+          v8::Handle<v8::Value> argv[0] = {};
+          callback->Call(context->Global(), 0, argv);
+        }
+
       }
       
       context->Exit();
@@ -649,8 +674,8 @@ void CinderjsApp::v8EventThread(){
  */
 void CinderjsApp::resize()
 {
-  BufferedEvent evt;
-  evt.type = CJS_RESIZE;
+  BufferedEvent evt(new BufferedEventHolder());
+  evt->type = CJS_RESIZE;
   mEventQueue.pushFront(evt);
   _eventRun = true;
   cvEventThread.notify_one();
@@ -681,9 +706,9 @@ void CinderjsApp::mouseDown( MouseEvent event )
  */
 void CinderjsApp::keyDown( KeyEvent event )
 {
-  BufferedEvent evt;
-  evt.type = CJS_KEY_DOWN;
-  evt.kEvt = event;
+  BufferedEvent evt(new BufferedEventHolder());
+  evt->type = CJS_KEY_DOWN;
+  evt->kEvt = event;
   mEventQueue.pushFront(evt);
   _eventRun = true;
   cvEventThread.notify_one();
@@ -694,9 +719,9 @@ void CinderjsApp::keyDown( KeyEvent event )
  */
 void CinderjsApp::keyUp( KeyEvent event )
 {
-  BufferedEvent evt;
-  evt.type = CJS_KEY_UP;
-  evt.kEvt = event;
+  BufferedEvent evt(new BufferedEventHolder());
+  evt->type = CJS_KEY_UP;
+  evt->kEvt = event;
   mEventQueue.pushFront(evt);
   _eventRun = true;
   cvEventThread.notify_one();
@@ -725,6 +750,20 @@ void CinderjsApp::draw()
   if(!_v8Run){
     _v8Run = true;
     cvJSThread.notify_one();
+  }
+  
+  // Handle execution stack
+  if(sExecutionQueue.isNotEmpty()){
+    while(sExecutionQueue.isNotEmpty()){
+      BufferedEvent evt(new BufferedEventHolder());
+      NextFrameFn nffn(new NextFrameFnHolder());
+      sExecutionQueue.popBack(&nffn);
+      evt->type = CJS_NEXT_FRAME;
+      evt->v8Fn.Reset(mIsolate, nffn->v8Fn);
+      mEventQueue.pushFront(evt);
+    }
+    _eventRun = true;
+    cvEventThread.notify_one();
   }
   
 }
@@ -850,6 +889,20 @@ void CinderjsApp::requestQuit(const v8::FunctionCallbackInfo<v8::Value>& args) {
   sQuitRequested = true;
   // TODO: emit process exit event for js to react on and shutdown stuff if necessary
   return;
+}
+
+/**
+ * Async function execution in the next frame (executed in v8 event thread)
+ */
+void CinderjsApp::nextFrameJS(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  Isolate* isolate = args.GetIsolate();
+  HandleScope scope(isolate);
+
+  if(args[0]->IsFunction()){
+    NextFrameFn nffn(new NextFrameFnHolder());
+    nffn->v8Fn.Reset(isolate, args[0].As<Function>());
+    sExecutionQueue.pushFront(nffn);
+  }
 }
 
 /**
