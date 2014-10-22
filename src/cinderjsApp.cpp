@@ -368,7 +368,14 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   v8::Local<v8::ObjectTemplate> processObj = ObjectTemplate::New();
   processObj->Set(v8::String::NewFromUtf8(mIsolate, "nextFrame"), v8::FunctionTemplate::New(mIsolate, nextFrameJS));
   processObj->Set(v8::String::NewFromUtf8(mIsolate, "nativeBinding"), v8::FunctionTemplate::New(mIsolate, NativeBinding));
+  // TODO: export process.platform
+  // TODO: export process.noDeprecation
+  // TODO: export process.throwDeprecation
+  // TODO: export process.traceDeprecation
+  // TODO: export process.pid
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "process"), processObj);
+  
+  // TODO: export console[log, error, trace, etc.]
   
   //
   // Load Modules
@@ -441,8 +448,6 @@ void CinderjsApp::v8Thread( std::string mainJS ){
     
     // TODO: Get Global()->global object and use in new context for external js modules
     
-    // TODO: process.nextFrame(fn) method, which pushes a v8 callack to the execution stack and runs it in the v8 event thread in the next draw cycle
-    //       -> Then this execution does not necessarily need a GL context wrap
   } else {
     // FATAL: Main script not a function
     quit();
@@ -763,7 +768,7 @@ void CinderjsApp::draw()
     cvJSThread.notify_one();
   }
   
-  // Handle execution stack
+  // Handle execution queue
   if(sExecutionQueue.isNotEmpty()){
     while(sExecutionQueue.isNotEmpty()){
       BufferedEvent evt(new BufferedEventHolder());
@@ -984,13 +989,15 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
     Local<Function> modFn = modResult.As<Function>();
     
     // Call
-    Local<Value> argv[1] = {
-      exports
+    Local<Value> argv[2] = {
+      exports,
+      // use this method as require as native modules won't require external ones(?)
+      v8::Local<v8::Value>::Cast(v8::FunctionTemplate::New(isolate, NativeBinding)->GetFunction())
     };
     
     v8::TryCatch tryCatch;
     
-    modFn->Call(isolate->GetCurrentContext()->Global(), 1, argv);
+    modFn->Call(isolate->GetCurrentContext()->Global(), 2, argv);
     
     if(tryCatch.HasCaught()){
       handleV8TryCatch(tryCatch);
