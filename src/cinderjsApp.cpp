@@ -52,6 +52,7 @@ enum EventType {
 };
 
 // TODO
+// - Load a js module by dropping it on the app window
 // - Split cinderjsApp in header file
 // - load js modules with wrapper: "function (module, exports, __filename, ...) {"
 // - Expose Env info like OS etc.
@@ -409,6 +410,8 @@ void CinderjsApp::v8Thread( std::string mainJS ){
       handleV8TryCatch(tryCatch);
     }
     
+    // TODO: Get Global()->global object and use in new context for external js modules
+    
     // TODO: process.nextFrame(fn) method, which pushes a v8 callack to the execution stack and runs it in the v8 event thread in the next draw cycle
     //       -> Then this execution does not necessarily need a GL context wrap
   } else {
@@ -704,6 +707,7 @@ void CinderjsApp::keyUp( KeyEvent event )
 void CinderjsApp::update()
 {
   // Quit if requested
+  // TODO: Push to event queue and execute there (not check every frame, duh)
   if(sQuitRequested) {
     quit();
   }
@@ -843,6 +847,7 @@ void CinderjsApp::toggleV8Stats(const v8::FunctionCallbackInfo<v8::Value>& args)
  */
 void CinderjsApp::requestQuit(const v8::FunctionCallbackInfo<v8::Value>& args) {
   sQuitRequested = true;
+  // TODO: emit process exit event for js to react on and shutdown stuff if necessary
   return;
 }
 
