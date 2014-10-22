@@ -30,18 +30,17 @@
 		9E7F713319EE0C67002DDCFF /* libicui18n.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E7F713019EE0C67002DDCFF /* libicui18n.dylib */; };
 		9E7F713419EE0C67002DDCFF /* libicuuc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E7F713119EE0C67002DDCFF /* libicuuc.dylib */; };
 		9E7F713519EE0C67002DDCFF /* libv8.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E7F713219EE0C67002DDCFF /* libv8.dylib */; };
-		9E9877F219F1EA19002DC7C8 /* particle.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E9877F119F1EA19002DC7C8 /* particle.js */; };
 		9E9B3E3219F002C200291CDE /* AppConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3019F002C200291CDE /* AppConsole.cpp */; };
-		9E9B3E3519F0122700291CDE /* test.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3419F0122700291CDE /* test.js */; };
 		9E9B3E3C19F022C000291CDE /* app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3819F022C000291CDE /* app.cpp */; };
 		9E9B3E3D19F022C000291CDE /* gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3A19F022C000291CDE /* gl.cpp */; };
 		9E9B3E4019F0233C00291CDE /* PipeModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3E19F0233C00291CDE /* PipeModule.cpp */; };
 		9E9B3E4419F0390000291CDE /* console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E4219F0390000291CDE /* console.cpp */; };
 		9EAF080919EDC4C600C02F65 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9EAF080819EDC4C600C02F65 /* README.md */; };
-		9ED123B819F61656007786A6 /* cubes.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123B719F61656007786A6 /* cubes.js */; };
 		9ED123BE19F6EB23007786A6 /* TextHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED123BD19F6EB23007786A6 /* TextHelpers.cpp */; };
 		9ED123C119F6EE9F007786A6 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED123BF19F6EE9F007786A6 /* utils.cpp */; };
-		9EFB3A3B19F480BB00013216 /* lines.js in Resources */ = {isa = PBXBuildFile; fileRef = 9EFB3A3A19F480BB00013216 /* lines.js */; };
+		9ED123C419F72B02007786A6 /* cinder.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123C319F72B02007786A6 /* cinder.js */; };
+		9ED123C919F72D4F007786A6 /* test.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123C819F72D4F007786A6 /* test.js */; };
+		9ED123CB19F7309A007786A6 /* prebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123CA19F7309A007786A6 /* prebuild.sh */; };
 		B6B86EEF243D496CAA6AC588 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = A16F000F7FC04E0DA0360B7B /* CinderApp.icns */; };
 /* End PBXBuildFile section */
 
@@ -77,7 +76,6 @@
 		9E9877F119F1EA19002DC7C8 /* particle.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = particle.js; path = ../examples/particle.js; sourceTree = "<group>"; };
 		9E9B3E3019F002C200291CDE /* AppConsole.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppConsole.cpp; path = ../src/AppConsole.cpp; sourceTree = "<group>"; };
 		9E9B3E3119F002C200291CDE /* AppConsole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppConsole.h; path = ../src/AppConsole.h; sourceTree = "<group>"; };
-		9E9B3E3419F0122700291CDE /* test.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = test.js; path = ../lib/test.js; sourceTree = "<group>"; };
 		9E9B3E3819F022C000291CDE /* app.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = app.cpp; path = ../src/modules/app.cpp; sourceTree = "<group>"; };
 		9E9B3E3919F022C000291CDE /* app.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = app.hpp; path = ../src/modules/app.hpp; sourceTree = "<group>"; };
 		9E9B3E3A19F022C000291CDE /* gl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gl.cpp; path = ../src/modules/gl.cpp; sourceTree = "<group>"; };
@@ -92,6 +90,10 @@
 		9ED123BD19F6EB23007786A6 /* TextHelpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextHelpers.cpp; path = ../src/utils/TextHelpers.cpp; sourceTree = "<group>"; };
 		9ED123BF19F6EE9F007786A6 /* utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = utils.cpp; path = ../src/modules/utils.cpp; sourceTree = "<group>"; };
 		9ED123C019F6EE9F007786A6 /* utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = utils.hpp; path = ../src/modules/utils.hpp; sourceTree = "<group>"; };
+		9ED123C319F72B02007786A6 /* cinder.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = cinder.js; path = ../lib/cinder.js; sourceTree = "<group>"; };
+		9ED123C619F72B2B007786A6 /* js2c.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = js2c.py; path = ../tools/js2c.py; sourceTree = "<group>"; };
+		9ED123C819F72D4F007786A6 /* test.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = test.js; path = ../examples/test.js; sourceTree = "<group>"; };
+		9ED123CA19F7309A007786A6 /* prebuild.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = prebuild.sh; path = ../tools/prebuild.sh; sourceTree = "<group>"; };
 		9EFB3A3A19F480BB00013216 /* lines.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = lines.js; path = ../examples/lines.js; sourceTree = "<group>"; };
 		A16F000F7FC04E0DA0360B7B /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
 		B26520EF291B4336BEC87FD7 /* cinderjsApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = cinderjsApp.cpp; path = ../src/cinderjsApp.cpp; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 		29B97314FDCFA39411CA2CEA /* cinderjs */ = {
 			isa = PBXGroup;
 			children = (
+				9ED123C519F72B08007786A6 /* tools */,
 				9E9877F019F1EA06002DC7C8 /* examples */,
 				9E9B3E3319F0121D00291CDE /* lib */,
 				01B97315FEAEA392516A2CEA /* Blocks */,
@@ -251,6 +254,7 @@
 		9E9877F019F1EA06002DC7C8 /* examples */ = {
 			isa = PBXGroup;
 			children = (
+				9ED123C819F72D4F007786A6 /* test.js */,
 				9ED123B719F61656007786A6 /* cubes.js */,
 				9EFB3A3A19F480BB00013216 /* lines.js */,
 				9E9877F119F1EA19002DC7C8 /* particle.js */,
@@ -261,7 +265,7 @@
 		9E9B3E3319F0121D00291CDE /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				9E9B3E3419F0122700291CDE /* test.js */,
+				9ED123C319F72B02007786A6 /* cinder.js */,
 			);
 			name = lib;
 			sourceTree = "<group>";
@@ -296,6 +300,15 @@
 			name = utils;
 			sourceTree = "<group>";
 		};
+		9ED123C519F72B08007786A6 /* tools */ = {
+			isa = PBXGroup;
+			children = (
+				9ED123CA19F7309A007786A6 /* prebuild.sh */,
+				9ED123C619F72B2B007786A6 /* js2c.py */,
+			);
+			name = tools;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -303,6 +316,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "cinderjs" */;
 			buildPhases = (
+				9ED123C219F727C7007786A6 /* ShellScript */,
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
@@ -367,12 +381,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9EFB3A3B19F480BB00013216 /* lines.js in Resources */,
-				9ED123B819F61656007786A6 /* cubes.js in Resources */,
-				9E9B3E3519F0122700291CDE /* test.js in Resources */,
 				9EAF080919EDC4C600C02F65 /* README.md in Resources */,
-				9E9877F219F1EA19002DC7C8 /* particle.js in Resources */,
 				B6B86EEF243D496CAA6AC588 /* CinderApp.icns in Resources */,
+				9ED123CB19F7309A007786A6 /* prebuild.sh in Resources */,
+				9ED123C919F72D4F007786A6 /* test.js in Resources */,
+				9ED123C419F72B02007786A6 /* cinder.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,6 +399,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		9ED123C219F727C7007786A6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = ../tools/prebuild.sh;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8D11072C0486CEB800E47090 /* Sources */ = {

@@ -12,6 +12,7 @@
 #include <sstream>
 #include <cerrno>
 
+#include "js_natives.h"
 #include "AppConsole.h"
 #include "CinderAppBase.hpp"
 
@@ -234,37 +235,40 @@ void CinderjsApp::setup()
   }
   
   // Do we have a js file to run?
-  std::string jsFileContents;
-  if(jsMainFile.length() > 0) {
-    AppConsole::log("Starting app with JS file at: " + jsMainFile);
-    
-    if( !cinder::fs::exists( jsMainFile ) ){
-      AppConsole::log("Could not find specified JS file!");
-    } else {
-      try {
-        std::ifstream in(jsMainFile, std::ios::in );
-        if (in)
-        {
-          std::ostringstream contents;
-          contents << in.rdbuf();
-          jsFileContents = contents.str();
-          in.close();
-        }
-      } catch(std::exception &e) {
-        std::string err = "Error: ";
-        err.append(e.what());
-        AppConsole::log( err );
-      }
-    }
-  }
+//  std::string jsFileContents;
+//  if(jsMainFile.length() > 0) {
+//    AppConsole::log("Starting app with JS file at: " + jsMainFile);
+//    
+//    if( !cinder::fs::exists( jsMainFile ) ){
+//      AppConsole::log("Could not find specified JS file!");
+//    } else {
+//      try {
+//        std::ifstream in(jsMainFile, std::ios::in );
+//        if (in)
+//        {
+//          std::ostringstream contents;
+//          contents << in.rdbuf();
+//          jsFileContents = contents.str();
+//          in.close();
+//        }
+//      } catch(std::exception &e) {
+//        std::string err = "Error: ";
+//        err.append(e.what());
+//        AppConsole::log( err );
+//      }
+//    }
+//  }
   
   // clear out the window with black
   gl::clear( Color( 0, 0, 0 ) );
   
   glRenderer = getRenderer();
   
-  //CGLContextObj currCtx = CGLGetCurrentContext();
-  mV8Thread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8Thread, this, jsFileContents ) );
+  // Get cinder.js main native
+  std::string mainJS(cinder_native);
+  
+  
+  mV8Thread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8Thread, this, mainJS ) );
   
 }
 
@@ -303,7 +307,7 @@ void CinderjsApp::executeScriptString( std::string scriptStr, v8::Local<v8::Cont
 /**
  *
  */
-void CinderjsApp::v8Thread( std::string jsFileContents ){
+void CinderjsApp::v8Thread( std::string mainJS ){
   ThreadSetup threadSetup;
   
   // Initialize V8 (implicit initialization was removed in an earlier revision)
@@ -356,9 +360,7 @@ void CinderjsApp::v8Thread( std::string jsFileContents ){
   CGLLockContext( currCtx );
   
   // Execute entry script
-  if( jsFileContents.length() > 0 ){
-    executeScriptString( jsFileContents, mMainContext );
-  }
+  executeScriptString( mainJS, mMainContext );
   
   // Get rid of gl context again
   CGLUnlockContext( currCtx );
