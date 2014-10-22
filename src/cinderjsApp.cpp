@@ -974,7 +974,30 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
   
   if (found) {
     exports = Object::New(isolate);
-    Local<Value> modResult = executeScriptString(mod.source, isolate, isolate->GetCurrentContext());
+    
+    v8::TryCatch tryCatch;
+    
+    // wrappers and wrap method set in cinder.js js land
+    Local<Function> wrap = isolate
+      ->GetCurrentContext()
+      ->Global()
+      ->Get(v8::String::NewFromUtf8(isolate, "process"))
+      .As<Object>()
+      ->Get(v8::String::NewFromUtf8(isolate, "wrap"))
+      .As<Function>()
+    ; // wtf v8...
+    
+    // Check v8 in sanity
+    if(!wrap->IsFunction()) {
+      std::string except = "Native module loading failed: No wrap method on the process object.";
+      isolate->ThrowException(String::NewFromUtf8(isolate, except.c_str()));
+      return;
+    }
+    
+    // Wrap it
+    Local<Value> modSource = String::NewFromUtf8(isolate, mod.source);
+    v8::String::Utf8Value wrappedSource( wrap->Call(Local<Object>::New(isolate, sEmptyObject), 1, &modSource) );
+    Local<Value> modResult = executeScriptString(*wrappedSource, isolate, isolate->GetCurrentContext());
     
     // Check native module validity
     if(!modResult->IsFunction()){
@@ -994,8 +1017,6 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
       // use this method as require as native modules won't require external ones(?)
       v8::Local<v8::Value>::Cast(v8::FunctionTemplate::New(isolate, NativeBinding)->GetFunction())
     };
-    
-    v8::TryCatch tryCatch;
     
     modFn->Call(isolate->GetCurrentContext()->Global(), 2, argv);
     
