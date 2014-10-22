@@ -90,7 +90,8 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   void v8EventThread();
   
   // V8 Setup
-  static v8::Local<v8::Value> executeScriptString( std::string scriptStr, Isolate* isolate, Local<Context> context );
+  static v8::Local<v8::Value> executeScriptString( std::string scriptStr, Isolate* isolate,
+    Local<Context> context, Handle<String> filename );
   
   //
   private:
@@ -308,7 +309,7 @@ void CinderjsApp::setup()
 /**
  * Runs a JS string and prints eventual errors to the AppConsole
  */
-v8::Local<v8::Value> CinderjsApp::executeScriptString( std::string scriptStr, Isolate* isolate, v8::Local<v8::Context> context ){
+v8::Local<v8::Value> CinderjsApp::executeScriptString( std::string scriptStr, Isolate* isolate, v8::Local<v8::Context> context, Handle<String> filename ){
   EscapableHandleScope scope(isolate);
 
   v8::TryCatch try_catch;
@@ -320,7 +321,7 @@ v8::Local<v8::Value> CinderjsApp::executeScriptString( std::string scriptStr, Is
   Local<String> source = String::NewFromUtf8( isolate, scriptStr.c_str() );
   
   // Compile the source code.
-  Local<Script> script = Script::Compile( source );
+  Local<Script> script = Script::Compile( source, filename );
   
   // Run the script to get the result.
   Local<Value> result = script->Run();
@@ -373,6 +374,11 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   // TODO: export process.throwDeprecation
   // TODO: export process.traceDeprecation
   // TODO: export process.pid
+  // TODO: export process.env (environment vars etc.)
+  //       -> Empty object for now (placeholer)
+  processObj->Set(v8::String::NewFromUtf8(mIsolate, "env"), ObjectTemplate::New());
+  //process.execPath
+  processObj->Set(v8::String::NewFromUtf8(mIsolate, "execPath"), v8::String::NewFromUtf8(mIsolate, getAppPath().c_str()));
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "process"), processObj);
   
   // TODO: export console[log, error, trace, etc.]
@@ -432,7 +438,8 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   CGLLockContext( currCtx );
   
   // Execute entry script
-  Local<Value> mainResult = executeScriptString( mainJS, mIsolate, mMainContext );
+  Local<Value> mainResult = executeScriptString( mainJS, mIsolate,
+    mMainContext, v8::String::NewFromUtf8(mIsolate, "cinder.js") );
   
   // Call wrapper function with process object
   if(mainResult->IsFunction()){
@@ -938,6 +945,13 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
     return;
   }
   
+  // if we have a second argument and it is a boolean true,
+  // check for module existence only and return a boolean that can be checked with === operator
+  bool checkExistence = false;
+  if( args.Length() == 2 && args[1]->ToBoolean()->Value() ) {
+    checkExistence = true;
+  }
+  
   Local<Object> cache = Local<Object>::New(isolate, sModuleCache);
   Local<Object> exports;
 
@@ -972,7 +986,14 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
     }
   }
   
+  // If we only have to check existence, we return here
+  if( checkExistence ) {
+    args.GetReturnValue().Set(v8::Boolean::New(isolate, found));
+    return;
+  }
+  
   if (found) {
+  
     exports = Object::New(isolate);
     
     v8::TryCatch tryCatch;
@@ -997,7 +1018,10 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
     // Wrap it
     Local<Value> modSource = String::NewFromUtf8(isolate, mod.source);
     v8::String::Utf8Value wrappedSource( wrap->Call(Local<Object>::New(isolate, sEmptyObject), 1, &modSource) );
-    Local<Value> modResult = executeScriptString(*wrappedSource, isolate, isolate->GetCurrentContext());
+    std::string filename = cmpModName;
+    filename.append(".js");
+    Local<Value> modResult = executeScriptString(*wrappedSource, isolate, isolate->GetCurrentContext(),
+      v8::String::NewFromUtf8(isolate, filename.c_str()) );
     
     // Check native module validity
     if(!modResult->IsFunction()){

@@ -44,6 +44,9 @@
 		9ED123CF19F78F85007786A6 /* path.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123CE19F78F85007786A6 /* path.js */; };
 		9ED123D119F7A43C007786A6 /* module.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123D019F7A43C007786A6 /* module.js */; };
 		9ED123D319F7A6AE007786A6 /* util.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123D219F7A6AE007786A6 /* util.js */; };
+		9ED123D719F7C84D007786A6 /* vm.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123D519F7C84D007786A6 /* vm.js */; };
+		9ED123D919F7C86A007786A6 /* fs.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123D819F7C86A007786A6 /* fs.js */; };
+		9ED123DB19F7DD02007786A6 /* assert.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123DA19F7DD02007786A6 /* assert.js */; };
 		B6B86EEF243D496CAA6AC588 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = A16F000F7FC04E0DA0360B7B /* CinderApp.icns */; };
 /* End PBXBuildFile section */
 
@@ -100,6 +103,9 @@
 		9ED123CE19F78F85007786A6 /* path.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = path.js; path = ../lib/path.js; sourceTree = "<group>"; };
 		9ED123D019F7A43C007786A6 /* module.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = module.js; path = ../lib/module.js; sourceTree = "<group>"; };
 		9ED123D219F7A6AE007786A6 /* util.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = util.js; path = ../lib/util.js; sourceTree = "<group>"; };
+		9ED123D519F7C84D007786A6 /* vm.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = vm.js; path = ../lib/vm.js; sourceTree = "<group>"; };
+		9ED123D819F7C86A007786A6 /* fs.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = fs.js; path = ../lib/fs.js; sourceTree = "<group>"; };
+		9ED123DA19F7DD02007786A6 /* assert.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = assert.js; path = ../lib/assert.js; sourceTree = "<group>"; };
 		9EFB3A3A19F480BB00013216 /* lines.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = lines.js; path = ../examples/lines.js; sourceTree = "<group>"; };
 		A16F000F7FC04E0DA0360B7B /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
 		B26520EF291B4336BEC87FD7 /* cinderjsApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = cinderjsApp.cpp; path = ../src/cinderjsApp.cpp; sourceTree = "<group>"; };
@@ -271,6 +277,9 @@
 		9E9B3E3319F0121D00291CDE /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				9ED123DA19F7DD02007786A6 /* assert.js */,
+				9ED123D819F7C86A007786A6 /* fs.js */,
+				9ED123D519F7C84D007786A6 /* vm.js */,
 				9ED123D219F7A6AE007786A6 /* util.js */,
 				9ED123D019F7A43C007786A6 /* module.js */,
 				9ED123CE19F78F85007786A6 /* path.js */,
@@ -393,11 +402,14 @@
 				9ED123D319F7A6AE007786A6 /* util.js in Resources */,
 				9EAF080919EDC4C600C02F65 /* README.md in Resources */,
 				B6B86EEF243D496CAA6AC588 /* CinderApp.icns in Resources */,
+				9ED123D719F7C84D007786A6 /* vm.js in Resources */,
 				9ED123CB19F7309A007786A6 /* prebuild.sh in Resources */,
 				9ED123D119F7A43C007786A6 /* module.js in Resources */,
+				9ED123DB19F7DD02007786A6 /* assert.js in Resources */,
 				9ED123CF19F78F85007786A6 /* path.js in Resources */,
 				9ED123C919F72D4F007786A6 /* test.js in Resources */,
 				9ED123C419F72B02007786A6 /* cinder.js in Resources */,
+				9ED123D919F7C86A007786A6 /* fs.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
