@@ -57,6 +57,7 @@ class NextFrameFnHolder {
 typedef boost::shared_ptr<NextFrameFnHolder> NextFrameFn;
 
 enum EventType {
+  CJS_SHUTDOWN_REQUEST = 0,
   CJS_NEXT_FRAME = 1,
   CJS_RESIZE = 10,
   CJS_KEY_DOWN = 20,
@@ -394,9 +395,9 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   #ifdef DEBUG
   // For development loading...
   //argv[2] = "/Users/sebastian/Dropbox/+Projects/cinderjs/lib/test.js";
-  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js");
+  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js");
-  //argv[2] = "/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js";
+  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
   #endif
   
   Local<Array> argvArr = Array::New(mIsolate);
@@ -654,6 +655,11 @@ void CinderjsApp::v8EventThread(){
           v8::Handle<v8::Value> argv[0] = {};
           callback->Call(context->Global(), 0, argv);
         }
+        
+        // Shutdown (gracefully)
+        else if(evt->type == CJS_SHUTDOWN_REQUEST){
+          quit();
+        }
 
       }
       
@@ -734,11 +740,7 @@ void CinderjsApp::keyUp( KeyEvent event )
  */
 void CinderjsApp::update()
 {
-  // Quit if requested
-  // TODO: Push to event queue and execute there (not check every frame, duh)
-  if(sQuitRequested) {
-    quit();
-  }
+  
 }
 
 /**
@@ -750,6 +752,14 @@ void CinderjsApp::draw()
   
   // Trigger v8 draw if not running already...
   if(!_v8Run){
+    // Quit if requested
+    // Push to event queue and execute there (not check every frame, duh)
+    if(sQuitRequested) {
+      BufferedEvent evt(new BufferedEventHolder());
+      evt->type = CJS_SHUTDOWN_REQUEST;
+      mEventQueue.pushFront(evt);
+      return;
+    }
     _v8Run = true;
     cvJSThread.notify_one();
   }
