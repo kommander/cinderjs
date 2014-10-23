@@ -110,6 +110,7 @@ class CinderjsApp : public cinder::app::AppNative, public CinderAppBase  {
 	void update();
 	void draw();
   void resize();
+  void fileDrop( cinder::app::FileDropEvent event );
   
   // Threads
   void v8Thread( std::string jsFileContents );
