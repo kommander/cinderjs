@@ -61,8 +61,8 @@ typedef boost::shared_ptr<NextFrameFnHolder> NextFrameFn;
 
 class TimerFnHolder {
   public:
-  int scheduledAt;
-  v8::Persistent<v8::Array> args; // 0 = fn, 1 = timeout, 2-n = callback arguments
+  double scheduledAt;
+  v8::Persistent<v8::Function> v8Fn;
   bool _repeat = false;
 };
 typedef boost::shared_ptr<TimerFnHolder> TimerFn;
@@ -82,6 +82,7 @@ enum EventType {
 // - Split cinderjsApp in header file
 // - Expose Env info like OS etc.
 // - Expose versions object (cinder, v8, cinderjs)
+// - uncaughtException handler
 
 // Design Notes:
 // - The implementation and native/js communication is trying to avoid object instantiation
@@ -171,7 +172,7 @@ class CinderjsApp : public cinder::app::AppNative, public CinderAppBase  {
   static void toggleV8Stats(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void requestQuit(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void nextFrameJS(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void setTimeout(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void setTimer(const v8::FunctionCallbackInfo<v8::Value>& args);
   
   // Default Process Bindings
   static void NativeBinding(const v8::FunctionCallbackInfo<v8::Value>& args);
