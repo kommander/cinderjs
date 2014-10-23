@@ -68,6 +68,7 @@
 		8D1107320486CEB800E47090 /* cinderjs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = cinderjs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E0BDE0E19F803330036038F /* vm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = vm.cpp; path = ../src/modules/vm.cpp; sourceTree = "<group>"; };
 		9E0BDE0F19F803330036038F /* vm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = vm.hpp; path = ../src/modules/vm.hpp; sourceTree = "<group>"; };
+		9E0BDE1119F915200036038F /* cinderjsApp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = cinderjsApp.hpp; path = ../src/cinderjsApp.hpp; sourceTree = "<group>"; };
 		9E7F70F619EDD441002DDCFF /* libicudata.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicudata.a; path = ../v8/xcodebuild/Release/libicudata.a; sourceTree = "<group>"; };
 		9E7F70F719EDD441002DDCFF /* libicui18n.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicui18n.a; path = ../v8/xcodebuild/Release/libicui18n.a; sourceTree = "<group>"; };
 		9E7F70F819EDD441002DDCFF /* libicuuc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicuuc.a; path = ../v8/xcodebuild/Release/libicuuc.a; sourceTree = "<group>"; };
@@ -228,6 +229,7 @@
 			isa = PBXGroup;
 			children = (
 				9E9B3E3719F022B000291CDE /* modules */,
+				9E0BDE1119F915200036038F /* cinderjsApp.hpp */,
 				9E9B3E4119F0240C00291CDE /* CinderAppBase.hpp */,
 				9E9B3E3119F002C200291CDE /* AppConsole.h */,
 				9E9B3E3F19F0233C00291CDE /* PipeModule.hpp */,

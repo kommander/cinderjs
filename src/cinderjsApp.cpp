@@ -1,7 +1,4 @@
-#include "cinder/app/AppNative.h"
-#include "cinder/gl/gl.h"
-#include "cinder/Filesystem.h"
-#include "cinder/ConcurrentCircularBuffer.h"
+#include "cinderjsApp.hpp"
 
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
@@ -11,13 +8,6 @@
 #include <fstream>
 #include <sstream>
 #include <cerrno>
-
-#include "js_natives.h"
-#include "AppConsole.h"
-#include "CinderAppBase.hpp"
-
-#include "v8.h"
-#include "libplatform/libplatform.h"
 
 #ifdef __APPLE__
 #include <OpenGL/OpenGL.h>
@@ -38,149 +28,6 @@ using namespace std;
 using namespace v8;
 
 namespace cjs {
-
-typedef boost::filesystem::path Path;
-
-class BufferedEventHolder {
-  public:
-  int type;
-  MouseEvent mEvt;
-  KeyEvent kEvt;
-  v8::Persistent<v8::Function> v8Fn;
-};
-typedef boost::shared_ptr<BufferedEventHolder> BufferedEvent;
-
-class NextFrameFnHolder {
-  public:
-  v8::Persistent<v8::Function> v8Fn;
-};
-typedef boost::shared_ptr<NextFrameFnHolder> NextFrameFn;
-
-enum EventType {
-  CJS_SHUTDOWN_REQUEST = 0,
-  CJS_NEXT_FRAME = 1,
-  CJS_RESIZE = 10,
-  CJS_KEY_DOWN = 20,
-  CJS_KEY_UP = 30
-};
-
-// TODO
-// - Fix "exports" object usage in js modules (cannot be replaced with something like exports = function(){},
-//   will return an empty exports object (not sure why)
-// - Load a js module by dropping it on the app window
-// - Split cinderjsApp in header file
-// - Expose Env info like OS etc.
-// - Expose versions object (cinder, v8, cinderjs)
-
-// Design Notes:
-// - The implementation and native/js communication is trying to avoid object instantiation
-//   to have less conversion costs when calling C++ methods from js.
-//   This behaviour can be encapsuled within js itself. Converting numbers is way faster then
-//   unpacking full fledged js objects to C++. ( eg. args[0]->ToObject()->Get(...) )
-
-class CinderjsApp : public AppNative, public CinderAppBase  {
-  public:
-  CinderjsApp() : mEventQueue(1024) {}
-  ~CinderjsApp(){}
-  
-  // Cinder App
-	void setup();
-  void shutdown();
-	void mouseDown( MouseEvent event );	
-	void mouseMove( MouseEvent event );
-  void keyDown( KeyEvent event );
-  void keyUp( KeyEvent event );
-	void update();
-	void draw();
-  void resize();
-  
-  // Threads
-  void v8Thread( std::string jsFileContents );
-  void v8RenderThread();
-  void v8EventThread();
-  void v8TimerThread();
-  
-  // V8 Setup
-  static v8::Local<v8::Value> executeScriptString( std::string scriptStr, Isolate* isolate,
-    Local<Context> context, Handle<String> filename );
-  
-  //
-  private:
-  
-  // v8 thread methods
-  void v8Draw( double timePassed );
-
-  
-  // Stats
-  volatile int v8Frames = 0;
-  volatile double v8FPS = 0;
-  volatile int mLastUpdate = 0;
-  volatile int mUpdateInterval = 1000;
-  
-  // Threading
-  volatile bool mShouldQuit;
-  std::mutex mMainMutex;
-  std::condition_variable cvJSThread;
-  volatile bool _v8Run = false;
-  std::condition_variable cvMainThread;
-  volatile bool _mainRun = false;
-  std::condition_variable cvEventThread;
-  volatile bool _eventRun = false;
-  std::condition_variable cvTimerThread;
-  volatile bool _timerRun = false;
-  
-  RendererRef glRenderer;
-  
-  // Eventing
-  ConcurrentCircularBuffer<BufferedEvent> mEventQueue;
-  static ConcurrentCircularBuffer<NextFrameFn> sExecutionQueue;
-  volatile Vec2f mousePosBuf;
-  
-  // Path
-  Path mCwd;
-  
-  // V8 Threads
-  std::shared_ptr<std::thread> mV8Thread;
-  std::shared_ptr<std::thread> mV8RenderThread;
-  std::shared_ptr<std::thread> mV8EventThread;
-  std::shared_ptr<std::thread> mV8TimerThread;
-  
-  // Modules
-  static v8::Persistent<v8::Object> sModuleCache;
-  static v8::Persistent<v8::Array> sModuleList;
-  
-  // GC
-  static void gcPrologueCb(Isolate *isolate, GCType type, GCCallbackFlags flags);
-  static int sGCRuns;
-  
-  // Default Bindings
-  static void setDrawCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void setEventCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void toggleAppConsole(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void toggleV8Stats(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void requestQuit(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void nextFrameJS(const v8::FunctionCallbackInfo<v8::Value>& args);
-  
-  // Default Process Bindings
-  static void NativeBinding(const v8::FunctionCallbackInfo<v8::Value>& args);
-
-  // Default Callbacks
-  static v8::Persistent<v8::Function> sDrawCallback;
-  static v8::Persistent<v8::Function> sEventCallback; // TODO: only push events that were subscribed to in v8
-  
-  //
-  static v8::Persistent<v8::Object> sEmptyObject;
-  
-  // Console
-  static volatile bool sConsoleActive;
-  static volatile bool sV8StatsActive;
-  
-  // Error Handling
-  static void handleV8TryCatch( v8::TryCatch &tryCatch );
-  
-  // Quit
-  static bool sQuitRequested;
-};
 
 #ifdef DEBUG
 volatile bool CinderjsApp::sConsoleActive = true;
