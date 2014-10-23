@@ -29,7 +29,13 @@ using namespace cinder;
 
 namespace cjs {
   
-  // TODO: Extend SyncedObject
+  //
+  // TODO: Make scene objects scriptable by default,
+  //       by being able to set a JS draw method for each
+  //       (needs investigation and performance check)
+  // TODO: Check if implementation is possible where multiple isntances
+  //       of the same object can be processed from js, not needing to call
+  //       the draw callback for each object separately from C land
   class SceneObject {
     public:
       SceneObject(){}
