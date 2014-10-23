@@ -65,11 +65,18 @@ enum EventType {
 };
 
 // TODO
+// - Fix "exports" object usage in js modules (cannot be replaced with something like exports = function(){},
+//   will return an empty exports object (not sure why)
 // - Load a js module by dropping it on the app window
 // - Split cinderjsApp in header file
-// - load js modules with wrapper: "function (module, exports, __filename, ...) {"
 // - Expose Env info like OS etc.
 // - Expose versions object (cinder, v8, cinderjs)
+
+// Design Notes:
+// - The implementation and native/js communication is trying to avoid object instantiation
+//   to have less conversion costs when calling C++ methods from js.
+//   This behaviour can be encapsuled within js itself. Converting numbers is way faster then
+//   unpacking full fledged js objects to C++. ( eg. args[0]->ToObject()->Get(...) )
 
 class CinderjsApp : public AppNative, public CinderAppBase  {
   public:
@@ -765,6 +772,10 @@ void CinderjsApp::draw()
   }
   
   // Handle execution queue
+  // TODO: Maybe push nextFrame() scheduled functions directly to event queue
+  //       instead of proxying through the main process (allthough it could be better
+  //       to only have the main thread writing to the event buffer.)
+  // TODO: Use a buffer queue and reuse event/frame buffer "packets" instead of instantiation at each creation time
   if(sExecutionQueue.isNotEmpty()){
     while(sExecutionQueue.isNotEmpty()){
       BufferedEvent evt(new BufferedEventHolder());
@@ -896,20 +907,35 @@ void CinderjsApp::toggleV8Stats(const v8::FunctionCallbackInfo<v8::Value>& args)
 
 /**
  * Allow JS to quit the App
+ *
+ * Tries to shutdown the application process gracefully,
+ * meaning everything scheduled up until this point will still be executed,
+ * shutdown will happen only after the scheduled tasks finish.
+ *
  */
 void CinderjsApp::requestQuit(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  sQuitRequested = true;
   // TODO: emit process exit event for js to react on and shutdown stuff if necessary
+  //       Will at this point be pushed to event queue before the shutdown request,
+  //       so it will be executed before shutdown.
+  sQuitRequested = true;
   return;
 }
 
 /**
  * Async function execution in the next frame (executed in v8 event thread)
+ *
+ * Function callbacks scheduled for the next frame will be executed in a separate thread,
+ * not the main render thread. The event thread they are executed in has a separate GL context,
+ * with shared resources, so GL objects can be setup there and be used in the main render loop.
+ * Drawing directly to the canvas however is not possible within the event thread.
+ *
  */
 void CinderjsApp::nextFrameJS(const v8::FunctionCallbackInfo<v8::Value>& args) {
   Isolate* isolate = args.GetIsolate();
   HandleScope scope(isolate);
-
+  
+  // TODO: check next frame execution queue and warn (fail) if full
+  
   if(args[0]->IsFunction()){
     NextFrameFn nffn(new NextFrameFnHolder());
     nffn->v8Fn.Reset(isolate, args[0].As<Function>());
@@ -987,7 +1013,7 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
     
     v8::TryCatch tryCatch;
     
-    // wrappers and wrap method set in cinder.js js land
+    // Use wrappers and wrap method set in cinder.js
     Local<Function> wrap = isolate
       ->GetCurrentContext()
       ->Global()
