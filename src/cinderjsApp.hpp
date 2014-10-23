@@ -64,6 +64,7 @@ typedef boost::shared_ptr<NextFrameFnHolder> NextFrameFn;
 class TimerFnHolder {
   public:
   uint32_t id;
+  double after;
   double scheduledAt;
   v8::Persistent<v8::Function> v8Fn;
   bool _repeat = false;

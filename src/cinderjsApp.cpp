@@ -575,10 +575,16 @@ void CinderjsApp::executeTimer(TimerFn timer, Isolate* isolate) {
   
   v8::Handle<v8::Value> argv[0] = {};
   Local<Function> fn = Local<Function>::New(isolate, timer->v8Fn);
+  
+  if(fn.IsEmpty()) return;
+  
+  TryCatch try_catch;
+  
   fn->Call(fn->CreationContext()->Global(), 0, argv);
   
-  // Check if timer should be repeated (interval) and reschedule
-  timer->v8Fn.Reset();
+  if(try_catch.HasCaught()){
+    handleV8TryCatch(try_catch);
+  }
   
   //context->Exit();
   v8::Unlocker unlock(isolate);
@@ -609,6 +615,20 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
   double mNextScheduledTime = 1000000000000;
   std::shared_ptr<std::thread> waitThread;
   bool immediateLoop = false;
+  
+  std::function<void(std::vector<uint32_t>, std::map<uint32_t, TimerFn> mTimerFns)> deleteTimer =
+  [=](std::vector<uint32_t> markedForDeletion, std::map<uint32_t, TimerFn> mTimerFns){
+    if(markedForDeletion.size() > 0){
+      for( std::vector<uint32_t>::iterator it = markedForDeletion.begin(); it != markedForDeletion.end(); it++ ) {
+        TimerFn timer = mTimerFns[*it];
+        if(timer){
+          timer->v8Fn.Reset();
+        }
+        mTimerFns.erase(*it);
+      }
+      markedForDeletion.clear();
+    }
+  };
   
   // Thread loop
   while( !mShouldQuit ) {
@@ -641,12 +661,7 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
         //std::cout << "scheduling " << std::endl;
       }
       
-      if(markedForDeletion.size() > 0){
-        for( std::vector<uint32_t>::iterator it = markedForDeletion.begin(); it != markedForDeletion.end(); it++ ) {
-          mTimerFns.erase(*it);
-        }
-        markedForDeletion.clear();
-      }
+      deleteTimer(markedForDeletion, mTimerFns);
       
       if(!mTimerFns.empty()){
         
@@ -657,7 +672,14 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
             if(it->second->scheduledAt <= now){
               //std::cout << "executing " << std::endl;
               executeTimer(it->second, isolate);
-              markedForDeletion.push_back(it->first);
+              
+              // Delete or repeat?
+              if(it->second->_repeat){
+                it->second->scheduledAt = now + it->second->after;
+              } else {
+                markedForDeletion.push_back(it->first);
+              }
+              
               now = sScheduleTimer.getSeconds() * 1000;
               continue;
             }
@@ -670,13 +692,8 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
         
         immediateLoop = false;
         
-        if(markedForDeletion.size() > 0){
-          for( std::vector<uint32_t>::iterator it = markedForDeletion.begin(); it != markedForDeletion.end(); it++ ) {
-            mTimerFns.erase(*it);
-          }
-          markedForDeletion.clear();
-        }
-      
+        deleteTimer(markedForDeletion, mTimerFns);
+        
         if(waitThread){
           waitThread->join();
           waitThread.reset();
@@ -990,6 +1007,7 @@ void CinderjsApp::setTimer(const v8::FunctionCallbackInfo<v8::Value>& args) {
       }
       
       newTimer->v8Fn.Reset(isolate, args[1].As<Function>());
+      newTimer->after = timeout;
       newTimer->scheduledAt = sScheduleTimer.getSeconds() * 1000 + timeout;
       
       // Repeat?
