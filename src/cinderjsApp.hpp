@@ -67,6 +67,7 @@ class TimerFnHolder {
   double scheduledAt;
   v8::Persistent<v8::Function> v8Fn;
   bool _repeat = false;
+  bool _remove = false;
 };
 typedef boost::shared_ptr<TimerFnHolder> TimerFn;
 
@@ -101,7 +102,7 @@ class CinderjsApp : public cinder::app::AppNative, public CinderAppBase  {
   // Cinder App
 	void setup();
   void shutdown();
-	void mouseDown( cinder::app::MouseEvent event );
+  void mouseDown( cinder::app::MouseEvent event );
 	void mouseMove( cinder::app::MouseEvent event );
   void keyDown( cinder::app::KeyEvent event );
   void keyUp( cinder::app::KeyEvent event );
