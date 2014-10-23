@@ -113,7 +113,7 @@ class CinderjsApp : public cinder::app::AppNative, public CinderAppBase  {
   void v8Thread( std::string jsFileContents );
   void v8RenderThread();
   void v8EventThread();
-  void v8TimerThread();
+  void v8TimerThread( v8::Isolate* isolate );
   
   // V8 Setup
   static v8::Local<v8::Value> executeScriptString( std::string scriptStr, v8::Isolate* isolate,
@@ -141,8 +141,9 @@ class CinderjsApp : public cinder::app::AppNative, public CinderAppBase  {
   volatile bool _mainRun = false;
   std::condition_variable cvEventThread;
   volatile bool _eventRun = false;
-  std::condition_variable cvTimerThread;
-  volatile bool _timerRun = false;
+  
+  static std::condition_variable cvTimerThread;
+  static volatile bool _timerRun;
   
   cinder::app::RendererRef glRenderer;
   
@@ -195,10 +196,13 @@ class CinderjsApp : public cinder::app::AppNative, public CinderAppBase  {
   static void handleV8TryCatch( v8::TryCatch &tryCatch );
   
   // Timers
-  static cinder::ConcurrentCircularBuffer<TimerFn> mTimerQueue;
-  void executeTimer( TimerFn timer );
+  static cinder::ConcurrentCircularBuffer<TimerFn> sTimerQueue;
+  static void executeTimer( TimerFn timer, v8::Isolate* isolate );
   static cinder::Timer sScheduleTimer;
-  
+  void v8TimerWaitingThread( double _timerWaitingFor );
+  static std::condition_variable cvTimerWaitingThread;
+  static volatile bool _timerWaitingRun;
+
   // Quit
   static bool sQuitRequested;
 };
