@@ -27,6 +27,7 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Filesystem.h"
+#include "cinder/Timer.h"
 #include "cinder/ConcurrentCircularBuffer.h"
 
 #include "js_natives.h"
@@ -57,6 +58,14 @@ class NextFrameFnHolder {
   v8::Persistent<v8::Function> v8Fn;
 };
 typedef boost::shared_ptr<NextFrameFnHolder> NextFrameFn;
+
+class TimerFnHolder {
+  public:
+  int scheduledAt;
+  v8::Persistent<v8::Array> args; // 0 = fn, 1 = timeout, 2-n = callback arguments
+  bool _repeat = false;
+};
+typedef boost::shared_ptr<TimerFnHolder> TimerFn;
 
 enum EventType {
   CJS_SHUTDOWN_REQUEST = 0,
@@ -162,6 +171,7 @@ class CinderjsApp : public cinder::app::AppNative, public CinderAppBase  {
   static void toggleV8Stats(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void requestQuit(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void nextFrameJS(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void setTimeout(const v8::FunctionCallbackInfo<v8::Value>& args);
   
   // Default Process Bindings
   static void NativeBinding(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -179,6 +189,14 @@ class CinderjsApp : public cinder::app::AppNative, public CinderAppBase  {
   
   // Error Handling
   static void handleV8TryCatch( v8::TryCatch &tryCatch );
+  
+  // Timers
+  static cinder::ConcurrentCircularBuffer<TimerFn> mTimerQueue;
+  std::vector<TimerFn> mTimerFns;
+  int mLastTimerCheck = 0;
+  int mNextScheduledTime = 0;
+  void executeTimer( TimerFn timer );
+  static cinder::Timer sScheduleTimer;
   
   // Quit
   static bool sQuitRequested;

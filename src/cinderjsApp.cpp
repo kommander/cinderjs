@@ -48,6 +48,10 @@ v8::Persistent<v8::Object> CinderjsApp::sEmptyObject;
 
 ConcurrentCircularBuffer<NextFrameFn> CinderjsApp::sExecutionQueue(1024);
 
+// Init timeout/interval timer and start it
+cinder::Timer CinderjsApp::sScheduleTimer = new cinder::Timer(true);
+cinder::ConcurrentCircularBuffer<TimerFn> CinderjsApp::mTimerQueue(1024);
+
 int CinderjsApp::sGCRuns = 0;
 void CinderjsApp::gcPrologueCb(Isolate *isolate, GCType type, GCCallbackFlags flags) {
   sGCRuns++;
@@ -212,6 +216,9 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "toggleV8Stats"), v8::FunctionTemplate::New(mIsolate, toggleV8Stats));
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "quit"), v8::FunctionTemplate::New(mIsolate, requestQuit));
   
+  // Timer
+  mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "setTimeout"), v8::FunctionTemplate::New(mIsolate, setTimeout));
+  
   // Setup process object
   v8::Local<v8::ObjectTemplate> processObj = ObjectTemplate::New();
   processObj->Set(v8::String::NewFromUtf8(mIsolate, "nextFrame"), v8::FunctionTemplate::New(mIsolate, nextFrameJS));
@@ -263,10 +270,10 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   
   #ifdef DEBUG
   // For development loading...
-  //argv[2] = "/Users/sebastian/Dropbox/+Projects/cinderjs/lib/test.js";
+  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/test.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js");
-  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
+  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
   #endif
   
   Local<Array> argvArr = Array::New(mIsolate);
@@ -547,11 +554,46 @@ void CinderjsApp::v8EventThread(){
   std::cout << "V8 Event thread ending" << std::endl;
 }
 
+void CinderjsApp::executeTimer(TimerFn timer) {
+  v8::Locker lock(mIsolate);
+
+  // Isolate
+  v8::Isolate::Scope isolate_scope(mIsolate);
+  v8::HandleScope handleScope(mIsolate);
+  
+  v8::Local<v8::Context> context = v8::Local<v8::Context>::New(mIsolate, pContext);
+  
+  if(context.IsEmpty()) return;
+  
+  Context::Scope ctxScope(context);
+  context->Enter();
+  
+  // Execute
+  Local<Array> timerArr = Local<Array>::New(mIsolate, timer->args);
+  Handle<Array> args = Array::New(mIsolate);
+  
+  int argsLen = timerArr->Length() - 2;
+  for(int i = 2; i < timerArr->Length(); ++i){
+    args->Set( i, timerArr->Get(i) );
+  }
+  
+  Handle<Value> argVal = args.As<Value>();
+  
+  timerArr->Get(0).As<Function>()->Call(context->Global(), argsLen, &argVal);
+  
+  context->Exit();
+  v8::Unlocker unlock(mIsolate);
+}
+
 /**
  * Timer thread
+ * Simplified timer implementation (unprecise)
  */
 void CinderjsApp::v8TimerThread(){
   ThreadSetup threadSetup;
+  
+  std::vector<TimerFn> timersToExecute;
+  double now;
   
   // Thread loop
   while( !mShouldQuit ) {
@@ -564,26 +606,44 @@ void CinderjsApp::v8TimerThread(){
     
     if(!mShouldQuit){
       
+      now = sScheduleTimer.getSeconds();
+      
+      // Get timers from queue
+      while(mTimerQueue.isNotEmpty()){
+        TimerFn scheduledTimer;
+        mTimerQueue.popBack(&scheduledTimer);
+        // If timer is scheduled for less then Xms in the future, execute directly
+        if( scheduledTimer->scheduledAt - now < 2){
+          executeTimer( scheduledTimer );
+          continue;
+        }
+        // otherwise push to be executed later...
+        if( scheduledTimer->scheduledAt < mNextScheduledTime){
+          mNextScheduledTime = scheduledTimer->scheduledAt;
+        }
+        mTimerFns.push_back( scheduledTimer );
+      }
+      
       // Check timers, execute the ones that timed out
-      continue;
+      if( mTimerFns.size() < 1 ){
+        // Nothing to do...
+        continue;
+      }
       
-      v8::Locker lock(mIsolate);
-
-      // Isolate
-      v8::Isolate::Scope isolate_scope(mIsolate);
-      v8::HandleScope handleScope(mIsolate);
+      if( now >= mNextScheduledTime ){
+        for( std::vector<TimerFn>::iterator it = mTimerFns.begin(); it < mTimerFns.end(); ++it ) {
+          if(it->get()->scheduledAt <= now - 1){
+            executeTimer((TimerFn)it->get());
+            mTimerFns.erase(it);
+            continue;
+          }
+          if(it->get()->scheduledAt < mNextScheduledTime){
+            mNextScheduledTime = it->get()->scheduledAt;
+            continue;
+          }
+        }
+      }
       
-      v8::Local<v8::Context> context = v8::Local<v8::Context>::New(mIsolate, pContext);
-      
-      if(context.IsEmpty()) return;
-      
-      Context::Scope ctxScope(context);
-      context->Enter();
-      
-      // TODO: execute timed out timers
-      
-      context->Exit();
-      v8::Unlocker unlock(mIsolate);
     }
     
     _timerRun = false;
@@ -857,6 +917,33 @@ void CinderjsApp::nextFrameJS(const v8::FunctionCallbackInfo<v8::Value>& args) {
     NextFrameFn nffn(new NextFrameFnHolder());
     nffn->v8Fn.Reset(isolate, args[0].As<Function>());
     sExecutionQueue.pushFront(nffn);
+  }
+}
+
+void CinderjsApp::setTimeout(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  Isolate* isolate = args.GetIsolate();
+  HandleScope scope(isolate);
+  
+  if(args[0]->IsFunction()){
+    std::cout << "Setting timeout...";
+  
+    uint32_t timeout = args[1]->ToUint32()->Value();
+    if(timeout < 1){
+      timeout = 1;
+    }
+  
+    TimerFn newTimer(new TimerFnHolder());
+    
+    Local<Array> timerArgs = Array::New(isolate);
+    
+    for(int i = 0; i < args.Length(); ++i){
+      timerArgs->Set(i, args[i]);
+    }
+    
+    newTimer->args.Reset(isolate, timerArgs);
+    newTimer->scheduledAt = sScheduleTimer.getSeconds() + timeout;
+    
+    mTimerQueue.pushFront(newTimer);
   }
 }
 

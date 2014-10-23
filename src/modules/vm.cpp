@@ -50,13 +50,21 @@ void runInThisContext(const v8::FunctionCallbackInfo<v8::Value>& args) {
   Local<Script> script = Script::Compile( source, filename );
   
   // Run the script to get the result.
+  TryCatch try_catch;
+  
   Local<Value> result = script->Run();
   
   // Check native module validity
   if(result.IsEmpty() || !result->IsFunction()){
-    std::string except = "External module not a function: ";
-    //except.append(filename->);
-  
+    std::string except = "External module not a function, in ";
+    v8::String::Utf8Value fname(filename);
+    except.append(*fname);
+    
+    if(try_catch.HasCaught()){
+      v8::String::Utf8Value msg(try_catch.Exception());
+      except.append(*msg);
+    }
+    
     isolate->ThrowException(String::NewFromUtf8(isolate, except.c_str()));
     // TODO: remove from module list again
     return;
