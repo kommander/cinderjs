@@ -8,6 +8,8 @@
 #include <fstream>
 #include <sstream>
 #include <cerrno>
+#include <chrono>
+#include <thread>
 
 #ifdef __APPLE__
 #include <OpenGL/OpenGL.h>
@@ -50,7 +52,11 @@ ConcurrentCircularBuffer<NextFrameFn> CinderjsApp::sExecutionQueue(1024);
 
 // Init timeout/interval timer and start it
 cinder::Timer CinderjsApp::sScheduleTimer = new cinder::Timer(true);
-cinder::ConcurrentCircularBuffer<TimerFn> CinderjsApp::mTimerQueue(1024);
+cinder::ConcurrentCircularBuffer<TimerFn> CinderjsApp::sTimerQueue(1024);
+std::condition_variable CinderjsApp::cvTimerThread;
+volatile bool CinderjsApp::_timerRun = false;
+std::condition_variable CinderjsApp::cvTimerWaitingThread;
+volatile bool CinderjsApp::_timerWaitingRun = false;
 
 int CinderjsApp::sGCRuns = 0;
 void CinderjsApp::gcPrologueCb(Isolate *isolate, GCType type, GCCallbackFlags flags) {
@@ -86,7 +92,7 @@ void CinderjsApp::shutdown()
   sConsoleActive = false;
   mShouldQuit = true;
   
-  mTimerQueue.cancel();
+  sTimerQueue.cancel();
   mEventQueue.cancel();
   sExecutionQueue.cancel();
   
@@ -327,7 +333,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   // Start sub threads
   mV8RenderThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8RenderThread, this ) );
   mV8EventThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8EventThread, this ) );
-  mV8TimerThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8TimerThread, this ) );
+  mV8TimerThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8TimerThread, this, mIsolate ) );
 }
 
 /**
@@ -558,94 +564,147 @@ void CinderjsApp::v8EventThread(){
   std::cout << "V8 Event thread ending" << std::endl;
 }
 
-void CinderjsApp::executeTimer(TimerFn timer) {
-  v8::Locker lock(mIsolate);
+void CinderjsApp::executeTimer(TimerFn timer, Isolate* isolate) {
+  v8::Locker lock(isolate);
 
   // Isolate
-  v8::Isolate::Scope isolate_scope(mIsolate);
-  v8::HandleScope handleScope(mIsolate);
-  
-  v8::Local<v8::Context> context = v8::Local<v8::Context>::New(mIsolate, pContext);
-  
-  if(context.IsEmpty()) return;
-  
-  Context::Scope ctxScope(context);
-  context->Enter();
+  v8::Isolate::Scope isolate_scope(isolate);
+  v8::HandleScope handleScope(isolate);
   
   v8::Handle<v8::Value> argv[0] = {};
-  Local<Function> fn = Local<Function>::New(mIsolate, timer->v8Fn);
-  fn->Call(context->Global(), 0, argv);
+  Local<Function> fn = Local<Function>::New(isolate, timer->v8Fn);
+  fn->Call(fn->CreationContext()->Global(), 0, argv);
   
   // Check if timer should be repeated (interval) and reschedule
   timer->v8Fn.Reset();
   
-  context->Exit();
-  v8::Unlocker unlock(mIsolate);
+  //context->Exit();
+  v8::Unlocker unlock(isolate);
+}
+
+void CinderjsApp::v8TimerWaitingThread( double _timerWaitingFor ){
+  ThreadSetup threadSetup;
+  //std::cout << "timer waiting for " << to_string(_timerWaitingFor) << std::endl;
+  std::this_thread::sleep_for(std::chrono::milliseconds((long)_timerWaitingFor));
+  
+  _timerRun = true;
+  cvTimerThread.notify_one();
+  
+  //std::cout << "timer ends " << to_string(_timerWaitingFor) << std::endl;;
 }
 
 /**
  * Timer thread
  * Simplified timer implementation (unprecise)
  */
-void CinderjsApp::v8TimerThread(){
+void CinderjsApp::v8TimerThread( Isolate* isolate ){
   ThreadSetup threadSetup;
   
   double now;
   std::map<uint32_t, TimerFn> mTimerFns;
   std::vector<uint32_t> markedForDeletion;
-  int mLastTimerCheck = 0;
-  int mNextScheduledTime = 0;
+  double mNextScheduledTime = 1000000000000;
+  std::shared_ptr<std::thread> waitThread;
+  bool immediateLoop = false;
   
   // Thread loop
   while( !mShouldQuit ) {
     
     // Wait for data to be processed...
+    if(!immediateLoop)
     {
-        std::unique_lock<std::mutex> lck( mMainMutex );
-        cvTimerThread.wait(lck, [this]{ return _timerRun; });
+      std::unique_lock<std::mutex> lck( mMainMutex );
+      cvTimerThread.wait(lck, [this]{ return _timerRun; });
     }
     
     if(!mShouldQuit){
       
       // Get timers from queue
-      while(mTimerQueue.isNotEmpty()){
+      while(sTimerQueue.isNotEmpty()){
+        now = sScheduleTimer.getSeconds() * 1000;
         TimerFn scheduledTimer;
-        mTimerQueue.popBack(&scheduledTimer);
-        if( scheduledTimer->scheduledAt < mNextScheduledTime){
+        sTimerQueue.popBack(&scheduledTimer);
+        scheduledTimer->scheduledAt -= 0.5;
+        if( scheduledTimer->scheduledAt < mNextScheduledTime || mNextScheduledTime < now){
           mNextScheduledTime = scheduledTimer->scheduledAt;
         }
         mTimerFns[scheduledTimer->id] = scheduledTimer;
-        std::cout << "sceudling timer " << to_string(scheduledTimer->id) << std::endl;
+        //std::cout << "scheduling " << std::endl;
+      }
+      
+      if(markedForDeletion.size() > 0){
+        for( std::vector<uint32_t>::iterator it = markedForDeletion.begin(); it != markedForDeletion.end(); it++ ) {
+          mTimerFns.erase(*it);
+        }
+        markedForDeletion.clear();
       }
       
       if(!mTimerFns.empty()){
+        
+        now = sScheduleTimer.getSeconds() * 1000;
+        if( now >= mNextScheduledTime ){
+          //std::cout << "checking... " << std::endl;
+          for( std::map<uint32_t, TimerFn>::iterator it = mTimerFns.begin(); it != mTimerFns.end(); it++ ) {
+            if(it->second->scheduledAt <= now){
+              //std::cout << "executing " << std::endl;
+              executeTimer(it->second, isolate);
+              markedForDeletion.push_back(it->first);
+              now = sScheduleTimer.getSeconds() * 1000;
+              continue;
+            }
+            if(it->second->scheduledAt < mNextScheduledTime){
+              mNextScheduledTime = it->second->scheduledAt;
+            }
+          }
+        }
+        
+        
+        immediateLoop = false;
         
         if(markedForDeletion.size() > 0){
           for( std::vector<uint32_t>::iterator it = markedForDeletion.begin(); it != markedForDeletion.end(); it++ ) {
             mTimerFns.erase(*it);
           }
+          markedForDeletion.clear();
         }
-        markedForDeletion.clear();
       
-        now = sScheduleTimer.getSeconds() * 1000;
-        if( now >= mNextScheduledTime ){
-          for( std::map<uint32_t, TimerFn>::iterator it = mTimerFns.begin(); it != mTimerFns.end(); it++ ) {
-            if(it->second->scheduledAt <= now - 5){
-              std::cout << "executing timer" << std::endl;
-              executeTimer(it->second);
-              markedForDeletion.push_back(it->first);
-              continue;
-            }
-            if(it->second->scheduledAt < mNextScheduledTime){
-              mNextScheduledTime = it->second->scheduledAt;
-              continue;
-            }
-          }
+        if(waitThread){
+          waitThread->join();
+          waitThread.reset();
         }
-      }
+        
+        if(mTimerFns.empty()) continue;
+        
+        double waitFor = mNextScheduledTime - sScheduleTimer.getSeconds() * 1000;
+        // Timer thread setup takes longer, wait in loop..
+        if(waitFor < 2){
+          //std::cout << "waitfor < 2 " << to_string(waitFor) << std::endl;
+          if(waitFor > 0){
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            mNextScheduledTime -= waitFor; // todo: check
+          }
+          immediateLoop = true;
+          continue;
+        }
+        
+        //std::cout << "create wait thread " << to_string(waitFor) << std::endl;;
+        waitThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8TimerWaitingThread, this, waitFor ) );
+        
+      } // !empty
     }
     
+    if(markedForDeletion.size() > 0){
+      immediateLoop = true;
+      continue;
+    }
+    
+    immediateLoop = false;
     _timerRun = false;
+  }
+  
+  if( waitThread ){
+    waitThread->join();
+    waitThread.reset();
   }
   
   std::cout << "V8 Timer thread ending" << std::endl;
@@ -726,11 +785,6 @@ void CinderjsApp::update()
  */
 void CinderjsApp::draw()
 {
-  // Check timers
-  if(!_timerRun){
-    _timerRun = true;
-    cvTimerThread.notify_one();
-  }
   
   // Trigger v8 draw if not running already...
   if(!_v8Run){
@@ -938,16 +992,19 @@ void CinderjsApp::setTimer(const v8::FunctionCallbackInfo<v8::Value>& args) {
     newTimer->id = id;
     newTimer->v8Fn.Reset(isolate, args[1].As<Function>());
     
-    // Ugly, but need at least 10ms to be executed in draw loop (event loop)
-    newTimer->scheduledAt = sScheduleTimer.getSeconds() * 1000 + timeout - 10;
+    newTimer->scheduledAt = sScheduleTimer.getSeconds() * 1000 + timeout;
     
     // Repeat?
     if(args[3]->IsBoolean()) {
       newTimer->_repeat = args[1]->ToBoolean()->Value();
     }
     
-    mTimerQueue.pushFront(newTimer);
+    sTimerQueue.pushFront(newTimer);
     
+    if(!_timerRun){
+      _timerRun = true;
+      cvTimerThread.notify_one();
+    }
   }
 }
 
