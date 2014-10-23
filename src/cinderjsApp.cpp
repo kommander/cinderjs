@@ -615,6 +615,7 @@ void CinderjsApp::v8TimerThread(){
           mNextScheduledTime = scheduledTimer->scheduledAt;
         }
         mTimerFns[scheduledTimer->id] = scheduledTimer;
+        std::cout << "sceudling timer " << to_string(scheduledTimer->id) << std::endl;
       }
       
       if(!mTimerFns.empty()){
@@ -923,7 +924,7 @@ void CinderjsApp::setTimer(const v8::FunctionCallbackInfo<v8::Value>& args) {
   
   if(args[1]->IsFunction()){
     
-    uint32_t id = 1;
+    uint32_t id = args[0]->ToUint32()->Value();
     double timeout = args[2]->ToNumber()->Value();
     
     // If timer is too small to be executed in time, run directly next frame;
