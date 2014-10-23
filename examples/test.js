@@ -1,9 +1,5 @@
-log("External World!" + Math.random());
+var timers = require('timers');
 
-__draw__(function(){
-  
-});
-
-setTimeout(function(){
-  log("Timed out...");
-}, 2000);
+timers.setTimeout(function(now){
+  log("Timed out in " + (Date.now() - now) + "ms");
+}, 100, Date.now());

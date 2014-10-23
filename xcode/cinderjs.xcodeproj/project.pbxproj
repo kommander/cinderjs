@@ -17,6 +17,7 @@
 		69CC5FFAB4E1488598E5D024 /* cinderjsApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B26520EF291B4336BEC87FD7 /* cinderjsApp.cpp */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		9E0BDE1019F803330036038F /* vm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E0BDE0E19F803330036038F /* vm.cpp */; };
+		9E0BDE1319F954530036038F /* timers.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1219F954530036038F /* timers.js */; };
 		9E7F710A19EDDF22002DDCFF /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9EAF080819EDC4C600C02F65 /* README.md */; };
 		9E7F710B19EDDF22002DDCFF /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = A16F000F7FC04E0DA0360B7B /* CinderApp.icns */; };
 		9E7F710D19EDDF22002DDCFF /* cinderjsApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B26520EF291B4336BEC87FD7 /* cinderjsApp.cpp */; };
@@ -69,6 +70,7 @@
 		9E0BDE0E19F803330036038F /* vm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = vm.cpp; path = ../src/modules/vm.cpp; sourceTree = "<group>"; };
 		9E0BDE0F19F803330036038F /* vm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = vm.hpp; path = ../src/modules/vm.hpp; sourceTree = "<group>"; };
 		9E0BDE1119F915200036038F /* cinderjsApp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = cinderjsApp.hpp; path = ../src/cinderjsApp.hpp; sourceTree = "<group>"; };
+		9E0BDE1219F954530036038F /* timers.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = timers.js; path = ../lib/timers.js; sourceTree = "<group>"; };
 		9E7F70F619EDD441002DDCFF /* libicudata.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicudata.a; path = ../v8/xcodebuild/Release/libicudata.a; sourceTree = "<group>"; };
 		9E7F70F719EDD441002DDCFF /* libicui18n.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicui18n.a; path = ../v8/xcodebuild/Release/libicui18n.a; sourceTree = "<group>"; };
 		9E7F70F819EDD441002DDCFF /* libicuuc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicuuc.a; path = ../v8/xcodebuild/Release/libicuuc.a; sourceTree = "<group>"; };
@@ -285,6 +287,7 @@
 		9E9B3E3319F0121D00291CDE /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				9E0BDE1219F954530036038F /* timers.js */,
 				9ED123DA19F7DD02007786A6 /* assert.js */,
 				9ED123D819F7C86A007786A6 /* fs.js */,
 				9ED123D519F7C84D007786A6 /* vm.js */,
@@ -419,6 +422,7 @@
 				9ED123D119F7A43C007786A6 /* module.js in Resources */,
 				9ED123DB19F7DD02007786A6 /* assert.js in Resources */,
 				9ED123CF19F78F85007786A6 /* path.js in Resources */,
+				9E0BDE1319F954530036038F /* timers.js in Resources */,
 				9ED123C919F72D4F007786A6 /* test.js in Resources */,
 				9ED123C419F72B02007786A6 /* cinder.js in Resources */,
 				9ED123D919F7C86A007786A6 /* fs.js in Resources */,

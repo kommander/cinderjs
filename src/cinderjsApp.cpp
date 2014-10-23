@@ -86,6 +86,10 @@ void CinderjsApp::shutdown()
   sConsoleActive = false;
   mShouldQuit = true;
   
+  mTimerQueue.cancel();
+  mEventQueue.cancel();
+  sExecutionQueue.cancel();
+  
   _v8Run = true;
   cvJSThread.notify_all();
   _eventRun = true;
@@ -217,7 +221,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "quit"), v8::FunctionTemplate::New(mIsolate, requestQuit));
   
   // Timer
-  mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "setTimeout"), v8::FunctionTemplate::New(mIsolate, setTimeout));
+  mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "setTimer"), v8::FunctionTemplate::New(mIsolate, setTimer));
   
   // Setup process object
   v8::Local<v8::ObjectTemplate> processObj = ObjectTemplate::New();
@@ -568,18 +572,12 @@ void CinderjsApp::executeTimer(TimerFn timer) {
   Context::Scope ctxScope(context);
   context->Enter();
   
-  // Execute
-  Local<Array> timerArr = Local<Array>::New(mIsolate, timer->args);
-  Handle<Array> args = Array::New(mIsolate);
+  v8::Handle<v8::Value> argv[0] = {};
+  Local<Function> fn = Local<Function>::New(mIsolate, timer->v8Fn);
+  fn->Call(context->Global(), 0, argv);
   
-  int argsLen = timerArr->Length() - 2;
-  for(int i = 2; i < timerArr->Length(); ++i){
-    args->Set( i, timerArr->Get(i) );
-  }
-  
-  Handle<Value> argVal = args.As<Value>();
-  
-  timerArr->Get(0).As<Function>()->Call(context->Global(), argsLen, &argVal);
+  // Check if timer should be repeated (interval) and reschedule
+  timer->v8Fn.Reset();
   
   context->Exit();
   v8::Unlocker unlock(mIsolate);
@@ -592,7 +590,6 @@ void CinderjsApp::executeTimer(TimerFn timer) {
 void CinderjsApp::v8TimerThread(){
   ThreadSetup threadSetup;
   
-  std::vector<TimerFn> timersToExecute;
   double now;
   
   // Thread loop
@@ -606,7 +603,7 @@ void CinderjsApp::v8TimerThread(){
     
     if(!mShouldQuit){
       
-      now = sScheduleTimer.getSeconds();
+      now = sScheduleTimer.getSeconds() * 1000;
       
       // Get timers from queue
       while(mTimerQueue.isNotEmpty()){
@@ -727,6 +724,11 @@ void CinderjsApp::update()
  */
 void CinderjsApp::draw()
 {
+  // Check timers
+  if(!_timerRun){
+    _timerRun = true;
+    cvTimerThread.notify_one();
+  }
   
   // Trigger v8 draw if not running already...
   if(!_v8Run){
@@ -758,12 +760,6 @@ void CinderjsApp::draw()
     }
     _eventRun = true;
     cvEventThread.notify_one();
-  }
-  
-  // Check timers
-  if(!_timerRun){
-    _timerRun = true;
-    cvTimerThread.notify_one();
   }
   
 }
@@ -920,30 +916,32 @@ void CinderjsApp::nextFrameJS(const v8::FunctionCallbackInfo<v8::Value>& args) {
   }
 }
 
-void CinderjsApp::setTimeout(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void CinderjsApp::setTimer(const v8::FunctionCallbackInfo<v8::Value>& args) {
   Isolate* isolate = args.GetIsolate();
   HandleScope scope(isolate);
   
   if(args[0]->IsFunction()){
-    std::cout << "Setting timeout...";
-  
-    uint32_t timeout = args[1]->ToUint32()->Value();
-    if(timeout < 1){
-      timeout = 1;
+    
+    double timeout = args[1]->ToNumber()->Value();
+    
+    // If timer is too small to be executed in time, run directly next frame;
+    if(timeout < 3){
+      nextFrameJS(args);
+      return;
     }
-  
+    
     TimerFn newTimer(new TimerFnHolder());
     
-    Local<Array> timerArgs = Array::New(isolate);
+    newTimer->v8Fn.Reset(isolate, args[0].As<Function>());
+    newTimer->scheduledAt = sScheduleTimer.getSeconds() * 1000 + timeout - 5;
     
-    for(int i = 0; i < args.Length(); ++i){
-      timerArgs->Set(i, args[i]);
+    // Repeat?
+    if(args[2]->IsBoolean()) {
+      newTimer->_repeat = args[1]->ToBoolean()->Value();
     }
     
-    newTimer->args.Reset(isolate, timerArgs);
-    newTimer->scheduledAt = sScheduleTimer.getSeconds() + timeout;
-    
     mTimerQueue.pushFront(newTimer);
+    
   }
 }
 

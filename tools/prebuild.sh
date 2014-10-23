@@ -8,3 +8,4 @@ python ../tools/js2c.py     \
   ../lib/fs.js              \
   ../lib/vm.js              \
   ../lib/assert.js          \
+  ../lib/timers.js          \
