@@ -30,6 +30,8 @@
 #include "cinder/Timer.h"
 #include "cinder/ConcurrentCircularBuffer.h"
 
+#include <map>
+
 #include "js_natives.h"
 #include "AppConsole.h"
 #include "CinderAppBase.hpp"
@@ -61,6 +63,7 @@ typedef boost::shared_ptr<NextFrameFnHolder> NextFrameFn;
 
 class TimerFnHolder {
   public:
+  uint32_t id;
   double scheduledAt;
   v8::Persistent<v8::Function> v8Fn;
   bool _repeat = false;
@@ -193,9 +196,6 @@ class CinderjsApp : public cinder::app::AppNative, public CinderAppBase  {
   
   // Timers
   static cinder::ConcurrentCircularBuffer<TimerFn> mTimerQueue;
-  std::vector<TimerFn> mTimerFns;
-  int mLastTimerCheck = 0;
-  int mNextScheduledTime = 0;
   void executeTimer( TimerFn timer );
   static cinder::Timer sScheduleTimer;
   
