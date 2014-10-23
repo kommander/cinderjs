@@ -92,9 +92,7 @@ void CinderjsApp::shutdown()
   sConsoleActive = false;
   mShouldQuit = true;
   
-  sTimerQueue.cancel();
-  mEventQueue.cancel();
-  sExecutionQueue.cancel();
+  std::this_thread::sleep_for(std::chrono::milliseconds(1));
   
   _v8Run = true;
   cvJSThread.notify_all();
@@ -102,6 +100,10 @@ void CinderjsApp::shutdown()
   cvEventThread.notify_all();
   _timerRun = true;
   cvTimerThread.notify_all();
+  
+  sTimerQueue.cancel();
+  mEventQueue.cancel();
+  sExecutionQueue.cancel();
   
   // Shutdown v8Thread
   if( mV8Thread ) {
@@ -584,6 +586,7 @@ void CinderjsApp::executeTimer(TimerFn timer, Isolate* isolate) {
 
 void CinderjsApp::v8TimerWaitingThread( double _timerWaitingFor ){
   ThreadSetup threadSetup;
+  
   //std::cout << "timer waiting for " << to_string(_timerWaitingFor) << std::endl;
   std::this_thread::sleep_for(std::chrono::milliseconds((long)_timerWaitingFor));
   
@@ -624,6 +627,12 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
         now = sScheduleTimer.getSeconds() * 1000;
         TimerFn scheduledTimer;
         sTimerQueue.popBack(&scheduledTimer);
+        
+        if(scheduledTimer->_remove){
+          mTimerFns.erase(scheduledTimer->id);
+          continue;
+        }
+        
         scheduledTimer->scheduledAt -= 0.5;
         if( scheduledTimer->scheduledAt < mNextScheduledTime || mNextScheduledTime < now){
           mNextScheduledTime = scheduledTimer->scheduledAt;
@@ -834,13 +843,6 @@ void CinderjsApp::v8Draw( double timePassed ){
   // Callback
   v8::Local<v8::Function> callback = v8::Local<v8::Function>::New(mIsolate, sDrawCallback);
   
-  v8::Local<v8::Context> context = v8::Local<v8::Context>::New(mIsolate, pContext);
-  
-  if(context.IsEmpty()) return;
-  
-  Context::Scope ctxScope(context);
-  context->Enter();
-  
   if( !callback.IsEmpty() ){
     
     v8::Handle<v8::Value> argv[3] = {
@@ -850,22 +852,16 @@ void CinderjsApp::v8Draw( double timePassed ){
     };
 
     v8::TryCatch try_catch;
-
-    Local<Object> emptyObj = Local<Object>::New(mIsolate, sEmptyObject);
-
-    //callback->Call(context->Global(), 3, argv);
-    callback->Call(emptyObj, 3, argv);
+    
+    callback->Call(callback->CreationContext()->Global(), 3, argv);
     
     // Check for errors
     if(try_catch.HasCaught()){
       handleV8TryCatch(try_catch);
     }
 
-    callback.Clear();
-    argv->Clear();
   }
   
-  context->Exit();
 }
 
 /**
@@ -976,36 +972,45 @@ void CinderjsApp::setTimer(const v8::FunctionCallbackInfo<v8::Value>& args) {
   Isolate* isolate = args.GetIsolate();
   HandleScope scope(isolate);
   
-  if(args[1]->IsFunction()){
+  if(args[0]->IsUint32()){
     
     uint32_t id = args[0]->ToUint32()->Value();
-    double timeout = args[2]->ToNumber()->Value();
-    
-    // If timer is too small to be executed in time, run directly next frame;
-    if(timeout < 10){
-      nextFrameJS(args);
-      return;
-    }
     
     TimerFn newTimer(new TimerFnHolder());
-    
     newTimer->id = id;
-    newTimer->v8Fn.Reset(isolate, args[1].As<Function>());
     
-    newTimer->scheduledAt = sScheduleTimer.getSeconds() * 1000 + timeout;
-    
-    // Repeat?
-    if(args[3]->IsBoolean()) {
-      newTimer->_repeat = args[1]->ToBoolean()->Value();
+    if(args[1]->IsFunction()){
+      
+      double timeout = args[2]->ToNumber()->Value();
+      
+      // If timer is too small to be executed in time, run directly next frame;
+      if(timeout < 10){
+        nextFrameJS(args);
+        return;
+      }
+      
+      newTimer->v8Fn.Reset(isolate, args[1].As<Function>());
+      newTimer->scheduledAt = sScheduleTimer.getSeconds() * 1000 + timeout;
+      
+      // Repeat?
+      if(args[3]->IsBoolean()) {
+        newTimer->_repeat = args[1]->ToBoolean()->Value();
+      }
+      
+    } else {
+      // If only an id is given, the timer will be marked for removal
+      newTimer->_remove = true;
     }
     
     sTimerQueue.pushFront(newTimer);
-    
+      
     if(!_timerRun){
       _timerRun = true;
       cvTimerThread.notify_one();
     }
+
   }
+  
 }
 
 /**
