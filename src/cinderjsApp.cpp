@@ -591,6 +591,10 @@ void CinderjsApp::v8TimerThread(){
   ThreadSetup threadSetup;
   
   double now;
+  std::map<uint32_t, TimerFn> mTimerFns;
+  std::vector<uint32_t> markedForDeletion;
+  int mLastTimerCheck = 0;
+  int mNextScheduledTime = 0;
   
   // Thread loop
   while( !mShouldQuit ) {
@@ -603,44 +607,41 @@ void CinderjsApp::v8TimerThread(){
     
     if(!mShouldQuit){
       
-      now = sScheduleTimer.getSeconds() * 1000;
-      
       // Get timers from queue
       while(mTimerQueue.isNotEmpty()){
         TimerFn scheduledTimer;
         mTimerQueue.popBack(&scheduledTimer);
-        // If timer is scheduled for less then Xms in the future, execute directly
-        if( scheduledTimer->scheduledAt - now < 2){
-          executeTimer( scheduledTimer );
-          continue;
-        }
-        // otherwise push to be executed later...
         if( scheduledTimer->scheduledAt < mNextScheduledTime){
           mNextScheduledTime = scheduledTimer->scheduledAt;
         }
-        mTimerFns.push_back( scheduledTimer );
+        mTimerFns[scheduledTimer->id] = scheduledTimer;
       }
       
-      // Check timers, execute the ones that timed out
-      if( mTimerFns.size() < 1 ){
-        // Nothing to do...
-        continue;
-      }
-      
-      if( now >= mNextScheduledTime ){
-        for( std::vector<TimerFn>::iterator it = mTimerFns.begin(); it < mTimerFns.end(); ++it ) {
-          if(it->get()->scheduledAt <= now - 1){
-            executeTimer((TimerFn)it->get());
-            mTimerFns.erase(it);
-            continue;
+      if(!mTimerFns.empty()){
+        
+        if(markedForDeletion.size() > 0){
+          for( std::vector<uint32_t>::iterator it = markedForDeletion.begin(); it != markedForDeletion.end(); it++ ) {
+            mTimerFns.erase(*it);
           }
-          if(it->get()->scheduledAt < mNextScheduledTime){
-            mNextScheduledTime = it->get()->scheduledAt;
-            continue;
+        }
+        markedForDeletion.clear();
+      
+        now = sScheduleTimer.getSeconds() * 1000;
+        if( now >= mNextScheduledTime ){
+          for( std::map<uint32_t, TimerFn>::iterator it = mTimerFns.begin(); it != mTimerFns.end(); it++ ) {
+            if(it->second->scheduledAt <= now - 5){
+              std::cout << "executing timer" << std::endl;
+              executeTimer(it->second);
+              markedForDeletion.push_back(it->first);
+              continue;
+            }
+            if(it->second->scheduledAt < mNextScheduledTime){
+              mNextScheduledTime = it->second->scheduledAt;
+              continue;
+            }
           }
         }
       }
-      
     }
     
     _timerRun = false;
@@ -920,23 +921,27 @@ void CinderjsApp::setTimer(const v8::FunctionCallbackInfo<v8::Value>& args) {
   Isolate* isolate = args.GetIsolate();
   HandleScope scope(isolate);
   
-  if(args[0]->IsFunction()){
+  if(args[1]->IsFunction()){
     
-    double timeout = args[1]->ToNumber()->Value();
+    uint32_t id = 1;
+    double timeout = args[2]->ToNumber()->Value();
     
     // If timer is too small to be executed in time, run directly next frame;
-    if(timeout < 3){
+    if(timeout < 10){
       nextFrameJS(args);
       return;
     }
     
     TimerFn newTimer(new TimerFnHolder());
     
-    newTimer->v8Fn.Reset(isolate, args[0].As<Function>());
-    newTimer->scheduledAt = sScheduleTimer.getSeconds() * 1000 + timeout - 5;
+    newTimer->id = id;
+    newTimer->v8Fn.Reset(isolate, args[1].As<Function>());
+    
+    // Ugly, but need at least 10ms to be executed in draw loop (event loop)
+    newTimer->scheduledAt = sScheduleTimer.getSeconds() * 1000 + timeout - 10;
     
     // Repeat?
-    if(args[2]->IsBoolean()) {
+    if(args[3]->IsBoolean()) {
       newTimer->_repeat = args[1]->ToBoolean()->Value();
     }
     
