@@ -1,5 +1,7 @@
 var timers = require('timers');
 
-timers.setTimeout(function(now){
-  log("Timed out in " + (Date.now() - now) + "ms");
-}, 2000, Date.now());
+for(var i = 0; i < 100; i++){
+  timers.setTimeout(function(now){
+    log("Timed out in " + (Date.now() - now) + "ms");
+  }, 2000, Date.now());
+}
