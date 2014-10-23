@@ -616,17 +616,19 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
   std::shared_ptr<std::thread> waitThread;
   bool immediateLoop = false;
   
-  std::function<void(std::vector<uint32_t>, std::map<uint32_t, TimerFn> mTimerFns)> deleteTimer =
-  [=](std::vector<uint32_t> markedForDeletion, std::map<uint32_t, TimerFn> mTimerFns){
-    if(markedForDeletion.size() > 0){
-      for( std::vector<uint32_t>::iterator it = markedForDeletion.begin(); it != markedForDeletion.end(); it++ ) {
-        TimerFn timer = mTimerFns[*it];
+  // Deletion function
+  std::function<void(std::vector<uint32_t>*, std::map<uint32_t, TimerFn>*)> deleteTimer =
+  [=](std::vector<uint32_t>* markedForDeletion, std::map<uint32_t, TimerFn>* mTimerFns){
+    if(markedForDeletion->size() > 0){
+      std::cout << "deleting " << std::endl;
+      for( std::vector<uint32_t>::iterator it = markedForDeletion->begin(); it != markedForDeletion->end(); it++ ) {
+        TimerFn timer = mTimerFns->at(*it);
         if(timer){
           timer->v8Fn.Reset();
         }
-        mTimerFns.erase(*it);
+        mTimerFns->erase(*it);
       }
-      markedForDeletion.clear();
+      markedForDeletion->clear();
     }
   };
   
@@ -658,30 +660,32 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
           mNextScheduledTime = scheduledTimer->scheduledAt;
         }
         mTimerFns[scheduledTimer->id] = scheduledTimer;
-        //std::cout << "scheduling " << std::endl;
+        std::cout << "scheduling " << std::endl;
       }
       
-      deleteTimer(markedForDeletion, mTimerFns);
+      deleteTimer(&markedForDeletion, &mTimerFns);
       
       if(!mTimerFns.empty()){
         
         now = sScheduleTimer.getSeconds() * 1000;
         if( now >= mNextScheduledTime ){
-          //std::cout << "checking... " << std::endl;
+          std::cout << "checking... " << std::endl;
           for( std::map<uint32_t, TimerFn>::iterator it = mTimerFns.begin(); it != mTimerFns.end(); it++ ) {
             if(it->second->scheduledAt <= now){
-              //std::cout << "executing " << std::endl;
+              std::cout << "executing " << std::endl;
               executeTimer(it->second, isolate);
               
               // Delete or repeat?
               if(it->second->_repeat){
                 it->second->scheduledAt = now + it->second->after;
+                mNextScheduledTime = it->second->scheduledAt;
+                // TODO: Fix scheduling with sorted map
               } else {
                 markedForDeletion.push_back(it->first);
+                continue;
               }
               
               now = sScheduleTimer.getSeconds() * 1000;
-              continue;
             }
             if(it->second->scheduledAt < mNextScheduledTime){
               mNextScheduledTime = it->second->scheduledAt;
@@ -692,7 +696,7 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
         
         immediateLoop = false;
         
-        deleteTimer(markedForDeletion, mTimerFns);
+        deleteTimer(&markedForDeletion, &mTimerFns);
         
         if(waitThread){
           waitThread->join();
@@ -704,7 +708,7 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
         double waitFor = mNextScheduledTime - sScheduleTimer.getSeconds() * 1000;
         // Timer thread setup takes longer, wait in loop..
         if(waitFor < 2){
-          //std::cout << "waitfor < 2 " << to_string(waitFor) << std::endl;
+          std::cout << "waitfor < 2 " << to_string(waitFor) << std::endl;
           if(waitFor > 0){
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
             mNextScheduledTime -= waitFor; // todo: check
@@ -713,7 +717,7 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
           continue;
         }
         
-        //std::cout << "create wait thread " << to_string(waitFor) << std::endl;;
+        std::cout << "create wait thread " << to_string(waitFor) << std::endl;;
         waitThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8TimerWaitingThread, this, waitFor ) );
         
       } // !empty
@@ -735,6 +739,24 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
   
   std::cout << "V8 Timer thread ending" << std::endl;
 }
+
+/**
+ *
+ */
+void CinderjsApp::fileDrop( FileDropEvent event )
+{
+  if(event.getNumFiles() == 1){
+    Path filePath = event.getFile(0);
+    std::string strPath = filePath.string();
+    if(strPath.find(".js") > 0){
+      AppConsole::log("Got js file drop: " + strPath);
+    }
+  }
+  
+  // Later: only load js file as module if shift key is pressed,
+  //        otherwise forward event to js
+}
+
 
 
 /**
