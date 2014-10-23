@@ -98,6 +98,7 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   void v8Thread( std::string jsFileContents );
   void v8RenderThread();
   void v8EventThread();
+  void v8TimerThread();
   
   // V8 Setup
   static v8::Local<v8::Value> executeScriptString( std::string scriptStr, Isolate* isolate,
@@ -125,6 +126,8 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   volatile bool _mainRun = false;
   std::condition_variable cvEventThread;
   volatile bool _eventRun = false;
+  std::condition_variable cvTimerThread;
+  volatile bool _timerRun = false;
   
   RendererRef glRenderer;
   
@@ -140,6 +143,7 @@ class CinderjsApp : public AppNative, public CinderAppBase  {
   std::shared_ptr<std::thread> mV8Thread;
   std::shared_ptr<std::thread> mV8RenderThread;
   std::shared_ptr<std::thread> mV8EventThread;
+  std::shared_ptr<std::thread> mV8TimerThread;
   
   // Modules
   static v8::Persistent<v8::Object> sModuleCache;
@@ -204,6 +208,10 @@ void CinderjsApp::gcPrologueCb(Isolate *isolate, GCType type, GCCallbackFlags fl
   std::cout << "GC Prologue " << std::to_string(sGCRuns) << std::endl;
 }
 
+/**
+ * Handling v8 errors in native land
+ * TODO: can be vastly improved
+ */
 void CinderjsApp::handleV8TryCatch( v8::TryCatch &tryCatch ) {
   std::string msg;
   if(tryCatch.StackTrace().IsEmpty()){
@@ -231,6 +239,8 @@ void CinderjsApp::shutdown()
   cvJSThread.notify_all();
   _eventRun = true;
   cvEventThread.notify_all();
+  _timerRun = true;
+  cvTimerThread.notify_all();
   
   // Shutdown v8Thread
   if( mV8Thread ) {
@@ -250,6 +260,11 @@ void CinderjsApp::shutdown()
     mV8EventThread.reset();
   }
   
+  // Shutdown v8TimerThread
+  if( mV8TimerThread ) {
+    mV8TimerThread->join();
+    mV8TimerThread.reset();
+  }
   v8::V8::Dispose();
 }
 
@@ -454,6 +469,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   // Start sub threads
   mV8RenderThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8RenderThread, this ) );
   mV8EventThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8EventThread, this ) );
+  mV8TimerThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8TimerThread, this ) );
 }
 
 /**
@@ -685,6 +701,52 @@ void CinderjsApp::v8EventThread(){
 }
 
 /**
+ * Timer thread
+ */
+void CinderjsApp::v8TimerThread(){
+  ThreadSetup threadSetup;
+  
+  // Thread loop
+  while( !mShouldQuit ) {
+    
+    // Wait for data to be processed...
+    {
+        std::unique_lock<std::mutex> lck( mMainMutex );
+        cvTimerThread.wait(lck, [this]{ return _timerRun; });
+    }
+    
+    if(!mShouldQuit){
+      
+      // Check timers, execute the ones that timed out
+      continue;
+      
+      v8::Locker lock(mIsolate);
+
+      // Isolate
+      v8::Isolate::Scope isolate_scope(mIsolate);
+      v8::HandleScope handleScope(mIsolate);
+      
+      v8::Local<v8::Context> context = v8::Local<v8::Context>::New(mIsolate, pContext);
+      
+      if(context.IsEmpty()) return;
+      
+      Context::Scope ctxScope(context);
+      context->Enter();
+      
+      // TODO: execute timed out timers
+      
+      context->Exit();
+      v8::Unlocker unlock(mIsolate);
+    }
+    
+    _timerRun = false;
+  }
+  
+  std::cout << "V8 Timer thread ending" << std::endl;
+}
+
+
+/**
  *
  */
 void CinderjsApp::resize()
@@ -751,8 +813,10 @@ void CinderjsApp::update()
 }
 
 /**
- * Cinder draw loop
- * Triggers the v8 render thread
+ * Cinder draw loop (tick)
+ * - Triggers the v8 render thread
+ * - Proxies nextFrame() 
+ * - Triggers timer thread
  */
 void CinderjsApp::draw()
 {
@@ -787,6 +851,12 @@ void CinderjsApp::draw()
     }
     _eventRun = true;
     cvEventThread.notify_one();
+  }
+  
+  // Check timers
+  if(!_timerRun){
+    _timerRun = true;
+    cvTimerThread.notify_one();
   }
   
 }
