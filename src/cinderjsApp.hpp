@@ -51,6 +51,7 @@ class BufferedEventHolder {
   int type;
   cinder::app::MouseEvent mEvt;
   cinder::app::KeyEvent kEvt;
+  std::vector<cinder::fs::path> fdFiles;
   v8::Persistent<v8::Function> v8Fn;
 };
 typedef boost::shared_ptr<BufferedEventHolder> BufferedEvent;
@@ -77,7 +78,8 @@ enum EventType {
   CJS_NEXT_FRAME = 1,
   CJS_RESIZE = 10,
   CJS_KEY_DOWN = 20,
-  CJS_KEY_UP = 30
+  CJS_KEY_UP = 30,
+  CJS_FILE_DROP = 100
 };
 
 // TODO
