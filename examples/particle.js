@@ -1,4 +1,5 @@
 var Vec2 = require('./lib/vec2.js');
+var Material = require('material').Material;
 
 // Screen size holder
 var ctxSize = {
@@ -24,6 +25,9 @@ function newParticle(){
   var particle = new Vec2( getRandomInt(0, ctxSize.x), getRandomInt(0, ctxSize.y), getRandomInt(0, 360) );
   particle.radius = getRandomInt(2, 5);
   particle.vel = getRandomInt(1, 4);
+  particle.rx = getRandomInt(1, 360);
+  particle.ry = getRandomInt(1, 360);
+  particle.rz = getRandomInt(1, 360);
   particle.rgb = [1,1,1];
   return particle;
 }
@@ -42,11 +46,24 @@ var distance;
 var textId = utils.createSimpleText("Particles: 2000");
 utils.setSimpleTextPosition(textId, 0, 40, 0);
 
+// Create example material
+var mat = new Material();
+mat.ambient(.0, .6, .6, 1);
+mat.diffuse(.0, .4, .8, 1);
+mat.specular(.0, .8, .8, 1);
+mat.emission(.0, .2, .3, 1);
+mat.shininess(100);
+
 var loop = function(timePassed, mx, my){
   // Update mouse position
   mouse.x = mx;
   mouse.y = my;
   
+  gl.enable(gl.LIGHTING);
+  gl.enable(gl.LIGHT0);
+
+  mat.apply();
+
   for( i = particles.length - 1; i >= 0; i-- ) {
     particle = particles[i];
     if(particle.x < 0 || particle.x > ctxSize.x || particle.y < 0 || particle.y > ctxSize.y){
@@ -69,15 +86,28 @@ var loop = function(timePassed, mx, my){
     }
     //gl.color(particle.rgb[0], particle.rgb[1], particle.rgb[2]);
     
+    
     if(drawMethod == 0) {
       gl.drawSolidCircle( particle.x, particle.y, particle.radius );
-    } else if(drawMethod == 1) {
+    } else if(drawMethod == 2) {
       gl.drawLine(lastParticle.x, lastParticle.y, particle.x, particle.y);
       lastParticle = particle;
-    } else if(drawMethod == 2) {
-      gl.drawCube(particle.x, particle.y, 0, 20, 20, 20);
+    } else if(drawMethod == 1) {
+      // Update rotation
+      particle.rx += 0.2;
+      particle.ry += 0.5;
+      particle.rz += 0.6;
+      
+      gl.pushMatrices();
+      gl.translate(particle.x, particle.y);
+      gl.rotate(particle.rx, particle.ry, particle.rz);
+      gl.drawCube(0, 0, 0, 20, 20, 20);
+      gl.popMatrices();
     }
   }
+  
+  gl.disable(gl.LIGHT0);
+  gl.disable(gl.LIGHTING);
   
   // Draw the earlier created text object...
   utils.drawSimpleText(textId);
