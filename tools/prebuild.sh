@@ -9,3 +9,6 @@ python ../tools/js2c.py     \
   ../lib/vm.js              \
   ../lib/assert.js          \
   ../lib/timers.js          \
+  ../lib/events.js          \
+  ../lib/app.js             \
+  ../lib/default_main.js    \

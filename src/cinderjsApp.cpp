@@ -78,8 +78,11 @@ void CinderjsApp::handleV8TryCatch( v8::TryCatch &tryCatch ) {
     v8::String::Utf8Value trace(tryCatch.StackTrace());
     msg = *trace;
   }
-  std::string ex = "JS Error: ";
+  std::string ex = "Uncaught Exception: ";
   ex.append(msg);
+  #ifdef DEBUG
+  std::cout << ex << std::endl;
+  #endif
   AppConsole::log( ex );
 }
 
@@ -245,6 +248,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   processObj->Set(v8::String::NewFromUtf8(mIsolate, "env"), ObjectTemplate::New());
   //process.execPath
   processObj->Set(v8::String::NewFromUtf8(mIsolate, "execPath"), v8::String::NewFromUtf8(mIsolate, getAppPath().c_str()));
+  processObj->Set(v8::String::NewFromUtf8(mIsolate, "cwd"), v8::String::NewFromUtf8(mIsolate, mCwd.c_str()));
   mGlobal->Set(v8::String::NewFromUtf8(mIsolate, "process"), processObj);
   
   // TODO: export console[log, error, trace, etc.]
@@ -282,10 +286,10 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   
   #ifdef DEBUG
   // For development loading...
-  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/test.js");
+  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/test.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js");
-  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
+  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
   #endif
   
   Local<Array> argvArr = Array::New(mIsolate);

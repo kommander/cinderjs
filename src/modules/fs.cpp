@@ -87,7 +87,10 @@ void readFileSync(const v8::FunctionCallbackInfo<v8::Value>& args) {
   // Do we have a js file to run?
   std::string jsFileContents;
   if( !cinder::fs::exists( fs::path::path(*path) ) ){
-    AppConsole::log("Could not find specified JS file!");
+    std::string err = "File not found: ";
+    err.append(*path);
+    isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate, err.c_str())));
+    return;
   } else {
     try {
       std::ifstream in(*path, std::ios::in );
@@ -101,7 +104,8 @@ void readFileSync(const v8::FunctionCallbackInfo<v8::Value>& args) {
     } catch(std::exception &e) {
       std::string err = "Error: ";
       err.append(e.what());
-      AppConsole::log( err );
+      isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate, err.c_str())));
+      return;
     }
   }
   
