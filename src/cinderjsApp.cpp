@@ -287,7 +287,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   #ifdef DEBUG
   // For development loading...
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/test.js");
-  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js");
+  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
   #endif
@@ -549,11 +549,25 @@ void CinderjsApp::v8EventThread(){
           callback->Call(context->Global(), 0, argv);
         }
         
+        // File Drop
+        else if(evt->type == CJS_FILE_DROP){
+        
+          Local<Array> files = Array::New(mIsolate);
+          for(int i = 0; i < evt->fdFiles.size(); i++){
+            files->Set(i, v8::String::NewFromUtf8(mIsolate, evt->fdFiles[i].c_str()));
+          }
+  
+          v8::Handle<v8::Value> argv[2] = {
+            v8::Number::New(mIsolate, CJS_FILE_DROP),
+            files
+          };
+          callback->Call(context->Global(), 2, argv);
+        }
+        
         // Shutdown (gracefully)
         else if(evt->type == CJS_SHUTDOWN_REQUEST){
           quit();
         }
-
       }
       
       context->Exit();
@@ -765,16 +779,12 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
  */
 void CinderjsApp::fileDrop( FileDropEvent event )
 {
-  if(event.getNumFiles() == 1){
-    Path filePath = event.getFile(0);
-    std::string strPath = filePath.string();
-    if(strPath.find(".js") > 0){
-      AppConsole::log("Got js file drop: " + strPath);
-    }
-  }
-  
-  // Later: only load js file as module if shift key is pressed,
-  //        otherwise forward event to js
+  BufferedEvent evt(new BufferedEventHolder());
+  evt->type = CJS_FILE_DROP;
+  evt->fdFiles = event.getFiles();
+  mEventQueue.pushFront(evt);
+  _eventRun = true;
+  cvEventThread.notify_one();
 }
 
 
