@@ -311,6 +311,10 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   CGLEnable( currCtx, kCGLCEMPEngine );
   CGLLockContext( currCtx );
   
+  // Enable depth buffer read/write by default
+  gl::enableDepthRead();
+  gl::enableDepthWrite();
+  
   // Execute entry script
   Local<Value> mainResult = executeScriptString( mainJS, mIsolate,
     mMainContext, v8::String::NewFromUtf8(mIsolate, "cinder.js") );
