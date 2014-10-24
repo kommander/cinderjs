@@ -23,6 +23,7 @@
 		9E0BDE1919F9EFF70036038F /* app.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1819F9EFF70036038F /* app.js */; };
 		9E0BDE1D19F9F8F90036038F /* trig.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1B19F9F8F90036038F /* trig.js */; };
 		9E0BDE1E19F9F8F90036038F /* vec2.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1C19F9F8F90036038F /* vec2.js */; };
+		9E0BDE2119FA8FB40036038F /* material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1F19FA8FB40036038F /* material.cpp */; };
 		9E7F710A19EDDF22002DDCFF /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9EAF080819EDC4C600C02F65 /* README.md */; };
 		9E7F710B19EDDF22002DDCFF /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = A16F000F7FC04E0DA0360B7B /* CinderApp.icns */; };
 		9E7F710D19EDDF22002DDCFF /* cinderjsApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B26520EF291B4336BEC87FD7 /* cinderjsApp.cpp */; };
@@ -81,6 +82,8 @@
 		9E0BDE1819F9EFF70036038F /* app.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = app.js; path = ../lib/app.js; sourceTree = "<group>"; };
 		9E0BDE1B19F9F8F90036038F /* trig.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = trig.js; path = ../examples/lib/trig.js; sourceTree = "<group>"; };
 		9E0BDE1C19F9F8F90036038F /* vec2.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = vec2.js; path = ../examples/lib/vec2.js; sourceTree = "<group>"; };
+		9E0BDE1F19FA8FB40036038F /* material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = material.cpp; path = ../src/modules/material.cpp; sourceTree = "<group>"; };
+		9E0BDE2019FA8FB40036038F /* material.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = material.hpp; path = ../src/modules/material.hpp; sourceTree = "<group>"; };
 		9E7F70F619EDD441002DDCFF /* libicudata.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicudata.a; path = ../v8/xcodebuild/Release/libicudata.a; sourceTree = "<group>"; };
 		9E7F70F719EDD441002DDCFF /* libicui18n.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicui18n.a; path = ../v8/xcodebuild/Release/libicui18n.a; sourceTree = "<group>"; };
 		9E7F70F819EDD441002DDCFF /* libicuuc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicuuc.a; path = ../v8/xcodebuild/Release/libicuuc.a; sourceTree = "<group>"; };
@@ -325,6 +328,7 @@
 		9E9B3E3619F022A800291CDE /* modules */ = {
 			isa = PBXGroup;
 			children = (
+				9E0BDE1F19FA8FB40036038F /* material.cpp */,
 				9E0BDE0E19F803330036038F /* vm.cpp */,
 				9ED123DC19F7ED4E007786A6 /* fs.cpp */,
 				9ED123BF19F6EE9F007786A6 /* utils.cpp */,
@@ -338,6 +342,7 @@
 		9E9B3E3719F022B000291CDE /* modules */ = {
 			isa = PBXGroup;
 			children = (
+				9E0BDE2019FA8FB40036038F /* material.hpp */,
 				9E0BDE0F19F803330036038F /* vm.hpp */,
 				9ED123DD19F7ED4E007786A6 /* fs.hpp */,
 				9ED123C019F6EE9F007786A6 /* utils.hpp */,
@@ -493,6 +498,7 @@
 				9E0BDE1019F803330036038F /* vm.cpp in Sources */,
 				9E9B3E4019F0233C00291CDE /* PipeModule.cpp in Sources */,
 				9E9B3E3C19F022C000291CDE /* app.cpp in Sources */,
+				9E0BDE2119FA8FB40036038F /* material.cpp in Sources */,
 				69CC5FFAB4E1488598E5D024 /* cinderjsApp.cpp in Sources */,
 				9ED123C119F6EE9F007786A6 /* utils.cpp in Sources */,
 				9E9B3E4419F0390000291CDE /* console.cpp in Sources */,

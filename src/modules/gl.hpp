@@ -57,6 +57,8 @@ class GLModule : public PipeModule {
     static void rotate(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void begin(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void end(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void enable(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void disable(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void vertex(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void color(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void enableWireframe(const v8::FunctionCallbackInfo<v8::Value>& args);

@@ -31,6 +31,8 @@ using namespace v8;
 
 namespace cjs {
 
+// TODO: Move to static module method
+
 void runInThisContext(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope handle_scope(isolate);
@@ -84,7 +86,7 @@ void VMModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   
   vmTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "runInThisContext"), v8::FunctionTemplate::New(getIsolate(), runInThisContext));
   
-  // Expose global fs object
+  // Expose global vm object
   global->Set(v8::String::NewFromUtf8(getIsolate(), "_vm"), vmTemplate);
 }
  

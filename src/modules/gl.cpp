@@ -110,6 +110,24 @@ void GLModule::end(const v8::FunctionCallbackInfo<v8::Value>& args) {
 /**
  *
  */
+void GLModule::enable(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  GLenum num = args[0]->ToUint32()->Value();
+  gl::enable(num);
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::disable(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  GLenum num = args[0]->ToUint32()->Value();
+  gl::disable(num);
+  return;
+}
+
+/**
+ *
+ */
 void GLModule::translate(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(args.Length() == 2){
     bufVec2f_1.x = args[0]->NumberValue();
@@ -255,6 +273,8 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "rotate"), v8::FunctionTemplate::New(getIsolate(), rotate));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "begin"), v8::FunctionTemplate::New(getIsolate(), begin));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "end"), v8::FunctionTemplate::New(getIsolate(), end));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "enable"), v8::FunctionTemplate::New(getIsolate(), enable));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "disable"), v8::FunctionTemplate::New(getIsolate(), disable));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "vertex"), v8::FunctionTemplate::New(getIsolate(), vertex));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "color"), v8::FunctionTemplate::New(getIsolate(), color));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "enableWireframe"), v8::FunctionTemplate::New(getIsolate(), enableWireframe));
@@ -262,6 +282,19 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawCube"), v8::FunctionTemplate::New(getIsolate(), drawCube));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawTorus"), v8::FunctionTemplate::New(getIsolate(), drawTorus));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawCylinder"), v8::FunctionTemplate::New(getIsolate(), drawCylinder));
+  
+  // Some GL Constants
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "CULL_FACE"), v8::Uint32::New(getIsolate(), GL_CULL_FACE));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "CULL_FACE_MODE"), v8::Uint32::New(getIsolate(), GL_CULL_FACE_MODE));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHTING"), v8::Uint32::New(getIsolate(), GL_LIGHTING));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHT0"), v8::Uint32::New(getIsolate(), GL_LIGHT0));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHT1"), v8::Uint32::New(getIsolate(), GL_LIGHT1));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHT2"), v8::Uint32::New(getIsolate(), GL_LIGHT2));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHT3"), v8::Uint32::New(getIsolate(), GL_LIGHT3));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHT4"), v8::Uint32::New(getIsolate(), GL_LIGHT4));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHT5"), v8::Uint32::New(getIsolate(), GL_LIGHT5));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHT6"), v8::Uint32::New(getIsolate(), GL_LIGHT6));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHT7"), v8::Uint32::New(getIsolate(), GL_LIGHT7));
   
   // Expose global gl object
   global->Set(v8::String::NewFromUtf8(getIsolate(), "gl"), glTemplate);

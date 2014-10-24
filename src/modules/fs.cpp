@@ -36,6 +36,8 @@ using namespace v8;
 
 namespace cjs {
 
+// TODO: Move to static module methods
+
 void existsSync(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope handle_scope(isolate);

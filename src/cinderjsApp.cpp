@@ -22,6 +22,7 @@
 #include "modules/utils.hpp"
 #include "modules/fs.hpp"
 #include "modules/vm.hpp"
+#include "modules/material.hpp"
 
 
 using namespace ci;
@@ -261,6 +262,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   addModule(boost::shared_ptr<UtilsModule>( new UtilsModule() ));
   addModule(boost::shared_ptr<FSModule>( new FSModule() ));
   addModule(boost::shared_ptr<VMModule>( new VMModule() ));
+  addModule(boost::shared_ptr<MaterialModule>( new MaterialModule() ));
   
   
   // Create a new context.
@@ -289,7 +291,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/test.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js");
-  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
+  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
   #endif
   
   Local<Array> argvArr = Array::New(mIsolate);
@@ -390,7 +392,7 @@ void CinderjsApp::v8RenderThread(){
       v8::Locker lock(mIsolate);
       
       // clear out the window with black
-      gl::clear( Color( 0, 0, 0 ) );
+      gl::clear( Color( 0.1, 0.1, 0.1 ) );
       
       // JS Draw callback
       v8Draw( timePassed );
