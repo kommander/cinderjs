@@ -1,9 +1,5 @@
 log('>>> LINES.JS START <<<');
 
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 // Screen size holder
 var ctxSize = {
   x: 640,
