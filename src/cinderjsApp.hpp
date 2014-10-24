@@ -81,7 +81,7 @@ enum EventType {
 };
 
 // TODO
-// - Fix "exports" object usage in js modules (cannot be replaced with something like exports = function(){},
+// - !!! Fix "exports" object usage in js modules (cannot be replaced with something like exports = function(){},
 //   will return an empty exports object (not sure why)
 // - Load a js module by dropping it on the app window
 // - Split cinderjsApp in header file
