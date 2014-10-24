@@ -312,9 +312,9 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   CGLLockContext( currCtx );
   
   // Enable depth buffer read/write by default
-  gl::enableDepthRead();
-  gl::enableDepthWrite();
-  
+//  gl::enableDepthRead();
+//  gl::enableDepthWrite();
+//  
   // Execute entry script
   Local<Value> mainResult = executeScriptString( mainJS, mIsolate,
     mMainContext, v8::String::NewFromUtf8(mIsolate, "cinder.js") );
@@ -397,7 +397,9 @@ void CinderjsApp::v8RenderThread(){
       
       // clear out the window with black
       gl::clear( Color( 0.1, 0.1, 0.1 ) );
-      
+      gl::enableDepthRead();
+      gl::enableDepthWrite();
+  
       // JS Draw callback
       v8Draw( timePassed );
       
@@ -406,6 +408,8 @@ void CinderjsApp::v8RenderThread(){
 //        it->get()->draw();
 //      }
       
+      gl::disableDepthRead();
+      gl::disableDepthWrite();
       v8::Unlocker unlock(mIsolate);
       
       // FPS (TODO: if active)
