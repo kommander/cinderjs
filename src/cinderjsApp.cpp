@@ -287,9 +287,9 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   #ifdef DEBUG
   // For development loading...
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/test.js");
-  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js");
+  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js");
-  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
+  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
   #endif
   
   Local<Array> argvArr = Array::New(mIsolate);
