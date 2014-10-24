@@ -1,4 +1,4 @@
-var Trig = require('./trig.js').Trig;
+var Trig = require('./trig.js');
 
 // Vector2D
 var Vec2 = function(x, y, angle) {
@@ -11,7 +11,7 @@ var Vec2 = function(x, y, angle) {
   this.y = y;
 };
 
-exports.Vec2 = Vec2;
+module.exports = Vec2;
   
 /** 
  * Move based on angle of trajectory and magnitude of distance

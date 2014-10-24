@@ -39,4 +39,4 @@ var Trig = {
   }
 }
 
-exports.Trig = Trig;
+module.exports = Trig;
