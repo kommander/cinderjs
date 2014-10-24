@@ -46,7 +46,11 @@ var distance;
 var textId = utils.createSimpleText("Particles: 2000");
 utils.setSimpleTextPosition(textId, 0, 40, 0);
 
-var loop = function(timePassed){
+var loop = function(timePassed, mx, my){
+  // Update mouse position
+  mouse.x = mx;
+  mouse.y = my;
+  
   for( i = particles.length - 1; i >= 0; i-- ) {
     particle = particles[i];
     if(particle.x < 0 || particle.x > ctxSize.x || particle.y < 0 || particle.y > ctxSize.y){
@@ -83,13 +87,8 @@ var loop = function(timePassed){
   utils.drawSimpleText(textId);
 }
 
-__draw__(function(timePassed, mx, my){
-  // Update mouse position
-  mouse.x = mx;
-  mouse.y = my;
-  
-  loop(timePassed);
-});
+// Register draw loop (executed each frame, allows drawing to window)
+app.draw(loop);
 
 app.on('resize', function( width, height ){
   ctxSize.x = width;

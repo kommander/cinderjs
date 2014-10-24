@@ -16,7 +16,11 @@ var mouse = {
 var drawMethod = 0;
 var wireframe = false;
 
-var loop = function(timePassed){
+var loop = function(timePassed, mx, my){
+  // Update mouse position
+  mouse.x = mx;
+  mouse.y = my;
+  
   gl.pushMatrices();
   if(wireframe) gl.enableWireframe();
   gl.translate(mouse.x, mouse.y);
@@ -33,13 +37,9 @@ var loop = function(timePassed){
   gl.popMatrices();
 }
 
-__draw__(function(timePassed, mx, my){
-  // Update mouse position
-  mouse.x = mx;
-  mouse.y = my;
-  
-  loop(timePassed);
-});
+// Register draw loop (executed each frame, allows drawing to window)
+app.draw(loop);
+
 
 app.on('keydown', function( evt ){
   if(evt.charCode == 99) { // C

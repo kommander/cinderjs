@@ -21,9 +21,9 @@ try {
     }
   }
 
-  __draw__(function(){
-    loop();
-  });
+  // Register draw loop (executed each frame, allows drawing to window)
+  app.draw(loop);
+
 } catch(ex) {
   log("Error: " + ex);
   return;
