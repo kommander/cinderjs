@@ -41,30 +41,19 @@ __draw__(function(timePassed, mx, my){
   loop(timePassed);
 });
 
-__event__(function( type ){
-  // Resize Event
-  if(type == 10){
-    //ctxSize.x = arguments[1];
-    //ctxSize.y = arguments[2];
-  }
-  // Key Down
-  else if(type == 20){
-    var charCode = arguments[1];
-    var char = arguments[2];
-    
-    if(charCode == 99) { // C
-      toggleAppConsole();
-    } else if(charCode == 27) { // ESC
-      quit();
-    } else if(charCode == 118) { // V
-      toggleV8Stats();
-    } else if(charCode == 119) { // W
-      wireframe = !wireframe;
-    } else if(charCode == 114) { // R
-      drawMethod++
-      if(drawMethod > 2){
-        drawMethod = 0
-      }
+app.on('keydown', function( evt ){
+  if(evt.charCode == 99) { // C
+    toggleAppConsole();
+  } else if(evt.charCode == 27) { // ESC
+    quit();
+  } else if(evt.charCode == 118) { // V
+    toggleV8Stats();
+  } else if(evt.charCode == 119) { // W
+    wireframe = !wireframe;
+  } else if(evt.charCode == 114) { // R
+    drawMethod++
+    if(drawMethod > 2){
+      drawMethod = 0
     }
   }
 });

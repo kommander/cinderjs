@@ -219,8 +219,6 @@ var loop = function(timePassed){
   utils.drawSimpleText(textId);
 }
 
-log('>>> PARTICLE.JS <<<');
-
 __draw__(function(timePassed, mx, my){
   // Update mouse position
   mouse.x = mx;
@@ -229,43 +227,31 @@ __draw__(function(timePassed, mx, my){
   loop(timePassed);
 });
 
-__event__(function( type ){
-  // Resize Event
-  if(type == 10){
-    ctxSize.x = arguments[1];
-    ctxSize.y = arguments[2];
-  }
-  // Key Down
-  else if(type == 20){
-    var charCode = arguments[1];
-    var char = arguments[2];
-    
-    if(charCode == 99) { // C
-      toggleAppConsole();
-    } else if(charCode == 109) { // M
-      generateParticles(1000);
-      utils.updateSimpleText(textId, "Particles: " + particles.length);
-    } else if(charCode == 108) { // L
-      removeParticles(1000);
-      utils.updateSimpleText(textId, "Particles: " + particles.length);
-    } else if(charCode == 114) { // R
-      drawMethod++
-      if(drawMethod > 2){
-        drawMethod = 0
-      }
-    } else if(charCode == 27) { // ESC
-      quit();
-    } else if(charCode == 118) { // V
-      toggleV8Stats();
+app.on('resize', function( width, height ){
+  ctxSize.x = width;
+  ctxSize.y = height;
+});
+
+app.on('keydown', function( evt ){
+  if(evt.charCode == 99) { // C
+    toggleAppConsole();
+  } else if(evt.charCode == 109) { // M
+    generateParticles(1000);
+    utils.updateSimpleText(textId, "Particles: " + particles.length);
+  } else if(evt.charCode == 108) { // L
+    removeParticles(1000);
+    utils.updateSimpleText(textId, "Particles: " + particles.length);
+  } else if(evt.charCode == 114) { // R
+    drawMethod++
+    if(drawMethod > 2){
+      drawMethod = 0
     }
-    
+  } else if(evt.charCode == 27) { // ESC
+    quit();
+  } else if(evt.charCode == 118) { // V
+    toggleV8Stats();
   }
-  // Key Up
-  else if(type == 30){
-    var charCode = arguments[1];
-    var char = arguments[2];
-    // ...
-  }
+
 });
 
 // Add some particles
