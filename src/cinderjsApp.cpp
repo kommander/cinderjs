@@ -612,7 +612,7 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
   double now;
   std::map<uint32_t, TimerFn> mTimerFns;
   std::vector<uint32_t> markedForDeletion;
-  double mNextScheduledTime = 1000000000000;
+  double mNextScheduledTime = 0;
   std::shared_ptr<std::thread> waitThread;
   bool immediateLoop = false;
   
@@ -620,7 +620,10 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
   std::function<void(std::vector<uint32_t>*, std::map<uint32_t, TimerFn>*)> deleteTimer =
   [=](std::vector<uint32_t>* markedForDeletion, std::map<uint32_t, TimerFn>* mTimerFns){
     if(markedForDeletion->size() > 0){
-      std::cout << "deleting " << std::endl;
+      
+      // Debug
+      //std::cout << "deleting " << std::endl;
+      
       for( std::vector<uint32_t>::iterator it = markedForDeletion->begin(); it != markedForDeletion->end(); it++ ) {
         TimerFn timer = mTimerFns->at(*it);
         if(timer){
@@ -655,12 +658,14 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
           continue;
         }
         
-        scheduledTimer->scheduledAt -= 0.5;
         if( scheduledTimer->scheduledAt < mNextScheduledTime || mNextScheduledTime < now){
           mNextScheduledTime = scheduledTimer->scheduledAt;
         }
         mTimerFns[scheduledTimer->id] = scheduledTimer;
-        std::cout << "scheduling " << std::endl;
+        
+        // Debug
+        //std::cout << "scheduling " << std::endl;
+        
       }
       
       deleteTimer(&markedForDeletion, &mTimerFns);
@@ -668,18 +673,23 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
       if(!mTimerFns.empty()){
         
         now = sScheduleTimer.getSeconds() * 1000;
-        if( now >= mNextScheduledTime ){
-          std::cout << "checking... " << std::endl;
+        if( now >= mNextScheduledTime - 1 ){
+          mNextScheduledTime = 0;
+          
+          // Debug
+          //std::cout << "checking... " << std::endl;
+          
           for( std::map<uint32_t, TimerFn>::iterator it = mTimerFns.begin(); it != mTimerFns.end(); it++ ) {
-            if(it->second->scheduledAt <= now){
-              std::cout << "executing " << std::endl;
+            if(it->second->scheduledAt - 1 <= now){
+              
+              // Debug
+              //std::cout << "executing " << std::endl;
+              
               executeTimer(it->second, isolate);
               
               // Delete or repeat?
               if(it->second->_repeat){
                 it->second->scheduledAt = now + it->second->after;
-                mNextScheduledTime = it->second->scheduledAt;
-                // TODO: Fix scheduling with sorted map
               } else {
                 markedForDeletion.push_back(it->first);
                 continue;
@@ -687,7 +697,7 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
               
               now = sScheduleTimer.getSeconds() * 1000;
             }
-            if(it->second->scheduledAt < mNextScheduledTime){
+            if(it->second->scheduledAt < mNextScheduledTime || mNextScheduledTime < now){
               mNextScheduledTime = it->second->scheduledAt;
             }
           }
@@ -699,16 +709,23 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
         deleteTimer(&markedForDeletion, &mTimerFns);
         
         if(waitThread){
+          
+          // Debug
+          //std::cout << "remove wait thread " << std::endl;
+          
           waitThread->join();
           waitThread.reset();
         }
         
-        if(mTimerFns.empty()) continue;
+        if(mTimerFns.empty() || mNextScheduledTime < now) continue;
         
         double waitFor = mNextScheduledTime - sScheduleTimer.getSeconds() * 1000;
         // Timer thread setup takes longer, wait in loop..
         if(waitFor < 2){
-          std::cout << "waitfor < 2 " << to_string(waitFor) << std::endl;
+          
+          // Debug
+          //std::cout << "waitfor < 2 " << to_string(waitFor) << ", tid " << to_string(waitFor) << std::endl;
+          
           if(waitFor > 0){
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
             mNextScheduledTime -= waitFor; // todo: check
@@ -717,16 +734,15 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
           continue;
         }
         
-        std::cout << "create wait thread " << to_string(waitFor) << std::endl;;
+        // Debug
+        //std::cout << "create wait thread " << to_string(waitFor) << std::endl;
+        
         waitThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8TimerWaitingThread, this, waitFor ) );
         
       } // !empty
     }
     
-    if(markedForDeletion.size() > 0){
-      immediateLoop = true;
-      continue;
-    }
+    deleteTimer(&markedForDeletion, &mTimerFns);
     
     immediateLoop = false;
     _timerRun = false;
