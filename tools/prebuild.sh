@@ -11,4 +11,6 @@ python ../tools/js2c.py     \
   ../lib/timers.js          \
   ../lib/events.js          \
   ../lib/app.js             \
+  ../lib/material.js        \
+  ../lib/color.js           \
   ../lib/default_main.js    \

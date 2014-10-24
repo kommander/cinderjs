@@ -1,5 +1,6 @@
 //
 // Cubes Example
+var Material = require('material').Material;
 
 // Screen size holder
 var ctxSize = { x: 640, y: 480 };
@@ -18,12 +19,12 @@ var wireframe = false;
 var cullface = false;
 
 // Create example material
-var materialId = material.create();
-material.setAmbient(materialId, .0, .6, .6, 1);
-material.setDiffuse(materialId, .0, .4, .8, 1);
-material.setSpecular(materialId, .8, .8, .8, 1);
-material.setEmission(materialId, .1, .2, .3, 1);
-material.setShininess(materialId, 100);
+var mat = new Material();
+mat.ambient(.0, .6, .6, 1);
+mat.diffuse(.0, .4, .8, 1);
+mat.specular(.0, .8, .8, 1);
+mat.emission(.0, .2, .3, 1);
+mat.shininess(100);
 
 //gl.enable(gl.CULL_FACE);
 
@@ -46,7 +47,7 @@ var loop = function(timePassed, mx, my){
   gl.enable(gl.LIGHTING);
   gl.enable(lights[currentLight]);
 
-  material.apply(materialId);
+  mat.apply();
   
   if(drawMethod == 0) {
     gl.drawTorus(60, 30);

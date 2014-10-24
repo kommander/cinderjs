@@ -44,6 +44,8 @@
 		9E9B3E4019F0233C00291CDE /* PipeModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3E19F0233C00291CDE /* PipeModule.cpp */; };
 		9E9B3E4419F0390000291CDE /* console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E4219F0390000291CDE /* console.cpp */; };
 		9EAF080919EDC4C600C02F65 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9EAF080819EDC4C600C02F65 /* README.md */; };
+		9EC32A4C19FAEAFA00CECCC3 /* material.js in Resources */ = {isa = PBXBuildFile; fileRef = 9EC32A4B19FAEAFA00CECCC3 /* material.js */; };
+		9EC32A6919FAF42400CECCC3 /* color.js in Resources */ = {isa = PBXBuildFile; fileRef = 9EC32A6819FAF42400CECCC3 /* color.js */; };
 		9ED123BE19F6EB23007786A6 /* TextHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED123BD19F6EB23007786A6 /* TextHelpers.cpp */; };
 		9ED123C119F6EE9F007786A6 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED123BF19F6EE9F007786A6 /* utils.cpp */; };
 		9ED123C419F72B02007786A6 /* cinder.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123C319F72B02007786A6 /* cinder.js */; };
@@ -112,6 +114,8 @@
 		9E9B3E4219F0390000291CDE /* console.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = console.cpp; path = ../src/modules/console.cpp; sourceTree = "<group>"; };
 		9E9B3E4319F0390000291CDE /* console.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = console.hpp; path = ../src/modules/console.hpp; sourceTree = "<group>"; };
 		9EAF080819EDC4C600C02F65 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		9EC32A4B19FAEAFA00CECCC3 /* material.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = material.js; path = ../lib/material.js; sourceTree = "<group>"; };
+		9EC32A6819FAF42400CECCC3 /* color.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = color.js; path = ../lib/color.js; sourceTree = "<group>"; };
 		9ED123B719F61656007786A6 /* cubes.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = cubes.js; path = ../examples/cubes.js; sourceTree = "<group>"; };
 		9ED123BD19F6EB23007786A6 /* TextHelpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextHelpers.cpp; path = ../src/utils/TextHelpers.cpp; sourceTree = "<group>"; };
 		9ED123BF19F6EE9F007786A6 /* utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = utils.cpp; path = ../src/modules/utils.cpp; sourceTree = "<group>"; };
@@ -310,6 +314,8 @@
 		9E9B3E3319F0121D00291CDE /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				9EC32A6819FAF42400CECCC3 /* color.js */,
+				9EC32A4B19FAEAFA00CECCC3 /* material.js */,
 				9E0BDE1819F9EFF70036038F /* app.js */,
 				9E0BDE1619F9EFA30036038F /* events.js */,
 				9E0BDE1419F9EEC80036038F /* default_main.js */,
@@ -454,7 +460,9 @@
 				9ED123D119F7A43C007786A6 /* module.js in Resources */,
 				9E0BDE1D19F9F8F90036038F /* trig.js in Resources */,
 				9E0BDE1519F9EEC80036038F /* default_main.js in Resources */,
+				9EC32A4C19FAEAFA00CECCC3 /* material.js in Resources */,
 				9ED123DB19F7DD02007786A6 /* assert.js in Resources */,
+				9EC32A6919FAF42400CECCC3 /* color.js in Resources */,
 				9ED123CF19F78F85007786A6 /* path.js in Resources */,
 				9E0BDE1319F954530036038F /* timers.js in Resources */,
 				9ED123C919F72D4F007786A6 /* test.js in Resources */,

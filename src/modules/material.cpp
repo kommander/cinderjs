@@ -203,9 +203,34 @@ void setShininess(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return;
 }
 
+//
+// TODO: If the Material object is not destroyed explicitly, it will float forever
+//       -> Use an object wrapper for the id which is returned from "create",
+//          and delete the referenced material when it is destroyed
+//          (Why not use full object binding? Because it's too much overhead in wrapping/unwrapping
+//          for real time drawing applications)
+void destroy(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  if(!args[0].IsEmpty()){
+    uint32_t id = args[0]->ToUint32()->Value();
+    
+    boost::shared_ptr<Material> material = sMaterialObjects[id];
+    
+    if(!material){
+      return;
+    }
+    
+    material->~Material();
+    sMaterialObjects.erase(id);
+  }
+  
+  return;
+}
+
 // TODO:
 // void	setFace( GLenum aFace ) { mFace = aFace; }
-// void destroy( id );
 
 /**
  * Add JS bindings
@@ -215,6 +240,7 @@ void MaterialModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   Handle<ObjectTemplate> materialTemplate = ObjectTemplate::New(getIsolate());
   
   materialTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "create"), v8::FunctionTemplate::New(getIsolate(), create));
+  materialTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "destroy"), v8::FunctionTemplate::New(getIsolate(), destroy));
   materialTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "apply"), v8::FunctionTemplate::New(getIsolate(), apply));
   materialTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setAmbient"), v8::FunctionTemplate::New(getIsolate(), setAmbient));
   materialTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setDiffuse"), v8::FunctionTemplate::New(getIsolate(), setDiffuse));
