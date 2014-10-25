@@ -46,6 +46,8 @@
 		9EAF080919EDC4C600C02F65 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9EAF080819EDC4C600C02F65 /* README.md */; };
 		9EC32A4C19FAEAFA00CECCC3 /* material.js in Resources */ = {isa = PBXBuildFile; fileRef = 9EC32A4B19FAEAFA00CECCC3 /* material.js */; };
 		9EC32A6919FAF42400CECCC3 /* color.js in Resources */ = {isa = PBXBuildFile; fileRef = 9EC32A6819FAF42400CECCC3 /* color.js */; };
+		9EC32A6B19FB140700CECCC3 /* light.js in Resources */ = {isa = PBXBuildFile; fileRef = 9EC32A6A19FB140700CECCC3 /* light.js */; };
+		9EC32A6E19FB141B00CECCC3 /* light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9EC32A6C19FB141B00CECCC3 /* light.cpp */; };
 		9ED123BE19F6EB23007786A6 /* TextHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED123BD19F6EB23007786A6 /* TextHelpers.cpp */; };
 		9ED123C119F6EE9F007786A6 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED123BF19F6EE9F007786A6 /* utils.cpp */; };
 		9ED123C419F72B02007786A6 /* cinder.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123C319F72B02007786A6 /* cinder.js */; };
@@ -116,6 +118,9 @@
 		9EAF080819EDC4C600C02F65 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		9EC32A4B19FAEAFA00CECCC3 /* material.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = material.js; path = ../lib/material.js; sourceTree = "<group>"; };
 		9EC32A6819FAF42400CECCC3 /* color.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = color.js; path = ../lib/color.js; sourceTree = "<group>"; };
+		9EC32A6A19FB140700CECCC3 /* light.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = light.js; path = ../lib/light.js; sourceTree = "<group>"; };
+		9EC32A6C19FB141B00CECCC3 /* light.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = light.cpp; path = ../src/modules/light.cpp; sourceTree = "<group>"; };
+		9EC32A6D19FB141B00CECCC3 /* light.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = light.hpp; path = ../src/modules/light.hpp; sourceTree = "<group>"; };
 		9ED123B719F61656007786A6 /* cubes.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = cubes.js; path = ../examples/cubes.js; sourceTree = "<group>"; };
 		9ED123BD19F6EB23007786A6 /* TextHelpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextHelpers.cpp; path = ../src/utils/TextHelpers.cpp; sourceTree = "<group>"; };
 		9ED123BF19F6EE9F007786A6 /* utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = utils.cpp; path = ../src/modules/utils.cpp; sourceTree = "<group>"; };
@@ -314,6 +319,7 @@
 		9E9B3E3319F0121D00291CDE /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				9EC32A6A19FB140700CECCC3 /* light.js */,
 				9EC32A6819FAF42400CECCC3 /* color.js */,
 				9EC32A4B19FAEAFA00CECCC3 /* material.js */,
 				9E0BDE1819F9EFF70036038F /* app.js */,
@@ -334,6 +340,7 @@
 		9E9B3E3619F022A800291CDE /* modules */ = {
 			isa = PBXGroup;
 			children = (
+				9EC32A6C19FB141B00CECCC3 /* light.cpp */,
 				9E0BDE1F19FA8FB40036038F /* material.cpp */,
 				9E0BDE0E19F803330036038F /* vm.cpp */,
 				9ED123DC19F7ED4E007786A6 /* fs.cpp */,
@@ -348,6 +355,7 @@
 		9E9B3E3719F022B000291CDE /* modules */ = {
 			isa = PBXGroup;
 			children = (
+				9EC32A6D19FB141B00CECCC3 /* light.hpp */,
 				9E0BDE2019FA8FB40036038F /* material.hpp */,
 				9E0BDE0F19F803330036038F /* vm.hpp */,
 				9ED123DD19F7ED4E007786A6 /* fs.hpp */,
@@ -460,6 +468,7 @@
 				9ED123D119F7A43C007786A6 /* module.js in Resources */,
 				9E0BDE1D19F9F8F90036038F /* trig.js in Resources */,
 				9E0BDE1519F9EEC80036038F /* default_main.js in Resources */,
+				9EC32A6B19FB140700CECCC3 /* light.js in Resources */,
 				9EC32A4C19FAEAFA00CECCC3 /* material.js in Resources */,
 				9ED123DB19F7DD02007786A6 /* assert.js in Resources */,
 				9EC32A6919FAF42400CECCC3 /* color.js in Resources */,
@@ -505,6 +514,7 @@
 			files = (
 				9E0BDE1019F803330036038F /* vm.cpp in Sources */,
 				9E9B3E4019F0233C00291CDE /* PipeModule.cpp in Sources */,
+				9EC32A6E19FB141B00CECCC3 /* light.cpp in Sources */,
 				9E9B3E3C19F022C000291CDE /* app.cpp in Sources */,
 				9E0BDE2119FA8FB40036038F /* material.cpp in Sources */,
 				69CC5FFAB4E1488598E5D024 /* cinderjsApp.cpp in Sources */,

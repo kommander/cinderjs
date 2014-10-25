@@ -23,6 +23,7 @@
 #include "modules/fs.hpp"
 #include "modules/vm.hpp"
 #include "modules/material.hpp"
+#include "modules/light.hpp"
 
 
 using namespace ci;
@@ -263,6 +264,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   addModule(boost::shared_ptr<FSModule>( new FSModule() ));
   addModule(boost::shared_ptr<VMModule>( new VMModule() ));
   addModule(boost::shared_ptr<MaterialModule>( new MaterialModule() ));
+  addModule(boost::shared_ptr<LightModule>( new LightModule() ));
   
   
   // Create a new context.
@@ -289,9 +291,9 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   #ifdef DEBUG
   // For development loading...
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/test.js");
-  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js");
+  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js");
-  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
+  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
   #endif
   
   Local<Array> argvArr = Array::New(mIsolate);

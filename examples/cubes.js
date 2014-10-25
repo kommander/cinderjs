@@ -1,6 +1,7 @@
 //
 // Cubes Example
 var Material = require('material').Material;
+var Light = require('light').Light;
 
 // Screen size holder
 var ctxSize = { x: 640, y: 480 };
@@ -11,7 +12,6 @@ var mouse = { x: 0, y: 0 };
 // Rotation
 var rotation = { x: 0, y: 0, z: 0 };
 
-var lights = [gl.LIGHT0, gl.LIGHT1, gl.LIGHT2, gl.LIGHT3, gl.LIGHT4, gl.LIGHT5, gl.LIGHT6];
 var currentLight = 0;
 
 var drawMethod = 0;
@@ -26,7 +26,8 @@ mat.specular(.0, .8, .8, 1);
 mat.emission(.0, .2, .3, 1);
 mat.shininess(100);
 
-//gl.enable(gl.CULL_FACE);
+var light = new Light();
+light.ambient(0.5, 0.1, 0.5, 1);
 
 // GL Draw loop
 var loop = function(timePassed, mx, my){
@@ -45,7 +46,7 @@ var loop = function(timePassed, mx, my){
   gl.rotate(rotation.x, rotation.y, rotation.z);
   
   gl.enable(gl.LIGHTING);
-  gl.enable(lights[currentLight]);
+  light.enable()
 
   mat.apply();
   
@@ -57,7 +58,7 @@ var loop = function(timePassed, mx, my){
     gl.drawCylinder(60, 30, 50, 16, 4);
   }
   
-  gl.disable(lights[currentLight]);
+  light.disable();
   gl.disable(gl.LIGHTING);
   
   if(wireframe) gl.disableWireframe();
@@ -83,10 +84,7 @@ app.on('keydown', function( evt ){
       drawMethod = 0
     }
   } else if(evt.charCode == 108) { // L
-    currentLight++
-    if(currentLight > lights.length - 1){
-      currentLight = 0
-    }
+    
   } else if(evt.charCode == 102) { // F
     
   }
