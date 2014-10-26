@@ -1,0 +1,7 @@
+// OSX only
+{
+    "cmd": [
+    	"open", "/path/to/cinderjs.app", 
+    	"--args", "$file"],
+    "selector": "source.javascript"
+}
