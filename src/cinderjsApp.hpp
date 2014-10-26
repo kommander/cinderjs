@@ -35,6 +35,7 @@
 #include "js_natives.h"
 #include "AppConsole.h"
 #include "CinderAppBase.hpp"
+#include "StaticFactory.hpp"
 
 #include "v8.h"
 #include "libplatform/libplatform.h"

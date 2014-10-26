@@ -22,6 +22,7 @@
 
 #include "material.hpp"
 #include "AppConsole.h"
+#include "../StaticFactory.hpp"
 
 #include "cinder/gl/Material.h"
 
@@ -34,23 +35,17 @@ namespace cjs {
 
 // TODO: Move to static module methods
 
-std::map<uint32_t, boost::shared_ptr<Material>> sMaterialObjects;
-uint32_t sMaterialObjectIds = 0;
 ColorA sBufColorA_1;
 
 void create(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
 
-  uint32_t id = sMaterialObjectIds++;
-  
-  boost::shared_ptr<Material> newMaterial( new Material() );
-  
-  sMaterialObjects[id] = newMaterial;
+  FactoryTuple<Material> tuple = StaticFactory::createMaterial();
   
   //std::cout << "created material material " << to_string(id) << "/" << to_string(sMaterialObjects.size()) << std::endl;
   
-  args.GetReturnValue().Set(v8::Uint32::New(isolate, id));
+  args.GetReturnValue().Set(v8::Uint32::New(isolate, tuple.id));
   return;
 }
 
@@ -63,7 +58,7 @@ void apply(const v8::FunctionCallbackInfo<v8::Value>& args) {
     
     //std::cout << "trying to apply material " << to_string(id) << std::endl;
     
-    boost::shared_ptr<Material> material = sMaterialObjects[id];
+    boost::shared_ptr<Material> material = StaticFactory::getMaterial(id);
     
     if(!material){
       return;
@@ -83,7 +78,7 @@ void setAmbient(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Material> material = sMaterialObjects[id];
+    boost::shared_ptr<Material> material = StaticFactory::getMaterial(id);
     
     if(!material){
       return;
@@ -109,7 +104,7 @@ void setDiffuse(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Material> material = sMaterialObjects[id];
+    boost::shared_ptr<Material> material = StaticFactory::getMaterial(id);
     
     if(!material){
       return;
@@ -135,7 +130,7 @@ void setSpecular(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Material> material = sMaterialObjects[id];
+    boost::shared_ptr<Material> material = StaticFactory::getMaterial(id);
     
     if(!material){
       return;
@@ -161,7 +156,7 @@ void setEmission(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Material> material = sMaterialObjects[id];
+    boost::shared_ptr<Material> material = StaticFactory::getMaterial(id);
     
     if(!material){
       return;
@@ -187,7 +182,7 @@ void setShininess(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Material> material = sMaterialObjects[id];
+    boost::shared_ptr<Material> material = StaticFactory::getMaterial(id);
     
     if(!material){
       return;
@@ -216,14 +211,16 @@ void destroy(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Material> material = sMaterialObjects[id];
+    boost::shared_ptr<Material> material = StaticFactory::getMaterial(id);
     
     if(!material){
       return;
     }
     
     material->~Material();
-    sMaterialObjects.erase(id);
+    
+    // TODO: Remove from factory
+    //StaticFactory::removeMaterial(id);
   }
   
   return;
