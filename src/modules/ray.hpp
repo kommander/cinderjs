@@ -61,8 +61,6 @@ class RayModule : public PipeModule {
   
   //
   private:
-    static std::map<uint32_t, boost::shared_ptr<cinder::Ray>> sRayObjects;
-    static uint32_t sRayObjectIds;
     static Vec3f sBufVec3f_1;
     static Vec3f sBufVec3f_2;
     static Vec3f sBufVec3f_3;

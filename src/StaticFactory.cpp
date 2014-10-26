@@ -31,6 +31,8 @@ std::map<uint32_t, boost::shared_ptr<Material>> StaticFactory::sMaterialMap;
 uint32_t StaticFactory::sMaterialCounter = 0;
 std::map<uint32_t, boost::shared_ptr<Light>> StaticFactory::sLightMap;
 uint32_t StaticFactory::sLightCounter = 0;
+std::map<uint32_t, boost::shared_ptr<Ray>> StaticFactory::sRayMap;
+uint32_t StaticFactory::sRayCounter = 0;
 
 FactoryTuple<Material> StaticFactory::createMaterial(){
   FactoryTuple<Material> tuple;
@@ -60,6 +62,21 @@ FactoryTuple<Light> StaticFactory::createLight(uint32_t type){
 
 boost::shared_ptr<Light> StaticFactory::getLight( uint32_t id ){
   return sLightMap[id];
+}
+
+FactoryTuple<Ray> StaticFactory::createRay(){
+  FactoryTuple<Ray> tuple;
+  tuple.id = sLightCounter++;
+  tuple.value = boost::shared_ptr<Ray>( new Ray() );
+  
+  // Store
+  sRayMap[tuple.id] = tuple.value;
+  
+  return tuple;
+}
+
+boost::shared_ptr<Ray> StaticFactory::getRay( uint32_t id ){
+  return sRayMap[id];
 }
 
   

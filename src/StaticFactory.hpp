@@ -52,15 +52,29 @@ namespace cjs {
       static FactoryTuple<cinder::gl::Light> createLight( uint32_t type );
       static boost::shared_ptr<cinder::gl::Light> getLight( uint32_t id );
     
+      static FactoryTuple<cinder::Ray> createRay();
+      static boost::shared_ptr<cinder::Ray> getRay( uint32_t id );
+    
       // TODO:
       //static bool removeMaterial( uint32_t id );
       //static bool removeLight( uint32_t id );
+      //static bool removeRay( uint32_t id );
+    
+      // TODO:
+      // To store objects that are created elsewhere
+      // and have to be referenced by JS
+      //static uint32_t putMaterial(boost::shared_ptr<Material> material);
+      // ... others
     
     private:
+      // TODO: Improve counters and reuse unused ids (generate ids at startup)
+      //       -> If id space is limited, it would help to spot leaks in JS scripts
       static std::map<uint32_t, boost::shared_ptr<cinder::gl::Material>> sMaterialMap;
       static uint32_t sMaterialCounter;
       static std::map<uint32_t, boost::shared_ptr<cinder::gl::Light>> sLightMap;
       static uint32_t sLightCounter;
+      static std::map<uint32_t, boost::shared_ptr<cinder::Ray>> sRayMap;
+      static uint32_t sRayCounter;
   };
   
 } // namespace

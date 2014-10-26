@@ -25,6 +25,7 @@
 
 #include "ray.hpp"
 #include "AppConsole.h"
+#include "../StaticFactory.hpp"
 
 using namespace std;
 using namespace cinder;
@@ -33,8 +34,6 @@ using namespace v8;
 
 namespace cjs {
 
-std::map<uint32_t, boost::shared_ptr<Ray>> RayModule::sRayObjects;
-uint32_t RayModule::sRayObjectIds = 0;
 Vec3f RayModule::sBufVec3f_1;
 Vec3f RayModule::sBufVec3f_2;
 Vec3f RayModule::sBufVec3f_3;
@@ -44,13 +43,9 @@ void RayModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
 
-  uint32_t id = sRayObjectIds++;
+  FactoryTuple<Ray> tuple = StaticFactory::createRay();
   
-  boost::shared_ptr<Ray> ray( new Ray() );
-  
-  sRayObjects[id] = ray;
-  
-  args.GetReturnValue().Set(v8::Uint32::New(isolate, id));
+  args.GetReturnValue().Set(v8::Uint32::New(isolate, tuple.id));
   return;
 }
 
@@ -61,13 +56,14 @@ void RayModule::destroy(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Ray> ray = sRayObjects[id];
+    boost::shared_ptr<Ray> ray = StaticFactory::getRay(id);
     
     if(!ray){
       return;
     }
     
-    sRayObjects.erase(id);
+    // TODO:
+    //StaticFactory::removeRay(id)
   }
   
   return;
@@ -80,7 +76,7 @@ void RayModule::setOrigin(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Ray> ray = sRayObjects[id];
+    boost::shared_ptr<Ray> ray = StaticFactory::getRay(id);
     
     if(!ray){
       return;
@@ -103,7 +99,7 @@ void RayModule::getOrigin(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Ray> ray = sRayObjects[id];
+    boost::shared_ptr<Ray> ray = StaticFactory::getRay(id);
     
     if(!ray){
       return;
@@ -130,7 +126,7 @@ void RayModule::setDirection(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Ray> ray = sRayObjects[id];
+    boost::shared_ptr<Ray> ray = StaticFactory::getRay(id);
     
     if(!ray){
       return;
@@ -153,7 +149,7 @@ void RayModule::getDirection(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Ray> ray = sRayObjects[id];
+    boost::shared_ptr<Ray> ray = StaticFactory::getRay(id);
     
     if(!ray){
       return;
@@ -181,7 +177,7 @@ void RayModule::calcPosition(const v8::FunctionCallbackInfo<v8::Value>& args) {
     uint32_t id = args[0]->ToUint32()->Value();
     double t = args[1]->ToNumber()->Value();
     
-    boost::shared_ptr<Ray> ray = sRayObjects[id];
+    boost::shared_ptr<Ray> ray = StaticFactory::getRay(id);
     
     if(!ray){
       return;
@@ -208,7 +204,7 @@ void RayModule::calcTriangleIntersection(const v8::FunctionCallbackInfo<v8::Valu
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Ray> ray = sRayObjects[id];
+    boost::shared_ptr<Ray> ray = StaticFactory::getRay(id);
     
     if(!ray){
       return;
