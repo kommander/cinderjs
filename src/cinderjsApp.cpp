@@ -293,7 +293,8 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/test.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js");
-  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
+  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
+  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/physics.js");
   #endif
   
   Local<Array> argvArr = Array::New(mIsolate);
@@ -394,6 +395,7 @@ void CinderjsApp::v8RenderThread(){
       v8::Locker lock(mIsolate);
       
       // clear out the window with black
+      // TODO: Do clearing manually from js
       gl::clear( Color( 0.1, 0.1, 0.1 ) );
       gl::enableDepthRead();
       gl::enableDepthWrite();
@@ -1061,7 +1063,7 @@ void CinderjsApp::setTimer(const v8::FunctionCallbackInfo<v8::Value>& args) {
       double timeout = args[2]->ToNumber()->Value();
       
       // If timer is too small to be executed in time, run directly next frame;
-      if(timeout < 10){
+      if(timeout <= 1){
         nextFrameJS(args);
         return;
       }
@@ -1118,7 +1120,7 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
   Local<Object> cache = Local<Object>::New(isolate, sModuleCache);
   Local<Object> exports;
 
-  if (cache->Has(moduleName)) {
+  if (!checkExistence && cache->Has(moduleName)) {
     exports = cache->Get(moduleName)->ToObject();
     args.GetReturnValue().Set(exports);
     return;

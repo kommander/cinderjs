@@ -83,6 +83,7 @@ enum EventType {
 };
 
 // TODO
+// - Create a Sublime Text build script, taking the current file as main module and running it agains a specified cinderjs app
 // - !!! Fix "exports" object usage in js modules (cannot be replaced with something like exports = function(){},
 //   will return an empty exports object (not sure why)
 // - Load a js module by dropping it on the app window
@@ -93,8 +94,8 @@ enum EventType {
 
 // Design Notes:
 // - The implementation and native/js communication is trying to avoid object instantiation
-//   to have less conversion costs when calling C++ methods from js.
-//   This behaviour can be encapsuled within js itself. Converting numbers is way faster then
+//   to have less conversion (object wrapping/unwrapping) costs when calling C++ methods from js and the other way waround.
+//   This behaviour can be mimiced within js itself. Converting numbers is way faster then
 //   unpacking full fledged js objects to C++. ( eg. args[0]->ToObject()->Get(...) )
 
 class CinderjsApp : public cinder::app::AppNative, public CinderAppBase  {
