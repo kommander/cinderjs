@@ -29,21 +29,38 @@ namespace cjs {
 
 std::map<uint32_t, boost::shared_ptr<Material>> StaticFactory::sMaterialMap;
 uint32_t StaticFactory::sMaterialCounter = 0;
+std::map<uint32_t, boost::shared_ptr<Light>> StaticFactory::sLightMap;
+uint32_t StaticFactory::sLightCounter = 0;
 
 FactoryTuple<Material> StaticFactory::createMaterial(){
-  FactoryTuple<Material> matObj;
-  matObj.id = sMaterialCounter++;
-  matObj.value = boost::shared_ptr<Material>( new Material() );
+  FactoryTuple<Material> tuple;
+  tuple.id = sMaterialCounter++;
+  tuple.value = boost::shared_ptr<Material>( new Material() );
   
   // Store
-  sMaterialMap[matObj.id] = matObj.value;
+  sMaterialMap[tuple.id] = tuple.value;
   
-  return matObj;
+  return tuple;
 }
 
 boost::shared_ptr<Material> StaticFactory::getMaterial( uint32_t id ){
   return sMaterialMap[id];
 }
+ 
+FactoryTuple<Light> StaticFactory::createLight(uint32_t type){
+  FactoryTuple<Light> tuple;
+  tuple.id = sLightCounter++;
+  tuple.value = boost::shared_ptr<Light>( new Light(type, tuple.id) );
   
+  // Store
+  sLightMap[tuple.id] = tuple.value;
   
+  return tuple;
 }
+
+boost::shared_ptr<Light> StaticFactory::getLight( uint32_t id ){
+  return sLightMap[id];
+}
+
+  
+} // namespace

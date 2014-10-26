@@ -57,8 +57,6 @@ class LightModule : public PipeModule {
   
   //
   private:
-    static std::map<uint32_t, boost::shared_ptr<cinder::gl::Light>> sLightObjects;
-    static uint32_t sLightObjectIds;
     static ColorA sBufColorA_1;
     static Vec3f sBufVec3f_1;
     static Vec3f sBufVec3f_2;

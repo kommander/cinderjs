@@ -49,12 +49,18 @@ namespace cjs {
       static FactoryTuple<cinder::gl::Material> createMaterial();
       static boost::shared_ptr<cinder::gl::Material> getMaterial( uint32_t id );
     
+      static FactoryTuple<cinder::gl::Light> createLight( uint32_t type );
+      static boost::shared_ptr<cinder::gl::Light> getLight( uint32_t id );
+    
       // TODO:
       //static bool removeMaterial( uint32_t id );
+      //static bool removeLight( uint32_t id );
     
     private:
       static std::map<uint32_t, boost::shared_ptr<cinder::gl::Material>> sMaterialMap;
       static uint32_t sMaterialCounter;
+      static std::map<uint32_t, boost::shared_ptr<cinder::gl::Light>> sLightMap;
+      static uint32_t sLightCounter;
   };
   
 } // namespace
