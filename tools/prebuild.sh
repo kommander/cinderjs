@@ -14,4 +14,5 @@ python ../tools/js2c.py     \
   ../lib/material.js        \
   ../lib/color.js           \
   ../lib/light.js           \
+  ../lib/ray.js             \
   ../lib/default_main.js    \

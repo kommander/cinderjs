@@ -24,6 +24,7 @@
 #include "modules/vm.hpp"
 #include "modules/material.hpp"
 #include "modules/light.hpp"
+#include "modules/ray.hpp"
 
 
 using namespace ci;
@@ -265,6 +266,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   addModule(boost::shared_ptr<VMModule>( new VMModule() ));
   addModule(boost::shared_ptr<MaterialModule>( new MaterialModule() ));
   addModule(boost::shared_ptr<LightModule>( new LightModule() ));
+  addModule(boost::shared_ptr<RayModule>( new RayModule() ));
   
   
   // Create a new context.
@@ -399,7 +401,9 @@ void CinderjsApp::v8RenderThread(){
       gl::clear( Color( 0.1, 0.1, 0.1 ) );
       gl::enableDepthRead();
       gl::enableDepthWrite();
-  
+      
+      
+      
       // JS Draw callback
       v8Draw( timePassed );
       
@@ -1215,6 +1219,9 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
       // TODO: remove from module list again
       return;
     }
+    
+    // TODO: give module object to modFn, check if module.exports exists,
+    //       if so, cache and return module.exports
     
     cache->Set(moduleName, exports);
   } else {

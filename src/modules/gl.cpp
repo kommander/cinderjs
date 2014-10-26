@@ -42,19 +42,30 @@ Vec3f GLModule::bufVec3f_2;
  */
 void GLModule::drawLine(const v8::FunctionCallbackInfo<v8::Value>& args) {
   
-  bufVec2f_1.x = args[0]->NumberValue();
-  bufVec2f_1.y = args[1]->NumberValue();
-  bufVec2f_2.x = args[2]->NumberValue();
-  bufVec2f_2.y = args[3]->NumberValue();
+  // 2D Line
+  if(args.Length() == 4){
+    bufVec2f_1.x = args[0]->NumberValue();
+    bufVec2f_1.y = args[1]->NumberValue();
+    bufVec2f_2.x = args[2]->NumberValue();
+    bufVec2f_2.y = args[3]->NumberValue();
+    
+    gl::drawLine(bufVec2f_1, bufVec2f_2);
+  }
   
-  gl::drawLine(bufVec2f_1, bufVec2f_2);
+  // 3D Line
+  else {
+    bufVec3f_1.x = args[0]->NumberValue();
+    bufVec3f_1.y = args[1]->NumberValue();
+    bufVec3f_1.z = args[2]->NumberValue();
+    bufVec3f_2.x = args[3]->NumberValue();
+    bufVec3f_2.y = args[4]->NumberValue();
+    bufVec3f_2.z = args[5]->NumberValue();
+    
+    gl::drawLine(bufVec3f_1, bufVec3f_2);
+  }
   
-  args[0].Clear();
-  args[1].Clear();
-  args[2].Clear();
-  args[3].Clear();
   
-  return;
+ return;
 }
 
 /**
@@ -246,6 +257,21 @@ void GLModule::drawCube(const v8::FunctionCallbackInfo<v8::Value>& args) {
 /**
  *
  */
+void GLModule::drawSphere(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  bufVec3f_1.x = args[0]->NumberValue();
+  bufVec3f_1.y = args[1]->NumberValue();
+  bufVec3f_1.z = args[2]->NumberValue();
+  
+  gl::drawSphere(bufVec3f_1, args[3]->NumberValue(), args[4]->NumberValue());
+  
+  return;
+}
+
+void drawSphere( const Vec3f &center, float radius, int segments = 12 );
+
+/**
+ *
+ */
 void GLModule::drawTorus(const v8::FunctionCallbackInfo<v8::Value>& args) {
   gl::drawTorus(args[0]->NumberValue(), args[1]->NumberValue(), args[2]->NumberValue(), args[3]->NumberValue());
   return;
@@ -279,7 +305,10 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "color"), v8::FunctionTemplate::New(getIsolate(), color));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "enableWireframe"), v8::FunctionTemplate::New(getIsolate(), enableWireframe));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "disableWireframe"), v8::FunctionTemplate::New(getIsolate(), disableWireframe));
+  
+  // Primitives
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawCube"), v8::FunctionTemplate::New(getIsolate(), drawCube));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawSphere"), v8::FunctionTemplate::New(getIsolate(), drawSphere));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawTorus"), v8::FunctionTemplate::New(getIsolate(), drawTorus));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawCylinder"), v8::FunctionTemplate::New(getIsolate(), drawCylinder));
   
@@ -296,6 +325,20 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHT6"), v8::Uint32::New(getIsolate(), GL_LIGHT6));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHT7"), v8::Uint32::New(getIsolate(), GL_LIGHT7));
   
+  // Primitive Types
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "POINTS"), v8::Uint32::New(getIsolate(), GL_POINTS));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LINES"), v8::Uint32::New(getIsolate(), GL_LINES));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "TRIANGLES"), v8::Uint32::New(getIsolate(), GL_TRIANGLES));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "POLYGON"), v8::Uint32::New(getIsolate(), GL_POLYGON));
+  
+  // TODO: Types
+//  LINE_LOOP					= 0x0002
+//	LINE_STRIP					= 0x0003
+//	TRIANGLE_STRIP					= 0x0005
+//	TRIANGLE_FAN					= 0x0006
+//	QUADS						= 0x0007
+//	QUAD_STRIP					= 0x0008
+	
   // Expose global gl object
   global->Set(v8::String::NewFromUtf8(getIsolate(), "gl"), glTemplate);
 }

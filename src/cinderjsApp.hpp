@@ -83,7 +83,8 @@ enum EventType {
 };
 
 // TODO
-// - Create a Sublime Text build script, taking the current file as main module and running it agains a specified cinderjs app
+// - Make object creation/lookup reusable within modules (Ray/Light/Material)
+// - Lazy load module bindings only when a native module that uses the bindings is required
 // - !!! Fix "exports" object usage in js modules (cannot be replaced with something like exports = function(){},
 //   will return an empty exports object (not sure why)
 // - Load a js module by dropping it on the app window
