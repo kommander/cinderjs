@@ -33,7 +33,11 @@ std::map<uint32_t, boost::shared_ptr<Light>> StaticFactory::sLightMap;
 uint32_t StaticFactory::sLightCounter = 0;
 std::map<uint32_t, boost::shared_ptr<Ray>> StaticFactory::sRayMap;
 uint32_t StaticFactory::sRayCounter = 0;
+std::map<uint32_t, boost::shared_ptr<CameraPersp>> StaticFactory::sCameraMap;
+uint32_t StaticFactory::sCameraCounter = 0;
 
+//
+// Material
 FactoryTuple<Material> StaticFactory::createMaterial(){
   FactoryTuple<Material> tuple;
   tuple.id = sMaterialCounter++;
@@ -48,7 +52,9 @@ FactoryTuple<Material> StaticFactory::createMaterial(){
 boost::shared_ptr<Material> StaticFactory::getMaterial( uint32_t id ){
   return sMaterialMap[id];
 }
- 
+
+//
+// Light
 FactoryTuple<Light> StaticFactory::createLight(uint32_t type){
   FactoryTuple<Light> tuple;
   tuple.id = sLightCounter++;
@@ -64,9 +70,11 @@ boost::shared_ptr<Light> StaticFactory::getLight( uint32_t id ){
   return sLightMap[id];
 }
 
+//
+// Ray
 FactoryTuple<Ray> StaticFactory::createRay(){
   FactoryTuple<Ray> tuple;
-  tuple.id = sLightCounter++;
+  tuple.id = sRayCounter++;
   tuple.value = boost::shared_ptr<Ray>( new Ray() );
   
   // Store
@@ -77,6 +85,32 @@ FactoryTuple<Ray> StaticFactory::createRay(){
 
 boost::shared_ptr<Ray> StaticFactory::getRay( uint32_t id ){
   return sRayMap[id];
+}
+
+uint32_t StaticFactory::putRay(Ray &ray){
+  uint32_t id = sRayCounter++;
+  boost::shared_ptr<Ray> rayPtr(new Ray(ray));
+  sRayMap[id] = rayPtr;
+  return id;
+}
+
+//
+// Camera
+FactoryTuple<CameraPersp> StaticFactory::createCamera(){
+  FactoryTuple<CameraPersp> tuple;
+  tuple.id = sCameraCounter++;
+  
+  // Use Perspective camera as default for now...
+  tuple.value = boost::shared_ptr<CameraPersp>( new CameraPersp() );
+  
+  // Store
+  sCameraMap[tuple.id] = tuple.value;
+  
+  return tuple;
+}
+
+boost::shared_ptr<CameraPersp> StaticFactory::getCamera( uint32_t id ){
+  return sCameraMap[id];
 }
 
   

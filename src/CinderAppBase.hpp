@@ -24,6 +24,8 @@
 
 #pragma once
 
+#include "cinder/app/AppNative.h"
+
 #include <boost/shared_ptr.hpp>
 
 #include "v8.h"
@@ -31,7 +33,7 @@
 
 namespace cjs {
 
-  class CinderAppBase {
+  class CinderAppBase : public cinder::app::AppNative {
     public:
       CinderAppBase(){}
       ~CinderAppBase(){}
@@ -44,6 +46,7 @@ namespace cjs {
       {
         mod->setIsolate( *mIsolate );
         mod->setContext(&pContext);
+        mod->setApp(this);
         mod->loadGlobalJS( mGlobal );
         MODULES.push_back( mod );
         return true;

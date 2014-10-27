@@ -67,6 +67,7 @@ class GLModule : public PipeModule {
     static void drawSphere(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void drawTorus(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void drawCylinder(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void setMatrices(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   private:
     //

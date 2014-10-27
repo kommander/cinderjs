@@ -25,6 +25,7 @@
 #include "modules/material.hpp"
 #include "modules/light.hpp"
 #include "modules/ray.hpp"
+#include "modules/camera.hpp"
 
 
 using namespace ci;
@@ -267,6 +268,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   addModule(boost::shared_ptr<MaterialModule>( new MaterialModule() ));
   addModule(boost::shared_ptr<LightModule>( new LightModule() ));
   addModule(boost::shared_ptr<RayModule>( new RayModule() ));
+  addModule(boost::shared_ptr<CameraModule>( new CameraModule() ));
   
   
   // Create a new context.
@@ -297,6 +299,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/physics.js");
+  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/ray.js");
   #endif
   
   Local<Array> argvArr = Array::New(mIsolate);

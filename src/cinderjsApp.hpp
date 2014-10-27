@@ -24,7 +24,6 @@
 
 #pragma once
 
-#include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Filesystem.h"
 #include "cinder/Timer.h"
@@ -100,7 +99,7 @@ enum EventType {
 //   This behaviour can be mimiced within js itself. Converting numbers is way faster then
 //   unpacking full fledged js objects to C++. ( eg. args[0]->ToObject()->Get(...) )
 
-class CinderjsApp : public cinder::app::AppNative, public CinderAppBase  {
+class CinderjsApp : public CinderAppBase  {
   public:
   CinderjsApp() : mEventQueue(1024) {}
   ~CinderjsApp(){}

@@ -46,7 +46,7 @@ class AppModule : public PipeModule {
   
   //
   private:
-  
+    static void getAspectRatio(const v8::FunctionCallbackInfo<v8::Value>& args);
   
  };
   

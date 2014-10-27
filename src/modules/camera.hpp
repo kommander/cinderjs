@@ -19,42 +19,48 @@
  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  POSSIBILITY OF SUCH DAMAGE.
  */
+#ifndef _CameraModule_hpp_
+#define _CameraModule_hpp_
 
-#include "app.hpp"
-#include "AppConsole.h"
+#pragma once
 
-using namespace std;
-using namespace cinder;
-using namespace v8;
+#define CAMERA_MOD_ID 8
+
+#include "../PipeModule.hpp"
+#include "cinder/Camera.h"
+#include "cinder/Quaternion.h"
 
 namespace cjs {
-
-/**
- *
- */
-void AppModule::getAspectRatio(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  Isolate* isolate = args.GetIsolate();
-  HandleScope scope(isolate);
   
-  float ratio = sApp->getWindowAspectRatio();
+class CameraModule : public PipeModule {
+  public:
+    CameraModule(){}
+    ~CameraModule(){}
   
-  args.GetReturnValue().Set(v8::Number::New(isolate, ratio));
-  return;
-}
-
-
-/**
- * Load bindings onto global js object
- */
-void AppModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
-  // Create global app object
-  Handle<ObjectTemplate> appTemplate = ObjectTemplate::New(getIsolate());
+    inline int moduleId() {
+      return CAMERA_MOD_ID;
+    }
   
-  appTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "getAspectRatio"), v8::FunctionTemplate::New(getIsolate(), getAspectRatio));
+    static void create(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void destroy(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void setEyePoint(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void lookAt(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void setViewDirection(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void setOrientation(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void generateRay(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void setCenterOfInterestPoint(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void setPerspective(const v8::FunctionCallbackInfo<v8::Value>& args);
   
-  // Expose global app object
-  global->Set(v8::String::NewFromUtf8(getIsolate(), "app"), appTemplate);
-}
-
- 
+    void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
+    void draw(){}
+  
+  //
+  private:
+    static cinder::Vec3f sBufVec3f_1;
+    static cinder::Vec3f sBufVec3f_2;
+    static cinder::Quatf sBufQuatf_1;
+ };
+  
 } // namespace cjs
+
+#endif

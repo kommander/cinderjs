@@ -210,6 +210,10 @@ void RayModule::calcTriangleIntersection(const v8::FunctionCallbackInfo<v8::Valu
       return;
     }
     
+    #ifdef DEBUG_RAY_MODULE
+    std::cout << "calcTriangleIntersection " << to_string(id) << std::endl;
+    #endif
+    
     sBufVec3f_1.x = args[1]->ToNumber()->Value();
     sBufVec3f_1.y = args[2]->ToNumber()->Value();
     sBufVec3f_1.z = args[3]->ToNumber()->Value();

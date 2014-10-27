@@ -24,6 +24,8 @@
 #include "cinder/Vector.h"
 #include "cinder/gl/GlslProg.h"
 
+#include "../StaticFactory.hpp"
+
 #include "gl.hpp"
 
 using namespace std;
@@ -285,11 +287,41 @@ void GLModule::drawCylinder(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return;
 }
 
+/**
+ *
+ */
+void GLModule::setMatrices(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  if(args[0]->IsUint32()){
+    uint32_t id = args[0]->ToUint32()->Value();
+    boost::shared_ptr<Camera> cam = StaticFactory::getCamera(id);
+    
+    if(!cam){
+      Isolate* isolate = args.GetIsolate();
+      HandleScope scope(isolate);
+      isolate->ThrowException(v8::Exception::TypeError(v8::String::NewFromUtf8(isolate, "Camera does not exist")));
+    }
+    
+    return;
+  } else {
+    // Error, need a camera id
+    Isolate* isolate = args.GetIsolate();
+    HandleScope scope(isolate);
+    isolate->ThrowException(v8::Exception::TypeError(v8::String::NewFromUtf8(isolate, "Need a camera id (uint32)")));
+  }
+}
+
+// TODO
+//void setMatrices( const Camera &cam );
+//void setModelView( const Camera &cam );
+//void setProjection( const Camera &cam );
+
 void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   // Create global gl object
   Handle<ObjectTemplate> glTemplate = ObjectTemplate::New(getIsolate());
   
   // gl methods
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setMatrices"), v8::FunctionTemplate::New(getIsolate(), setMatrices));
+  
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawLine"), v8::FunctionTemplate::New(getIsolate(), drawLine));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawSolidCircle"), v8::FunctionTemplate::New(getIsolate(), drawSolidCircle));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "pushMatrices"), v8::FunctionTemplate::New(getIsolate(), pushMatrices));

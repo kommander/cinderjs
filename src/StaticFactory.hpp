@@ -30,6 +30,7 @@
 #include "cinder/gl/Material.h"
 #include "cinder/gl/Light.h"
 #include "cinder/Ray.h"
+#include "cinder/Camera.h"
 
 namespace cjs {
   
@@ -54,11 +55,16 @@ namespace cjs {
     
       static FactoryTuple<cinder::Ray> createRay();
       static boost::shared_ptr<cinder::Ray> getRay( uint32_t id );
+      static uint32_t putRay(cinder::Ray &ray);
+    
+      static FactoryTuple<cinder::CameraPersp> createCamera();
+      static boost::shared_ptr<cinder::CameraPersp> getCamera( uint32_t id );
     
       // TODO:
       //static bool removeMaterial( uint32_t id );
       //static bool removeLight( uint32_t id );
       //static bool removeRay( uint32_t id );
+      // ... others
     
       // TODO:
       // To store objects that are created elsewhere
@@ -75,6 +81,8 @@ namespace cjs {
       static uint32_t sLightCounter;
       static std::map<uint32_t, boost::shared_ptr<cinder::Ray>> sRayMap;
       static uint32_t sRayCounter;
+      static std::map<uint32_t, boost::shared_ptr<cinder::CameraPersp>> sCameraMap;
+      static uint32_t sCameraCounter;
   };
   
 } // namespace

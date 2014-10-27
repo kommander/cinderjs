@@ -29,6 +29,8 @@
 
 #include "cinder/app/Event.h"
 
+#include "cinder/app/AppNative.h"
+
 #include "v8.h"
 
 namespace cjs {
@@ -54,6 +56,10 @@ namespace cjs {
         ctx = context;
       }
     
+      inline void setApp( cinder::app::AppBasic *app ) {
+        sApp = app;
+      }
+    
       inline v8::Persistent<v8::Context>* getContext() {
         return ctx;
       }
@@ -65,6 +71,9 @@ namespace cjs {
     private:
       v8::Isolate* mIsolate;
       v8::Persistent<v8::Context>* ctx;
+    
+    protected:
+      static cinder::app::AppBasic* sApp;
   };
 }
 

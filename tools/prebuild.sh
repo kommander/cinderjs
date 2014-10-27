@@ -15,4 +15,5 @@ python ../tools/js2c.py     \
   ../lib/color.js           \
   ../lib/light.js           \
   ../lib/ray.js             \
+  ../lib/camera.js          \
   ../lib/default_main.js    \

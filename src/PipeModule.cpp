@@ -21,3 +21,9 @@
  */
 
 #include "PipeModule.hpp"
+
+namespace cjs {
+
+cinder::app::AppBasic* PipeModule::sApp = nullptr;
+
+}
