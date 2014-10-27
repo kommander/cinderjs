@@ -11,14 +11,16 @@ var v2 = { x: 100, y: -50, z: 50 };
 var v3 = { x: 75, y: 150, z: 0 };
 
 var theRay = new Ray();
-theRay.setDirection(0, 0, 1);
+theRay.setDirection(0, 0, 0.000001);
+
+log('Ray Example');
 
 app.draw(function(timePassed, mx, my){
 
   gl.pushMatrices();
   gl.translate(ctxSize.w / 2, ctxSize.h / 2, 0);
     
-  theRay.setOrigin(mx - ctxSize.w / 2, my - ctxSize.h / 2, 0);
+  theRay.setOrigin(mx - ctxSize.w / 2, my - ctxSize.h / 2, -100);
 
   gl.color(0.8, 0.8, 1);
   gl.begin(gl.TRIANGLES);
@@ -34,8 +36,9 @@ app.draw(function(timePassed, mx, my){
     log('intersects');
     var pos = theRay.calcPosition(result);
     gl.color(0.9, 0.2, 0.4);
-    gl.drawSphere(pos.x, pos.y, pos.z, 20, 16);
-  }
+    gl.drawSphere(mx - ctxSize.w / 2, my - ctxSize.h / 2, pos.z, 20, 16);
+  } 
+
   gl.popMatrices();
 
 });
