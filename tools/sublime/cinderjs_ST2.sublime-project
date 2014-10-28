@@ -1,0 +1,35 @@
+{
+  "folders":
+  [
+    {
+      "path": "../../"
+    }
+  ],
+  "settings":
+    {
+    "todoreview":
+    {
+      "patterns": {
+        "TODO": "TODO[\\s]*?:+(?P<todo>.*)$",
+        "NOTE": "NOTE[\\s]*?:+(?P<note>.*)$",
+        "FIXME": "FIX ?ME[\\s]*?:+(?P<fixme>\\S.*)$",
+        "CHANGED": "CHANGED[\\s]*?:+(?P<changed>\\S.*)$"
+      },
+      "folder_exclude_patterns": [
+          "vendor", 
+          "tmp",
+          "boost",
+          "Cinder",
+          "v8",
+          "xcode",
+          "build"
+        ],
+        "file_exclude_patterns": [
+          "*.css",
+          "*.o",
+          "*.app"
+      ],
+      "result_title": "OMG! So much TODO! Thank you!"
+    }
+  }
+}
