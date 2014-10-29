@@ -9,11 +9,13 @@ to start out with simple command line programs and standard input/output.
 Bringing basics of web development to beginners involves at least three languages: HTML, CSS, Javascript.
 Too much overhead to draw a line on the screen.
 So while maintainig a feature rich foundation for graphical scripting, 
-it is supposed to be the base for a simplified gfx programming abstraction, suitable for children and minors,
+it is supposed to be the foundation for a simplified gfx programming abstraction, suitable for children and minors,
 with abilities to exchange cross platform compatible scripts.
 
 # Run
 # OSX
+Drag a js file onto the application. If it is a cinder module, it will run it. If another script is already running,
+it is shut down and replaced.
 Simply specify a "*.js" file to run on startup:  
 ```
 $> open xcode/build/Debug/cinderjs.app --args /Users/sebastian/Dropbox/+Projects/cinderjs/lib/test.js
