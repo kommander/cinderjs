@@ -51,7 +51,8 @@ namespace cjs {
         MODULES.push_back( mod );
         return true;
       }
-
+    
+      static bool shutdownInProgress;
     protected:
       std::vector<boost::shared_ptr<PipeModule>> MODULES;
       v8::Isolate* mIsolate;

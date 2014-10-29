@@ -24,20 +24,52 @@
 		9E0BDE1D19F9F8F90036038F /* trig.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1B19F9F8F90036038F /* trig.js */; };
 		9E0BDE1E19F9F8F90036038F /* vec2.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1C19F9F8F90036038F /* vec2.js */; };
 		9E0BDE2119FA8FB40036038F /* material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1F19FA8FB40036038F /* material.cpp */; };
-		9E7F710A19EDDF22002DDCFF /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9EAF080819EDC4C600C02F65 /* README.md */; };
-		9E7F710B19EDDF22002DDCFF /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = A16F000F7FC04E0DA0360B7B /* CinderApp.icns */; };
-		9E7F710D19EDDF22002DDCFF /* cinderjsApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B26520EF291B4336BEC87FD7 /* cinderjsApp.cpp */; };
-		9E7F710F19EDDF22002DDCFF /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		9E7F711019EDDF22002DDCFF /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0091D8F80E81B9330029341E /* OpenGL.framework */; };
-		9E7F711119EDDF22002DDCFF /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
-		9E7F711219EDDF22002DDCFF /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
-		9E7F711319EDDF22002DDCFF /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784AF0FF439BC000DE1D7 /* Accelerate.framework */; };
-		9E7F711419EDDF22002DDCFF /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */; };
-		9E7F711519EDDF22002DDCFF /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B10FF439BC000DE1D7 /* AudioUnit.framework */; };
-		9E7F711619EDDF22002DDCFF /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
-		9E7F713319EE0C67002DDCFF /* libicui18n.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E7F713019EE0C67002DDCFF /* libicui18n.dylib */; };
-		9E7F713419EE0C67002DDCFF /* libicuuc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E7F713119EE0C67002DDCFF /* libicuuc.dylib */; };
-		9E7F713519EE0C67002DDCFF /* libv8.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E7F713219EE0C67002DDCFF /* libv8.dylib */; };
+		9E51340819FFE6CF004CF6C5 /* app.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1819F9EFF70036038F /* app.js */; };
+		9E51340919FFE6CF004CF6C5 /* util.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123D219F7A6AE007786A6 /* util.js */; };
+		9E51340A19FFE6CF004CF6C5 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9EAF080819EDC4C600C02F65 /* README.md */; };
+		9E51340B19FFE6CF004CF6C5 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = A16F000F7FC04E0DA0360B7B /* CinderApp.icns */; };
+		9E51340C19FFE6CF004CF6C5 /* events.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1619F9EFA30036038F /* events.js */; };
+		9E51340D19FFE6CF004CF6C5 /* ray.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ECCE56419FD837900C37522 /* ray.js */; };
+		9E51340E19FFE6CF004CF6C5 /* vec2.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1C19F9F8F90036038F /* vec2.js */; };
+		9E51340F19FFE6CF004CF6C5 /* vm.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123D519F7C84D007786A6 /* vm.js */; };
+		9E51341019FFE6CF004CF6C5 /* prebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123CA19F7309A007786A6 /* prebuild.sh */; };
+		9E51341119FFE6CF004CF6C5 /* module.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123D019F7A43C007786A6 /* module.js */; };
+		9E51341219FFE6CF004CF6C5 /* trig.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1B19F9F8F90036038F /* trig.js */; };
+		9E51341319FFE6CF004CF6C5 /* ray.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ECCE56619FD879800C37522 /* ray.js */; };
+		9E51341419FFE6CF004CF6C5 /* default_main.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1419F9EEC80036038F /* default_main.js */; };
+		9E51341519FFE6CF004CF6C5 /* light.js in Resources */ = {isa = PBXBuildFile; fileRef = 9EC32A6A19FB140700CECCC3 /* light.js */; };
+		9E51341619FFE6CF004CF6C5 /* material.js in Resources */ = {isa = PBXBuildFile; fileRef = 9EC32A4B19FAEAFA00CECCC3 /* material.js */; };
+		9E51341719FFE6CF004CF6C5 /* assert.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123DA19F7DD02007786A6 /* assert.js */; };
+		9E51341819FFE6CF004CF6C5 /* color.js in Resources */ = {isa = PBXBuildFile; fileRef = 9EC32A6819FAF42400CECCC3 /* color.js */; };
+		9E51341919FFE6CF004CF6C5 /* path.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123CE19F78F85007786A6 /* path.js */; };
+		9E51341A19FFE6CF004CF6C5 /* camera.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ECCE56E19FDC71F00C37522 /* camera.js */; };
+		9E51341B19FFE6CF004CF6C5 /* timers.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1219F954530036038F /* timers.js */; };
+		9E51341C19FFE6CF004CF6C5 /* test.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123C819F72D4F007786A6 /* test.js */; };
+		9E51341D19FFE6CF004CF6C5 /* cinder.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123C319F72B02007786A6 /* cinder.js */; };
+		9E51341E19FFE6CF004CF6C5 /* fs.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123D819F7C86A007786A6 /* fs.js */; };
+		9E51342019FFE6CF004CF6C5 /* StaticFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCE56819FD962800C37522 /* StaticFactory.cpp */; };
+		9E51342119FFE6CF004CF6C5 /* vm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E0BDE0E19F803330036038F /* vm.cpp */; };
+		9E51342219FFE6CF004CF6C5 /* PipeModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3E19F0233C00291CDE /* PipeModule.cpp */; };
+		9E51342319FFE6CF004CF6C5 /* light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9EC32A6C19FB141B00CECCC3 /* light.cpp */; };
+		9E51342419FFE6CF004CF6C5 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCE56B19FDB56100C37522 /* camera.cpp */; };
+		9E51342519FFE6CF004CF6C5 /* app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3819F022C000291CDE /* app.cpp */; };
+		9E51342619FFE6CF004CF6C5 /* material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1F19FA8FB40036038F /* material.cpp */; };
+		9E51342719FFE6CF004CF6C5 /* cinderjsApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B26520EF291B4336BEC87FD7 /* cinderjsApp.cpp */; };
+		9E51342819FFE6CF004CF6C5 /* ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCE56119FD7B4500C37522 /* ray.cpp */; };
+		9E51342919FFE6CF004CF6C5 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED123BF19F6EE9F007786A6 /* utils.cpp */; };
+		9E51342A19FFE6CF004CF6C5 /* console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E4219F0390000291CDE /* console.cpp */; };
+		9E51342B19FFE6CF004CF6C5 /* TextHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED123BD19F6EB23007786A6 /* TextHelpers.cpp */; };
+		9E51342C19FFE6CF004CF6C5 /* fs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED123DC19F7ED4E007786A6 /* fs.cpp */; };
+		9E51342D19FFE6CF004CF6C5 /* gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3A19F022C000291CDE /* gl.cpp */; };
+		9E51342E19FFE6CF004CF6C5 /* AppConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3019F002C200291CDE /* AppConsole.cpp */; };
+		9E51343019FFE6CF004CF6C5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		9E51343119FFE6CF004CF6C5 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0091D8F80E81B9330029341E /* OpenGL.framework */; };
+		9E51343219FFE6CF004CF6C5 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
+		9E51343319FFE6CF004CF6C5 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
+		9E51343419FFE6CF004CF6C5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784AF0FF439BC000DE1D7 /* Accelerate.framework */; };
+		9E51343519FFE6CF004CF6C5 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */; };
+		9E51343619FFE6CF004CF6C5 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B10FF439BC000DE1D7 /* AudioUnit.framework */; };
+		9E51343719FFE6CF004CF6C5 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
 		9E9B3E3219F002C200291CDE /* AppConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3019F002C200291CDE /* AppConsole.cpp */; };
 		9E9B3E3C19F022C000291CDE /* app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3819F022C000291CDE /* app.cpp */; };
 		9E9B3E3D19F022C000291CDE /* gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3A19F022C000291CDE /* gl.cpp */; };
@@ -94,6 +126,9 @@
 		9E0BDE1C19F9F8F90036038F /* vec2.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = vec2.js; path = ../examples/lib/vec2.js; sourceTree = "<group>"; };
 		9E0BDE1F19FA8FB40036038F /* material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = material.cpp; path = ../src/modules/material.cpp; sourceTree = "<group>"; };
 		9E0BDE2019FA8FB40036038F /* material.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = material.hpp; path = ../src/modules/material.hpp; sourceTree = "<group>"; };
+		9E51343B19FFE6CF004CF6C5 /* cinderjs copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "cinderjs copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E51343C19FFE6CF004CF6C5 /* cinderjs copy2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "cinderjs copy2-Info.plist"; path = "/Users/sebastian/Dropbox/+Projects/cinderjs/xcode/cinderjs copy2-Info.plist"; sourceTree = "<absolute>"; };
+		9E51343D1A00776B004CF6C5 /* node_object_wrap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = node_object_wrap.h; path = ../src/node_object_wrap.h; sourceTree = "<group>"; };
 		9E7F70F619EDD441002DDCFF /* libicudata.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicudata.a; path = ../v8/xcodebuild/Release/libicudata.a; sourceTree = "<group>"; };
 		9E7F70F719EDD441002DDCFF /* libicui18n.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicui18n.a; path = ../v8/xcodebuild/Release/libicui18n.a; sourceTree = "<group>"; };
 		9E7F70F819EDD441002DDCFF /* libicuuc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicuuc.a; path = ../v8/xcodebuild/Release/libicuuc.a; sourceTree = "<group>"; };
@@ -103,7 +138,6 @@
 		9E7F710219EDD462002DDCFF /* libgmock.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgmock.a; path = ../v8/xcodebuild/Release/libgmock.a; sourceTree = "<group>"; };
 		9E7F710319EDD462002DDCFF /* libgtest.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgtest.a; path = ../v8/xcodebuild/Release/libgtest.a; sourceTree = "<group>"; };
 		9E7F710419EDD462002DDCFF /* libv8_libplatform.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libplatform.a; path = ../v8/xcodebuild/Release/libv8_libplatform.a; sourceTree = "<group>"; };
-		9E7F711A19EDDF22002DDCFF /* cinderjs copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "cinderjs copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E7F711B19EDDF23002DDCFF /* cinderjs copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "cinderjs copy-Info.plist"; path = "/Users/sebastian/Dropbox/+Projects/cinderjs/xcode/cinderjs copy-Info.plist"; sourceTree = "<absolute>"; };
 		9E7F711C19EDE93B002DDCFF /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		9E7F713019EE0C67002DDCFF /* libicui18n.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicui18n.dylib; path = ../v8/out/x64.release/libicui18n.dylib; sourceTree = "<group>"; };
@@ -174,21 +208,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9E7F710E19EDDF22002DDCFF /* Frameworks */ = {
+		9E51342F19FFE6CF004CF6C5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E7F713319EE0C67002DDCFF /* libicui18n.dylib in Frameworks */,
-				9E7F713419EE0C67002DDCFF /* libicuuc.dylib in Frameworks */,
-				9E7F713519EE0C67002DDCFF /* libv8.dylib in Frameworks */,
-				9E7F710F19EDDF22002DDCFF /* Cocoa.framework in Frameworks */,
-				9E7F711019EDDF22002DDCFF /* OpenGL.framework in Frameworks */,
-				9E7F711119EDDF22002DDCFF /* CoreVideo.framework in Frameworks */,
-				9E7F711219EDDF22002DDCFF /* QTKit.framework in Frameworks */,
-				9E7F711319EDDF22002DDCFF /* Accelerate.framework in Frameworks */,
-				9E7F711419EDDF22002DDCFF /* AudioToolbox.framework in Frameworks */,
-				9E7F711519EDDF22002DDCFF /* AudioUnit.framework in Frameworks */,
-				9E7F711619EDDF22002DDCFF /* CoreAudio.framework in Frameworks */,
+				9E51343019FFE6CF004CF6C5 /* Cocoa.framework in Frameworks */,
+				9E51343119FFE6CF004CF6C5 /* OpenGL.framework in Frameworks */,
+				9E51343219FFE6CF004CF6C5 /* CoreVideo.framework in Frameworks */,
+				9E51343319FFE6CF004CF6C5 /* QTKit.framework in Frameworks */,
+				9E51343419FFE6CF004CF6C5 /* Accelerate.framework in Frameworks */,
+				9E51343519FFE6CF004CF6C5 /* AudioToolbox.framework in Frameworks */,
+				9E51343619FFE6CF004CF6C5 /* AudioUnit.framework in Frameworks */,
+				9E51343719FFE6CF004CF6C5 /* CoreAudio.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,7 +274,7 @@
 			isa = PBXGroup;
 			children = (
 				8D1107320486CEB800E47090 /* cinderjs.app */,
-				9E7F711A19EDDF22002DDCFF /* cinderjs copy.app */,
+				9E51343B19FFE6CF004CF6C5 /* cinderjs copy.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -261,6 +292,7 @@
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				9E7F711B19EDDF23002DDCFF /* cinderjs copy-Info.plist */,
+				9E51343C19FFE6CF004CF6C5 /* cinderjs copy2-Info.plist */,
 			);
 			name = cinderjs;
 			sourceTree = "<group>";
@@ -269,6 +301,7 @@
 			isa = PBXGroup;
 			children = (
 				9E9B3E3719F022B000291CDE /* modules */,
+				9E51343D1A00776B004CF6C5 /* node_object_wrap.h */,
 				9E0BDE1119F915200036038F /* cinderjsApp.hpp */,
 				9E9B3E4119F0240C00291CDE /* CinderAppBase.hpp */,
 				9E9B3E3119F002C200291CDE /* AppConsole.h */,
@@ -411,9 +444,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8D1107260486CEB800E47090 /* cinderjs */ = {
+		8D1107260486CEB800E47090 /* cinderjs x64 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "cinderjs" */;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "cinderjs x64" */;
 			buildPhases = (
 				9ED123C219F727C7007786A6 /* ShellScript */,
 				8D1107290486CEB800E47090 /* Resources */,
@@ -424,28 +457,29 @@
 			);
 			dependencies = (
 			);
-			name = cinderjs;
+			name = "cinderjs x64";
 			productInstallPath = "$(HOME)/Applications";
 			productName = cinderjs;
 			productReference = 8D1107320486CEB800E47090 /* cinderjs.app */;
 			productType = "com.apple.product-type.application";
 		};
-		9E7F710819EDDF22002DDCFF /* cinderjs static v8 */ = {
+		9E51340519FFE6CF004CF6C5 /* cinderjs ia32 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9E7F711719EDDF22002DDCFF /* Build configuration list for PBXNativeTarget "cinderjs static v8" */;
+			buildConfigurationList = 9E51343819FFE6CF004CF6C5 /* Build configuration list for PBXNativeTarget "cinderjs ia32" */;
 			buildPhases = (
-				9E7F710919EDDF22002DDCFF /* Resources */,
-				9E7F710C19EDDF22002DDCFF /* Sources */,
-				9E7F710E19EDDF22002DDCFF /* Frameworks */,
+				9E51340619FFE6CF004CF6C5 /* ShellScript */,
+				9E51340719FFE6CF004CF6C5 /* Resources */,
+				9E51341F19FFE6CF004CF6C5 /* Sources */,
+				9E51342F19FFE6CF004CF6C5 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "cinderjs static v8";
+			name = "cinderjs ia32";
 			productInstallPath = "$(HOME)/Applications";
 			productName = cinderjs;
-			productReference = 9E7F711A19EDDF22002DDCFF /* cinderjs copy.app */;
+			productReference = 9E51343B19FFE6CF004CF6C5 /* cinderjs copy.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -470,8 +504,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* cinderjs */,
-				9E7F710819EDDF22002DDCFF /* cinderjs static v8 */,
+				8D1107260486CEB800E47090 /* cinderjs x64 */,
+				9E51340519FFE6CF004CF6C5 /* cinderjs ia32 */,
 			);
 		};
 /* End PBXProject section */
@@ -507,18 +541,52 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9E7F710919EDDF22002DDCFF /* Resources */ = {
+		9E51340719FFE6CF004CF6C5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E7F710A19EDDF22002DDCFF /* README.md in Resources */,
-				9E7F710B19EDDF22002DDCFF /* CinderApp.icns in Resources */,
+				9E51340819FFE6CF004CF6C5 /* app.js in Resources */,
+				9E51340919FFE6CF004CF6C5 /* util.js in Resources */,
+				9E51340A19FFE6CF004CF6C5 /* README.md in Resources */,
+				9E51340B19FFE6CF004CF6C5 /* CinderApp.icns in Resources */,
+				9E51340C19FFE6CF004CF6C5 /* events.js in Resources */,
+				9E51340D19FFE6CF004CF6C5 /* ray.js in Resources */,
+				9E51340E19FFE6CF004CF6C5 /* vec2.js in Resources */,
+				9E51340F19FFE6CF004CF6C5 /* vm.js in Resources */,
+				9E51341019FFE6CF004CF6C5 /* prebuild.sh in Resources */,
+				9E51341119FFE6CF004CF6C5 /* module.js in Resources */,
+				9E51341219FFE6CF004CF6C5 /* trig.js in Resources */,
+				9E51341319FFE6CF004CF6C5 /* ray.js in Resources */,
+				9E51341419FFE6CF004CF6C5 /* default_main.js in Resources */,
+				9E51341519FFE6CF004CF6C5 /* light.js in Resources */,
+				9E51341619FFE6CF004CF6C5 /* material.js in Resources */,
+				9E51341719FFE6CF004CF6C5 /* assert.js in Resources */,
+				9E51341819FFE6CF004CF6C5 /* color.js in Resources */,
+				9E51341919FFE6CF004CF6C5 /* path.js in Resources */,
+				9E51341A19FFE6CF004CF6C5 /* camera.js in Resources */,
+				9E51341B19FFE6CF004CF6C5 /* timers.js in Resources */,
+				9E51341C19FFE6CF004CF6C5 /* test.js in Resources */,
+				9E51341D19FFE6CF004CF6C5 /* cinder.js in Resources */,
+				9E51341E19FFE6CF004CF6C5 /* fs.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		9E51340619FFE6CF004CF6C5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = ../tools/prebuild.sh;
+		};
 		9ED123C219F727C7007786A6 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -557,21 +625,35 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9E7F710C19EDDF22002DDCFF /* Sources */ = {
+		9E51341F19FFE6CF004CF6C5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E7F710D19EDDF22002DDCFF /* cinderjsApp.cpp in Sources */,
+				9E51342019FFE6CF004CF6C5 /* StaticFactory.cpp in Sources */,
+				9E51342119FFE6CF004CF6C5 /* vm.cpp in Sources */,
+				9E51342219FFE6CF004CF6C5 /* PipeModule.cpp in Sources */,
+				9E51342319FFE6CF004CF6C5 /* light.cpp in Sources */,
+				9E51342419FFE6CF004CF6C5 /* camera.cpp in Sources */,
+				9E51342519FFE6CF004CF6C5 /* app.cpp in Sources */,
+				9E51342619FFE6CF004CF6C5 /* material.cpp in Sources */,
+				9E51342719FFE6CF004CF6C5 /* cinderjsApp.cpp in Sources */,
+				9E51342819FFE6CF004CF6C5 /* ray.cpp in Sources */,
+				9E51342919FFE6CF004CF6C5 /* utils.cpp in Sources */,
+				9E51342A19FFE6CF004CF6C5 /* console.cpp in Sources */,
+				9E51342B19FFE6CF004CF6C5 /* TextHelpers.cpp in Sources */,
+				9E51342C19FFE6CF004CF6C5 /* fs.cpp in Sources */,
+				9E51342D19FFE6CF004CF6C5 /* gl.cpp in Sources */,
+				9E51342E19FFE6CF004CF6C5 /* AppConsole.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		9E7F711819EDDF22002DDCFF /* Debug */ = {
+		9E51343919FFE6CF004CF6C5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CINDER_PATH = ../../../../cinder;
+				CINDER_PATH = ../Cinder;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
@@ -587,30 +669,35 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
 					"\"$(CINDER_PATH)/boost\"",
-					"\"$(V8_PATH)/include\"",
+					"\"$(V8_PATH)\"",
 				);
-				INFOPLIST_FILE = "cinderjs copy-Info.plist";
+				INFOPLIST_FILE = "cinderjs copy2-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"/Users/sebastian/Dropbox/+Projects/cinderjs/v8/xcodebuild/Release",
-					"/Users/sebastian/Dropbox/+Projects/cinderjs/v8/out/x64.release",
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"\"$(CINDER_PATH)/lib/libcinder_d.a\"",
+					"\"$(V8_PATH_D)/libicudata.a\"",
+					"\"$(V8_PATH_D)/libicui18n.a\"",
+					"\"$(V8_PATH_D)/libicuuc.a\"",
+					"\"$(V8_PATH_D)/libv8_snapshot.a\"",
+					"\"$(V8_PATH_D)/libv8_libbase.a\"",
+					"\"$(V8_PATH_D)/libv8_base.a\"",
+					"\"$(V8_PATH_D)/libv8_libplatform.a\"",
 				);
-				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder_d.a\"";
 				PRODUCT_NAME = "cinderjs copy";
 				SYMROOT = ./build;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include \"$(V8_PATH)/include\"";
 				V8_PATH = ../v8;
-				V8_PATH_D = ../v8/out/native;
-				V8_PATH_R = ../v8/out/native;
+				V8_PATH_D = ../v8/out/ia32.debug;
+				V8_PATH_R = ../v8/out/ia32.release;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
 		};
-		9E7F711919EDDF22002DDCFF /* Release */ = {
+		9E51343A19FFE6CF004CF6C5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CINDER_PATH = ../../../../cinder;
+				CINDER_PATH = ../Cinder;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -627,23 +714,28 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
 					"\"$(CINDER_PATH)/boost\"",
-					"\"$(V8_PATH)/include\"",
+					"\"$(V8_PATH)\"",
 				);
-				INFOPLIST_FILE = "cinderjs copy-Info.plist";
+				INFOPLIST_FILE = "cinderjs copy2-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"/Users/sebastian/Dropbox/+Projects/cinderjs/v8/xcodebuild/Release",
-					"/Users/sebastian/Dropbox/+Projects/cinderjs/v8/out/x64.release",
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"\"$(CINDER_PATH)/lib/libcinder.a\"",
+					"\"$(V8_PATH_R)/libicudata.a\"",
+					"\"$(V8_PATH_R)/libicui18n.a\"",
+					"\"$(V8_PATH_R)/libicuuc.a\"",
+					"\"$(V8_PATH_R)/libv8_nosnapshot.a\"",
+					"\"$(V8_PATH_R)/libv8_libbase.a\"",
+					"\"$(V8_PATH_R)/libv8_base.a\"",
+					"\"$(V8_PATH_R)/libv8_libplatform.a\"",
 				);
-				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder.a\"";
 				PRODUCT_NAME = "cinderjs copy";
 				STRIP_INSTALLED_PRODUCT = YES;
 				SYMROOT = ./build;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include \"$(V8_PATH)/include\"";
 				V8_PATH = ../v8;
-				V8_PATH_D = ../v8/out/native;
-				V8_PATH_R = ../v8/out/native;
+				V8_PATH_D = ../v8/out/ia32.debug;
+				V8_PATH_R = ../v8/out/ia32.release;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -774,16 +866,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		9E7F711719EDDF22002DDCFF /* Build configuration list for PBXNativeTarget "cinderjs static v8" */ = {
+		9E51343819FFE6CF004CF6C5 /* Build configuration list for PBXNativeTarget "cinderjs ia32" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9E7F711819EDDF22002DDCFF /* Debug */,
-				9E7F711919EDDF22002DDCFF /* Release */,
+				9E51343919FFE6CF004CF6C5 /* Debug */,
+				9E51343A19FFE6CF004CF6C5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "cinderjs" */ = {
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "cinderjs x64" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4B08A954540054247B /* Debug */,

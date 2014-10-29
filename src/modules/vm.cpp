@@ -38,6 +38,7 @@ void runInThisContext(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::HandleScope handle_scope(isolate);
   
   // Enter the context for compiling and running
+  // TODO: Use separate module context
   Context::Scope context_scope(isolate->GetCallingContext());
   
   // Create a string containing the JavaScript source code.

@@ -26,6 +26,8 @@
 
 #include "cinder/gl/Material.h"
 
+#include <assert.h>
+
 using namespace std;
 using namespace cinder;
 using namespace cinder::gl;
@@ -41,11 +43,14 @@ void create(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
 
-  FactoryTuple<Material> tuple = StaticFactory::createMaterial();
+  Local<Object> idHolder = StaticFactory::createMaterial( isolate );
   
   //std::cout << "created material material " << to_string(id) << "/" << to_string(sMaterialObjects.size()) << std::endl;
   
-  args.GetReturnValue().Set(v8::Uint32::New(isolate, tuple.id));
+  assert(idHolder->IsObject());
+  assert(idHolder->Has(v8::String::NewFromUtf8(isolate, "id")));
+  
+  args.GetReturnValue().Set(idHolder);
   return;
 }
 

@@ -43,7 +43,7 @@ void CameraModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
 
-  FactoryTuple<CameraPersp> tuple = StaticFactory::createCamera();
+  Wrapped<CameraPersp> tuple = StaticFactory::createCamera();
   
   args.GetReturnValue().Set(v8::Uint32::New(isolate, tuple.id));
   return;

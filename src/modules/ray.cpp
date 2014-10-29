@@ -43,7 +43,7 @@ void RayModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
 
-  FactoryTuple<Ray> tuple = StaticFactory::createRay();
+  Wrapped<Ray> tuple = StaticFactory::createRay();
   
   args.GetReturnValue().Set(v8::Uint32::New(isolate, tuple.id));
   return;

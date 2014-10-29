@@ -44,7 +44,7 @@ void LightModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
 
   uint32_t type = args[0]->ToUint32()->Value();
   
-  FactoryTuple<Light> tuple = StaticFactory::createLight( type );
+  Wrapped<Light> tuple = StaticFactory::createLight( type );
   
   #ifdef DEBUG_LIGHT_MODULE
   std::cout << "created light " << to_string(id) << "/" << to_string(sLightObjects.size()) << std::endl;

@@ -43,6 +43,7 @@ volatile bool CinderjsApp::sConsoleActive = false;
 volatile bool CinderjsApp::sV8StatsActive = false;
 
 bool CinderjsApp::sQuitRequested = false;
+bool CinderAppBase::shutdownInProgress = false;
 
 v8::Persistent<v8::Object> CinderjsApp::sModuleCache;
 v8::Persistent<v8::Array> CinderjsApp::sModuleList;
@@ -96,6 +97,7 @@ void CinderjsApp::handleV8TryCatch( v8::TryCatch &tryCatch ) {
  */
 void CinderjsApp::shutdown()
 {
+  shutdownInProgress = true;
   sConsoleActive = false;
   mShouldQuit = true;
   
@@ -299,7 +301,8 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/physics.js");
-  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/ray.js");
+  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/ray.js");
+  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/test/weak_callback.js");
   #endif
   
   Local<Array> argvArr = Array::New(mIsolate);

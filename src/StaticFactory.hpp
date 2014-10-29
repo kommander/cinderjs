@@ -32,10 +32,31 @@
 #include "cinder/Ray.h"
 #include "cinder/Camera.h"
 
+#include "node_object_wrap.h"
+
+#include "v8.h"
+
+//
+// The factory manages the references between C and js.
+// Modules request objects from the factory and the factory takes care of cleanup
+
+// TODO: store per isolate/context (removable when module is unloaded)
+
 namespace cjs {
   
   template<class T>
-  struct FactoryTuple {
+  class Wrapper : public node::ObjectWrap {
+    public:
+    ~Wrapper(){
+      
+    }
+    uint32_t id;
+    boost::shared_ptr<T> value;
+  };
+  
+  template<class T>
+  class Wrapped {
+    public:
     uint32_t id;
     boost::shared_ptr<T> value;
   };
@@ -47,24 +68,18 @@ namespace cjs {
     
       static void initialize();
     
-      static FactoryTuple<cinder::gl::Material> createMaterial();
+      static v8::Handle<v8::Object> createMaterial( v8::Isolate* isolate );
       static boost::shared_ptr<cinder::gl::Material> getMaterial( uint32_t id );
     
-      static FactoryTuple<cinder::gl::Light> createLight( uint32_t type );
+      static Wrapped<cinder::gl::Light> createLight( uint32_t type );
       static boost::shared_ptr<cinder::gl::Light> getLight( uint32_t id );
     
-      static FactoryTuple<cinder::Ray> createRay();
+      static Wrapped<cinder::Ray> createRay();
       static boost::shared_ptr<cinder::Ray> getRay( uint32_t id );
       static uint32_t putRay(cinder::Ray &ray);
     
-      static FactoryTuple<cinder::CameraPersp> createCamera();
+      static Wrapped<cinder::CameraPersp> createCamera();
       static boost::shared_ptr<cinder::CameraPersp> getCamera( uint32_t id );
-    
-      // TODO:
-      //static bool removeMaterial( uint32_t id );
-      //static bool removeLight( uint32_t id );
-      //static bool removeRay( uint32_t id );
-      // ... others
     
       // TODO:
       // To store objects that are created elsewhere
@@ -75,7 +90,7 @@ namespace cjs {
     private:
       // TODO: Improve counters and reuse unused ids (generate ids at startup)
       //       -> If id space is limited, it would help to spot leaks in JS scripts
-      static std::map<uint32_t, boost::shared_ptr<cinder::gl::Material>> sMaterialMap;
+      static std::map<uint32_t, boost::shared_ptr<Wrapper<cinder::gl::Material>>> sMaterialMap;
       static uint32_t sMaterialCounter;
       static std::map<uint32_t, boost::shared_ptr<cinder::gl::Light>> sLightMap;
       static uint32_t sLightCounter;

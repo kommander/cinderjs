@@ -24,10 +24,12 @@
 
 using namespace cinder;
 using namespace cinder::gl;
+using namespace v8;
+using namespace std;
 
 namespace cjs {
-
-std::map<uint32_t, boost::shared_ptr<Material>> StaticFactory::sMaterialMap;
+  
+std::map<uint32_t, boost::shared_ptr<Wrapper<Material>>> StaticFactory::sMaterialMap;
 uint32_t StaticFactory::sMaterialCounter = 0;
 std::map<uint32_t, boost::shared_ptr<Light>> StaticFactory::sLightMap;
 uint32_t StaticFactory::sLightCounter = 0;
@@ -36,27 +38,41 @@ uint32_t StaticFactory::sRayCounter = 0;
 std::map<uint32_t, boost::shared_ptr<CameraPersp>> StaticFactory::sCameraMap;
 uint32_t StaticFactory::sCameraCounter = 0;
 
+std::map<uint32_t, v8::Persistent<v8::Object>> persistents;
+  
 //
 // Material
-FactoryTuple<Material> StaticFactory::createMaterial(){
-  FactoryTuple<Material> tuple;
-  tuple.id = sMaterialCounter++;
-  tuple.value = boost::shared_ptr<Material>( new Material() );
+v8::Handle<v8::Object> StaticFactory::createMaterial( Isolate* isolate ){
+  EscapableHandleScope scope(isolate);
+  
+  boost::shared_ptr<Wrapper<Material>> tuple( new Wrapper<Material>() );
+  tuple->id = sMaterialCounter++;
+  tuple->value = boost::shared_ptr<Material>( new Material() );
+  
+  //std::cout << "Factory producing Material" << std::endl;
+  
+  Local<ObjectTemplate> obj = ObjectTemplate::New();
+  obj->SetInternalFieldCount(1);
+  
+  Local<Object> idHolder = obj->NewInstance();
+  idHolder->Set(v8::String::NewFromUtf8(isolate, "id"), v8::Uint32::New(isolate, tuple->id));
+  
+  tuple->Wrap(idHolder);
   
   // Store
-  sMaterialMap[tuple.id] = tuple.value;
+  sMaterialMap[tuple->id] = tuple;
   
-  return tuple;
+  return scope.Escape(idHolder);;
 }
 
 boost::shared_ptr<Material> StaticFactory::getMaterial( uint32_t id ){
-  return sMaterialMap[id];
+  return sMaterialMap[id]->value;
 }
 
 //
 // Light
-FactoryTuple<Light> StaticFactory::createLight(uint32_t type){
-  FactoryTuple<Light> tuple;
+Wrapped<Light> StaticFactory::createLight(uint32_t type){
+  Wrapped<Light> tuple;
   tuple.id = sLightCounter++;
   tuple.value = boost::shared_ptr<Light>( new Light(type, tuple.id) );
   
@@ -72,8 +88,8 @@ boost::shared_ptr<Light> StaticFactory::getLight( uint32_t id ){
 
 //
 // Ray
-FactoryTuple<Ray> StaticFactory::createRay(){
-  FactoryTuple<Ray> tuple;
+Wrapped<Ray> StaticFactory::createRay(){
+  Wrapped<Ray> tuple;
   tuple.id = sRayCounter++;
   tuple.value = boost::shared_ptr<Ray>( new Ray() );
   
@@ -96,8 +112,8 @@ uint32_t StaticFactory::putRay(Ray &ray){
 
 //
 // Camera
-FactoryTuple<CameraPersp> StaticFactory::createCamera(){
-  FactoryTuple<CameraPersp> tuple;
+Wrapped<CameraPersp> StaticFactory::createCamera(){
+  Wrapped<CameraPersp> tuple;
   tuple.id = sCameraCounter++;
   
   // Use Perspective camera as default for now...
