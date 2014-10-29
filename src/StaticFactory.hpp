@@ -26,6 +26,7 @@
 
 #include <map>
 #include <boost/shared_ptr.hpp>
+#include <boost/any.hpp>
 
 #include "cinder/gl/Material.h"
 #include "cinder/gl/Light.h"
@@ -68,8 +69,35 @@ namespace cjs {
     
       static void initialize();
     
-      static v8::Handle<v8::Object> createMaterial( v8::Isolate* isolate );
-      static boost::shared_ptr<cinder::gl::Material> getMaterial( uint32_t id );
+      template<class T>
+      static v8::Handle<v8::Object> create( v8::Isolate* isolate ){
+        v8::EscapableHandleScope scope(isolate);
+        
+        boost::shared_ptr<Wrapper<T>> tuple( new Wrapper<T>() );
+        tuple->id = sMaterialCounter++;
+        tuple->value = boost::shared_ptr<T>( new T() );
+        
+        //std::cout << "Factory creating" << std::endl;
+        
+        v8::Local<v8::ObjectTemplate> obj = v8::ObjectTemplate::New();
+        obj->SetInternalFieldCount(1);
+        
+        v8::Local<v8::Object> idHolder = obj->NewInstance();
+        idHolder->Set(v8::String::NewFromUtf8(isolate, "id"), v8::Uint32::New(isolate, tuple->id));
+        
+        tuple->Wrap(idHolder);
+        
+        // Store
+        _sObjectMap[tuple->id] = tuple;
+        
+        return scope.Escape(idHolder);
+      }
+    
+      template<class T>
+      static boost::shared_ptr<T> get( uint32_t id ){
+        boost::shared_ptr<Wrapper<T>> proxy = boost::any_cast<boost::shared_ptr<Wrapper<T>>>(_sObjectMap[id]);
+        return proxy->value;
+      }
     
       static Wrapped<cinder::gl::Light> createLight( uint32_t type );
       static boost::shared_ptr<cinder::gl::Light> getLight( uint32_t id );
@@ -90,7 +118,7 @@ namespace cjs {
     private:
       // TODO: Improve counters and reuse unused ids (generate ids at startup)
       //       -> If id space is limited, it would help to spot leaks in JS scripts
-      static std::map<uint32_t, boost::shared_ptr<Wrapper<cinder::gl::Material>>> sMaterialMap;
+      static std::map<uint32_t, boost::any> _sObjectMap;
       static uint32_t sMaterialCounter;
       static std::map<uint32_t, boost::shared_ptr<cinder::gl::Light>> sLightMap;
       static uint32_t sLightCounter;

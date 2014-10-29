@@ -29,7 +29,8 @@ using namespace std;
 
 namespace cjs {
   
-std::map<uint32_t, boost::shared_ptr<Wrapper<Material>>> StaticFactory::sMaterialMap;
+std::map<uint32_t, boost::any> StaticFactory::_sObjectMap;
+
 uint32_t StaticFactory::sMaterialCounter = 0;
 std::map<uint32_t, boost::shared_ptr<Light>> StaticFactory::sLightMap;
 uint32_t StaticFactory::sLightCounter = 0;
@@ -38,36 +39,6 @@ uint32_t StaticFactory::sRayCounter = 0;
 std::map<uint32_t, boost::shared_ptr<CameraPersp>> StaticFactory::sCameraMap;
 uint32_t StaticFactory::sCameraCounter = 0;
 
-std::map<uint32_t, v8::Persistent<v8::Object>> persistents;
-  
-//
-// Material
-v8::Handle<v8::Object> StaticFactory::createMaterial( Isolate* isolate ){
-  EscapableHandleScope scope(isolate);
-  
-  boost::shared_ptr<Wrapper<Material>> tuple( new Wrapper<Material>() );
-  tuple->id = sMaterialCounter++;
-  tuple->value = boost::shared_ptr<Material>( new Material() );
-  
-  //std::cout << "Factory producing Material" << std::endl;
-  
-  Local<ObjectTemplate> obj = ObjectTemplate::New();
-  obj->SetInternalFieldCount(1);
-  
-  Local<Object> idHolder = obj->NewInstance();
-  idHolder->Set(v8::String::NewFromUtf8(isolate, "id"), v8::Uint32::New(isolate, tuple->id));
-  
-  tuple->Wrap(idHolder);
-  
-  // Store
-  sMaterialMap[tuple->id] = tuple;
-  
-  return scope.Escape(idHolder);;
-}
-
-boost::shared_ptr<Material> StaticFactory::getMaterial( uint32_t id ){
-  return sMaterialMap[id]->value;
-}
 
 //
 // Light
