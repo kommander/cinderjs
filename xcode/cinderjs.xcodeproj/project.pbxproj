@@ -300,7 +300,6 @@
 			isa = PBXGroup;
 			children = (
 				9E9B3E3719F022B000291CDE /* modules */,
-				9E51343D1A00776B004CF6C5 /* node_object_wrap.h */,
 				9E0BDE1119F915200036038F /* cinderjsApp.hpp */,
 				9E9B3E4119F0240C00291CDE /* CinderAppBase.hpp */,
 				9E9B3E3119F002C200291CDE /* AppConsole.h */,
@@ -308,6 +307,7 @@
 				BA220610E72E4B7FA515FBCC /* Resources.h */,
 				24A9E79E5BC84C47B0A6A38B /* cinderjs_Prefix.pch */,
 				9ECCE56919FD962800C37522 /* StaticFactory.hpp */,
+				9E51343D1A00776B004CF6C5 /* node_object_wrap.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";

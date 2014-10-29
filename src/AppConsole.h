@@ -38,7 +38,7 @@ class AppConsole {
       sLines.push_back( str );
       
       if(sLines.size() > 100){
-  
+        // TODO: Remove previous lines from buffer
       }
       sChanged = true;
     }
@@ -48,24 +48,22 @@ class AppConsole {
       
       if( sChanged ) {
         sChanged = false;
+        
+        cinder::TextLayout text;
+        text.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
+        
+        int end = sLines.size() > 10 ? 10 : sLines.size();
+        
+        for(std::vector<std::string>::iterator it = sLines.end() - end; it != sLines.end(); ++it) {
+          text.addLine(*it);
+        }
+        
+        _sSurface = text.render();
       }
       
       cinder::gl::pushMatrices();
-      
-      cinder::TextLayout text;
-      text.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
-      
-      int end = sLines.size() > 10 ? 10 : sLines.size();
-      
-      for(std::vector<std::string>::iterator it = sLines.end() - end; it != sLines.end(); ++it) {
-        text.addLine(*it);
-        //pos.y -= 15;
-      }
-    
       cinder::gl::translate(2, pos.y - 120, 0);
-      cinder::gl::draw( cinder::gl::Texture( cinder::gl::Texture( text.render() ) ) );
-      
-      
+      cinder::gl::draw( cinder::gl::Texture( _sSurface ) );
       cinder::gl::popMatrices();
     }
     
@@ -75,6 +73,7 @@ class AppConsole {
     static std::vector<std::string> sLines;
     static int sNumLinesToShow;
     static int sMaxLines;
+    static cinder::Surface _sSurface;
 };
   
 } // namespace cjs
