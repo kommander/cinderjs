@@ -117,7 +117,10 @@ class ObjectWrap {
   }
 
   int refs_;  // ro
-
+  v8::Persistent<v8::Object> handle_;
+  
+  virtual void _weak( v8::Isolate* isolate ) = 0;
+  
  private:
   static void WeakCallback(
       const v8::WeakCallbackData<v8::Object, ObjectWrap>& data) {
@@ -127,12 +130,11 @@ class ObjectWrap {
     assert(wrap->refs_ == 0);
     assert(wrap->handle_.IsNearDeath());
     assert(data.GetValue() == v8::Local<v8::Object>::New(isolate, wrap->handle_));
-    std::cout << "Node object wrap WEAK." << std::endl;
     wrap->handle_.Reset();
-    delete wrap;
+    wrap->_weak( isolate );
+    //delete wrap;
   }
 
-  v8::Persistent<v8::Object> handle_;
 };
 
 }  // namespace node

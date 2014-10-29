@@ -45,29 +45,33 @@
 
 namespace cjs {
   
-  template<class T>
-  class Wrapper : public node::ObjectWrap {
-    public:
-    ~Wrapper(){
-      
-    }
-    uint32_t id;
-    boost::shared_ptr<T> value;
-  };
-  
-  template<class T>
-  class Wrapped {
-    public:
-    uint32_t id;
-    boost::shared_ptr<T> value;
+   struct FactorySettings {
+    uint16_t maxObjects = 4096;
   };
   
   class StaticFactory {
-    public:
-      //StaticFactory(){}
-      //~StaticFactory(){}
+  
+   template<class T>
+    class Wrapper : public node::ObjectWrap {
+      public:
+      uint32_t id;
+      boost::shared_ptr<T> value;
+      
+      void _weak( v8::Isolate* isolate ){
+        try {
+          StaticFactory::remove<T>( isolate, id );
+        } catch( std::exception ){
+          std::cout << "Wrapper remove error" << std::endl;
+        }
+      }
+      
+    };
     
-      static void initialize();
+    public:
+    
+      static void initialize(){
+        
+      };
     
       template<class T>
       static v8::Handle<v8::Object> create( v8::Isolate* isolate ){
@@ -95,6 +99,9 @@ namespace cjs {
         // Store
         _sObjectMap[tuple->id] = tuple;
         
+        // Todo: check if needed
+        isolate->AdjustAmountOfExternalAllocatedMemory(sizeof(*tuple));
+        
         return scope.Escape(idHolder);
       }
     
@@ -111,18 +118,24 @@ namespace cjs {
         }
       }
     
-      // TODO:
-      // To store objects that are created elsewhere
-      // and have to be referenced by JS
-      //static uint32_t putMaterial(boost::shared_ptr<Material> material);
-      // ... others
+      template<class T>
+      static void remove( v8::Isolate* isolate, uint32_t id ){
+        boost::any wrap = _sObjectMap[id];
+        if(!wrap.empty()){
+          boost::shared_ptr<Wrapper<T>> proxy = boost::any_cast<boost::shared_ptr<Wrapper<T>>>(wrap);
+          isolate->AdjustAmountOfExternalAllocatedMemory(-sizeof(*proxy));
+          wrap.clear();
+          _sObjectMap.erase(id);
+        }
+        // Todo: release id for re-use
+      }
     
     private:
       // TODO: Improve counters and reuse unused ids (generate ids at startup)
       //       -> If id space is limited, it would help to spot leaks in JS scripts
       static std::map<uint32_t, boost::any> _sObjectMap;
       static uint32_t _sObjectCounter;
-    
+      static FactorySettings _settings;
   };
   
 } // namespace
