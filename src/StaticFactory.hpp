@@ -71,13 +71,18 @@ namespace cjs {
     
       template<class T>
       static v8::Handle<v8::Object> create( v8::Isolate* isolate ){
+        return put( isolate, new T() );
+      }
+    
+      template<class T>
+      static v8::Handle<v8::Object> put( v8::Isolate* isolate, T* value ){
         v8::EscapableHandleScope scope(isolate);
         
         boost::shared_ptr<Wrapper<T>> tuple( new Wrapper<T>() );
-        tuple->id = sMaterialCounter++;
-        tuple->value = boost::shared_ptr<T>( new T() );
         
-        //std::cout << "Factory creating" << std::endl;
+        // TODO: Replace with _getId()
+        tuple->id = _sObjectCounter++;
+        tuple->value = boost::shared_ptr<T>( value );
         
         v8::Local<v8::ObjectTemplate> obj = v8::ObjectTemplate::New();
         obj->SetInternalFieldCount(1);
@@ -95,12 +100,16 @@ namespace cjs {
     
       template<class T>
       static boost::shared_ptr<T> get( uint32_t id ){
-        boost::shared_ptr<Wrapper<T>> proxy = boost::any_cast<boost::shared_ptr<Wrapper<T>>>(_sObjectMap[id]);
-        return proxy->value;
+        boost::any wrap = _sObjectMap[id];
+        if(wrap.empty()){
+          return boost::shared_ptr<T>();
+        } else {
+          // If conversion fails, the ids are probably mixed up
+          // and the map returns the wrong object so it cannot be converted to T
+          boost::shared_ptr<Wrapper<T>> proxy = boost::any_cast<boost::shared_ptr<Wrapper<T>>>(wrap);
+          return proxy->value;
+        }
       }
-    
-      static Wrapped<cinder::gl::Light> createLight( uint32_t type );
-      static boost::shared_ptr<cinder::gl::Light> getLight( uint32_t id );
     
       static Wrapped<cinder::Ray> createRay();
       static boost::shared_ptr<cinder::Ray> getRay( uint32_t id );
@@ -119,9 +128,8 @@ namespace cjs {
       // TODO: Improve counters and reuse unused ids (generate ids at startup)
       //       -> If id space is limited, it would help to spot leaks in JS scripts
       static std::map<uint32_t, boost::any> _sObjectMap;
-      static uint32_t sMaterialCounter;
-      static std::map<uint32_t, boost::shared_ptr<cinder::gl::Light>> sLightMap;
-      static uint32_t sLightCounter;
+      static uint32_t _sObjectCounter;
+    
       static std::map<uint32_t, boost::shared_ptr<cinder::Ray>> sRayMap;
       static uint32_t sRayCounter;
       static std::map<uint32_t, boost::shared_ptr<cinder::CameraPersp>> sCameraMap;

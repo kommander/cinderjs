@@ -38,19 +38,22 @@ ColorA LightModule::sBufColorA_1;
 Vec3f LightModule::sBufVec3f_1;
 Vec3f LightModule::sBufVec3f_2;
 
+// TODO: handle light ids
+uint16_t sLightIds = 0;
+
 void LightModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
 
   uint32_t type = args[0]->ToUint32()->Value();
   
-  Wrapped<Light> tuple = StaticFactory::createLight( type );
+  Local<Object> idHolder = StaticFactory::put<Light>( isolate, new Light(type, sLightIds++) );
   
   #ifdef DEBUG_LIGHT_MODULE
   std::cout << "created light " << to_string(id) << "/" << to_string(sLightObjects.size()) << std::endl;
   #endif
   
-  args.GetReturnValue().Set(v8::Uint32::New(isolate, tuple.id));
+  args.GetReturnValue().Set(idHolder);
   return;
 }
 
@@ -61,7 +64,7 @@ void LightModule::enable(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Light> light = StaticFactory::getLight(id);
+    boost::shared_ptr<Light> light = StaticFactory::get<Light>(id);
     
     if(!light){
       return;
@@ -84,7 +87,7 @@ void LightModule::disable(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Light> light = StaticFactory::getLight(id);
+    boost::shared_ptr<Light> light = StaticFactory::get<Light>(id);
     
     if(!light){
       return;
@@ -107,7 +110,7 @@ void LightModule::setAmbient(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Light> light = StaticFactory::getLight(id);
+    boost::shared_ptr<Light> light = StaticFactory::get<Light>(id);
     
     if(!light){
       return;
@@ -136,7 +139,7 @@ void LightModule::setDiffuse(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Light> light = StaticFactory::getLight(id);
+    boost::shared_ptr<Light> light = StaticFactory::get<Light>(id);
     
     if(!light){
       return;
@@ -165,7 +168,7 @@ void LightModule::setSpecular(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Light> light = StaticFactory::getLight(id);
+    boost::shared_ptr<Light> light = StaticFactory::get<Light>(id);
     
     if(!light){
       return;
@@ -200,7 +203,7 @@ void LightModule::destroy(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Light> light = StaticFactory::getLight(id);
+    boost::shared_ptr<Light> light = StaticFactory::get<Light>(id);
     
     if(!light){
       return;
@@ -224,7 +227,7 @@ void LightModule::lookAt(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Light> light = StaticFactory::getLight(id);
+    boost::shared_ptr<Light> light = StaticFactory::get<Light>(id);
     
     if(!light){
       return;
@@ -256,7 +259,7 @@ void LightModule::setPosition(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Light> light = StaticFactory::getLight(id);
+    boost::shared_ptr<Light> light = StaticFactory::get<Light>(id);
     
     if(!light){
       return;

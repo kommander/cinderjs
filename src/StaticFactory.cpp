@@ -30,32 +30,13 @@ using namespace std;
 namespace cjs {
   
 std::map<uint32_t, boost::any> StaticFactory::_sObjectMap;
+uint32_t StaticFactory::_sObjectCounter = 0;
 
-uint32_t StaticFactory::sMaterialCounter = 0;
-std::map<uint32_t, boost::shared_ptr<Light>> StaticFactory::sLightMap;
-uint32_t StaticFactory::sLightCounter = 0;
 std::map<uint32_t, boost::shared_ptr<Ray>> StaticFactory::sRayMap;
 uint32_t StaticFactory::sRayCounter = 0;
 std::map<uint32_t, boost::shared_ptr<CameraPersp>> StaticFactory::sCameraMap;
 uint32_t StaticFactory::sCameraCounter = 0;
 
-
-//
-// Light
-Wrapped<Light> StaticFactory::createLight(uint32_t type){
-  Wrapped<Light> tuple;
-  tuple.id = sLightCounter++;
-  tuple.value = boost::shared_ptr<Light>( new Light(type, tuple.id) );
-  
-  // Store
-  sLightMap[tuple.id] = tuple.value;
-  
-  return tuple;
-}
-
-boost::shared_ptr<Light> StaticFactory::getLight( uint32_t id ){
-  return sLightMap[id];
-}
 
 //
 // Ray
