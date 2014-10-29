@@ -68,9 +68,12 @@ class GLModule : public PipeModule {
     static void drawTorus(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void drawCylinder(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void setMatrices(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void clear(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   private:
     //
+    static ColorA sBufColorA_1;
+    static Color sBufColor_1;
     static Vec2f bufVec2f_1;
     static Vec2f bufVec2f_2;
     static Vec3f bufVec3f_1;

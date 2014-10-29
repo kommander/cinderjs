@@ -17,6 +17,8 @@ log('Ray Example');
 
 app.draw(function(timePassed, mx, my){
 
+  gl.clear( 0.1, 0.1, 0.1 );
+
   gl.pushMatrices();
   gl.translate(ctxSize.w / 2, ctxSize.h / 2, 0);
     

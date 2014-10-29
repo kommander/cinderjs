@@ -35,6 +35,8 @@ var loop = function(timePassed, mx, my){
   mouse.x = mx;
   mouse.y = my;
   
+  gl.clear( 0.1, 0.1, 0.1 );
+  
   // Update rotation
   rotation.y += 0.6;
   rotation.z += 0.8;

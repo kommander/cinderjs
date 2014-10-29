@@ -38,6 +38,8 @@ Vec2f GLModule::bufVec2f_1;
 Vec2f GLModule::bufVec2f_2;
 Vec3f GLModule::bufVec3f_1;
 Vec3f GLModule::bufVec3f_2;
+ColorA GLModule::sBufColorA_1;
+Color GLModule::sBufColor_1;
 
 /**
  * drawLine( sx, sy, ex, ey );
@@ -80,10 +82,6 @@ void GLModule::drawSolidCircle(const v8::FunctionCallbackInfo<v8::Value>& args) 
   double radius = args[2]->NumberValue();
   
   gl::drawSolidCircle(bufVec2f_1, radius);
-  
-  args[0].Clear();
-  args[1].Clear();
-  args[2].Clear();
   
   return;
 }
@@ -264,12 +262,11 @@ void GLModule::drawSphere(const v8::FunctionCallbackInfo<v8::Value>& args) {
   bufVec3f_1.y = args[1]->NumberValue();
   bufVec3f_1.z = args[2]->NumberValue();
   
+  // ( const Vec3f &center, float radius, int segments = 12 )
   gl::drawSphere(bufVec3f_1, args[3]->NumberValue(), args[4]->NumberValue());
   
   return;
 }
-
-void drawSphere( const Vec3f &center, float radius, int segments = 12 );
 
 /**
  *
@@ -310,6 +307,22 @@ void GLModule::setMatrices(const v8::FunctionCallbackInfo<v8::Value>& args) {
   }
 }
 
+/**
+ *
+ */
+void GLModule::clear(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  if(args.Length() >= 3) {
+    sBufColor_1.r = args[0]->ToNumber()->Value();
+    sBufColor_1.g = args[1]->ToNumber()->Value();
+    sBufColor_1.b = args[2]->ToNumber()->Value();
+    
+    return gl::clear( sBufColor_1 );
+  }
+  
+  gl::clear();
+  return;
+}
+
 // TODO
 //void setMatrices( const Camera &cam );
 //void setModelView( const Camera &cam );
@@ -321,6 +334,7 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   
   // gl methods
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setMatrices"), v8::FunctionTemplate::New(getIsolate(), setMatrices));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "clear"), v8::FunctionTemplate::New(getIsolate(), clear));
   
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawLine"), v8::FunctionTemplate::New(getIsolate(), drawLine));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawSolidCircle"), v8::FunctionTemplate::New(getIsolate(), drawSolidCircle));

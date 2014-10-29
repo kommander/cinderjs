@@ -402,13 +402,8 @@ void CinderjsApp::v8RenderThread(){
       
       v8::Locker lock(mIsolate);
       
-      // clear out the window with black
-      // TODO: Do clearing manually from js
-      gl::clear( Color( 0.1, 0.1, 0.1 ) );
       gl::enableDepthRead();
       gl::enableDepthWrite();
-      
-      
       
       // JS Draw callback
       v8Draw( timePassed );

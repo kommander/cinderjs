@@ -61,6 +61,8 @@ var loop = function(timePassed, mx, my){
   // Update mouse position
   mouse.x = mx;
   mouse.y = my;
+
+  gl.clear( 0.1, 0.1, 0.1 );
   
   gl.enable(gl.LIGHTING);
   gl.enable(gl.LIGHT0);
