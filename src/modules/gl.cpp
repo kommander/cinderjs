@@ -240,6 +240,38 @@ void GLModule::disableWireframe(const v8::FunctionCallbackInfo<v8::Value>& args)
 /**
  *
  */
+void GLModule::enableDepthRead(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::enableDepthRead();
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::disableDepthRead(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::disableDepthRead();
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::enableDepthWrite(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::enableDepthWrite();
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::disableDepthWrite(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::disableDepthWrite();
+  return;
+}
+
+/**
+ *
+ */
 void GLModule::drawCube(const v8::FunctionCallbackInfo<v8::Value>& args) {
   bufVec3f_1.x = args[0]->NumberValue();
   bufVec3f_1.y = args[1]->NumberValue();
@@ -351,6 +383,12 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "color"), v8::FunctionTemplate::New(getIsolate(), color));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "enableWireframe"), v8::FunctionTemplate::New(getIsolate(), enableWireframe));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "disableWireframe"), v8::FunctionTemplate::New(getIsolate(), disableWireframe));
+  
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "enableDepthRead"), v8::FunctionTemplate::New(getIsolate(), enableDepthRead));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "disableDepthRead"), v8::FunctionTemplate::New(getIsolate(), disableDepthRead));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "enableDepthWrite"), v8::FunctionTemplate::New(getIsolate(), enableDepthWrite));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "disableDepthWrite"), v8::FunctionTemplate::New(getIsolate(), disableDepthWrite));
+  
   
   // Primitives
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawCube"), v8::FunctionTemplate::New(getIsolate(), drawCube));

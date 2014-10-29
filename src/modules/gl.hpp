@@ -69,7 +69,11 @@ class GLModule : public PipeModule {
     static void drawCylinder(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void setMatrices(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void clear(const v8::FunctionCallbackInfo<v8::Value>& args);
-
+    static void enableDepthRead(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void disableDepthRead(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void enableDepthWrite(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void disableDepthWrite(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
   private:
     //
     static ColorA sBufColorA_1;

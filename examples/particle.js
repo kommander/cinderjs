@@ -110,9 +110,11 @@ var loop = function(timePassed, mx, my){
       particle.rz += 0.6;
       
       gl.pushMatrices();
+      gl.enableDepthRead();
       gl.translate(particle.x, particle.y);
       gl.rotate(particle.rx, particle.ry, particle.rz);
       gl.drawCube(0, 0, 0, particle.radius, particle.radius, particle.radius);
+      gl.disableDepthRead();
       gl.popMatrices();
     }
   }

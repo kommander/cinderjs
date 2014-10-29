@@ -42,6 +42,8 @@ var loop = function(timePassed, mx, my){
   rotation.z += 0.8;
   
   gl.pushMatrices();
+  gl.enableDepthRead();
+  
   if(wireframe) gl.enableWireframe();
   
   gl.enable(gl.LIGHTING);
@@ -66,6 +68,8 @@ var loop = function(timePassed, mx, my){
   gl.disable(gl.LIGHTING);
   
   if(wireframe) gl.disableWireframe();
+
+  gl.disableDepthRead();
   gl.popMatrices();
 }
 

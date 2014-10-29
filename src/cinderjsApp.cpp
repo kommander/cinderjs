@@ -402,9 +402,6 @@ void CinderjsApp::v8RenderThread(){
       
       v8::Locker lock(mIsolate);
       
-      gl::enableDepthRead();
-      gl::enableDepthWrite();
-      
       // JS Draw callback
       v8Draw( timePassed );
       
@@ -413,8 +410,6 @@ void CinderjsApp::v8RenderThread(){
 //        it->get()->draw();
 //      }
       
-      gl::disableDepthRead();
-      gl::disableDepthWrite();
       v8::Unlocker unlock(mIsolate);
       
       // FPS (TODO: if active)
