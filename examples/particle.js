@@ -29,6 +29,7 @@ function newParticle(){
   particle.ry = getRandomInt(1, 360);
   particle.rz = getRandomInt(1, 360);
   particle.rgb = [1,1,1];
+  particle.inReach = false;
   return particle;
 }
 
@@ -40,6 +41,8 @@ var particle;
 var i;
 var colorBuf = 0;
 var distance;
+var cubeSize = 20;
+var cubeSizeBuf = cubeSize;
 
 // NOTE: Utility methods like these can be wrapped
 //       in a convinience js object when modules have arrived...
@@ -70,19 +73,25 @@ var loop = function(timePassed, mx, my){
       particle.reverse();
     }
     if(moveParticles) {
+      
       distance = particle.distance(mouse)
-      if(mouseActive && distance < 80) {
+      if(!particle.inReach && mouseActive && distance < 80) {
+        particle.radius /= 2;
+        particle.inReach = true;
         particle.rgb[0] = 1 - 2 / distance;
         particle.rgb[1] = 1 - 1 / distance;
         particle.rgb[2] = 1 - .5 / distance;
         particle.angleTo(mouse);
-        if(mouse.down) {
-          particle.reverse();
-        }
+        particle.reverse();
         particle.forward(particle.vel * 2 * timePassed / 40);
-      } else {
+      } 
+
+      if(distance >= 80) {
+        particle.radius = cubeSize; 
+        particle.inReach = false;
         particle.forward(particle.vel * timePassed / 40);
       }
+
     }
     //gl.color(particle.rgb[0], particle.rgb[1], particle.rgb[2]);
     
@@ -101,7 +110,7 @@ var loop = function(timePassed, mx, my){
       gl.pushMatrices();
       gl.translate(particle.x, particle.y);
       gl.rotate(particle.rx, particle.ry, particle.rz);
-      gl.drawCube(0, 0, 0, 20, 20, 20);
+      gl.drawCube(0, 0, 0, particle.radius, particle.radius, particle.radius);
       gl.popMatrices();
     }
   }
