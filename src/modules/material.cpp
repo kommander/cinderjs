@@ -37,9 +37,9 @@ namespace cjs {
 
 // TODO: Move to static module methods
 
-ColorA sBufColorA_1;
+ColorA MaterialModule::sBufColorA_1;
 
-void create(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void MaterialModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
 
@@ -54,7 +54,7 @@ void create(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return;
 }
 
-void apply(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void MaterialModule::apply(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
 
@@ -76,7 +76,7 @@ void apply(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return;
 }
 
-void setAmbient(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void MaterialModule::setAmbient(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
 
@@ -102,7 +102,7 @@ void setAmbient(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return;
 }
 
-void setDiffuse(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void MaterialModule::setDiffuse(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
 
@@ -128,7 +128,7 @@ void setDiffuse(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return;
 }
 
-void setSpecular(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void MaterialModule::setSpecular(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
 
@@ -154,7 +154,7 @@ void setSpecular(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return;
 }
 
-void setEmission(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void MaterialModule::setEmission(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
 
@@ -180,7 +180,7 @@ void setEmission(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return;
 }
 
-void setShininess(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void MaterialModule::setShininess(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
 

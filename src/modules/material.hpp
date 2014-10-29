@@ -41,12 +41,20 @@ class MaterialModule : public PipeModule {
       return MATERIAL_MOD_ID;
     }
   
+    static void create(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void apply(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void setAmbient(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void setDiffuse(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void setSpecular(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void setEmission(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void setShininess(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
     void draw(){}
   
   //
   private:
-    
+    static ColorA sBufColorA_1;
  };
   
 } // namespace cjs
