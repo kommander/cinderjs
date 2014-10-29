@@ -515,7 +515,8 @@ void CinderjsApp::v8EventThread(){
       context->Enter();
       
       
-        
+      // TODO: do not treat events further if shutdown was requested (quit from js)
+      // TODO: Get rid of if/else statements
       while(mEventQueue.isNotEmpty()){
         BufferedEvent evt(new BufferedEventHolder());
         mEventQueue.popBack(&evt);
@@ -614,7 +615,7 @@ void CinderjsApp::executeTimer(TimerFn timer, Isolate* isolate) {
   v8::Handle<v8::Value> argv[0] = {};
   Local<Function> fn = Local<Function>::New(isolate, timer->v8Fn);
   
-  if(fn.IsEmpty()) return;
+  if( fn.IsEmpty() ) return;
   
   TryCatch try_catch;
   
@@ -631,6 +632,8 @@ void CinderjsApp::executeTimer(TimerFn timer, Isolate* isolate) {
 void CinderjsApp::v8TimerWaitingThread( double _timerWaitingFor ){
   ThreadSetup threadSetup;
   
+  // TODO: make interuptable
+  
   //std::cout << "timer waiting for " << to_string(_timerWaitingFor) << std::endl;
   std::this_thread::sleep_for(std::chrono::milliseconds((long)_timerWaitingFor));
   
@@ -643,6 +646,7 @@ void CinderjsApp::v8TimerWaitingThread( double _timerWaitingFor ){
 /**
  * Timer thread
  * Simplified timer implementation (unprecise)
+ * TODO: Encapsulate in Timer class (taking fn callback -> executeTimer())
  */
 void CinderjsApp::v8TimerThread( Isolate* isolate ){
   ThreadSetup threadSetup;
@@ -664,9 +668,10 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
       
       for( std::vector<uint32_t>::iterator it = markedForDeletion->begin(); it != markedForDeletion->end(); it++ ) {
         TimerFn timer = mTimerFns->at(*it);
-        if(timer){
+        if(timer && !timer->v8Fn.IsEmpty()){
           timer->v8Fn.Reset();
         }
+        timer.reset();
         mTimerFns->erase(*it);
       }
       markedForDeletion->clear();
@@ -708,7 +713,7 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
       
       deleteTimer(&markedForDeletion, &mTimerFns);
       
-      if(!mTimerFns.empty()){
+      if(!mTimerFns.empty() && !mShouldQuit){
         
         now = sScheduleTimer.getSeconds() * 1000;
         if( now >= mNextScheduledTime - 1 ){
