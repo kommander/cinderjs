@@ -42,20 +42,22 @@ var loop = function(timePassed, mx, my){
   gl.pushMatrices();
   if(wireframe) gl.enableWireframe();
   
-  gl.translate(mouse.x, mouse.y);
-  gl.rotate(rotation.x, rotation.y, rotation.z);
-  
   gl.enable(gl.LIGHTING);
   light.enable()
 
+  gl.translate(mouse.x, mouse.y);
+  gl.rotate(rotation.x, rotation.y, rotation.z);
+  
   mat.apply();
   
   if(drawMethod == 0) {
-    gl.drawTorus(60, 30);
+    gl.drawTorus(60, 30, 16, 16);
   } else if(drawMethod == 1) {
     gl.drawCube(0, 0, 0, 60, 60, 60);
   } else if(drawMethod == 2) {
     gl.drawCylinder(60, 30, 50, 16, 4);
+  } else if(drawMethod == 3) {
+    gl.drawSphere(0, 0, 0, 30, 16);
   }
   
   light.disable();
@@ -80,7 +82,7 @@ app.on('keydown', function( evt ){
     wireframe = !wireframe;
   } else if(evt.charCode == 114) { // R
     drawMethod++
-    if(drawMethod > 2){
+    if(drawMethod > 3){
       drawMethod = 0
     }
   } else if(evt.charCode == 108) { // L
