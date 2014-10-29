@@ -43,29 +43,9 @@ void CameraModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
 
-  Wrapped<CameraPersp> tuple = StaticFactory::createCamera();
+  Local<Object> idHolder = StaticFactory::create<CameraPersp>( isolate );
   
-  args.GetReturnValue().Set(v8::Uint32::New(isolate, tuple.id));
-  return;
-}
-
-void CameraModule::destroy(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  v8::Isolate* isolate = args.GetIsolate();
-  v8::HandleScope scope(isolate);
-
-  if(!args[0].IsEmpty()){
-    uint32_t id = args[0]->ToUint32()->Value();
-    
-    boost::shared_ptr<Ray> cam = StaticFactory::getRay(id);
-    
-    if(!cam){
-      return;
-    }
-    
-    // TODO:
-    //StaticFactory::removeRay(id)
-  }
-  
+  args.GetReturnValue().Set(idHolder);
   return;
 }
 
@@ -76,7 +56,7 @@ void CameraModule::setEyePoint(const v8::FunctionCallbackInfo<v8::Value>& args) 
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Camera> cam = StaticFactory::getCamera(id);
+    boost::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
       return;
@@ -99,7 +79,7 @@ void CameraModule::lookAt(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Camera> cam = StaticFactory::getCamera(id);
+    boost::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
       return;
@@ -122,7 +102,7 @@ void CameraModule::setViewDirection(const v8::FunctionCallbackInfo<v8::Value>& a
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Camera> cam = StaticFactory::getCamera(id);
+    boost::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
       return;
@@ -145,7 +125,7 @@ void CameraModule::setOrientation(const v8::FunctionCallbackInfo<v8::Value>& arg
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Camera> cam = StaticFactory::getCamera(id);
+    boost::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
       return;
@@ -168,7 +148,7 @@ void CameraModule::generateRay(const v8::FunctionCallbackInfo<v8::Value>& args) 
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Camera> cam = StaticFactory::getCamera(id);
+    boost::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
       return;
@@ -177,8 +157,8 @@ void CameraModule::generateRay(const v8::FunctionCallbackInfo<v8::Value>& args) 
     // Args u, v, aspect ration
     Ray ray = cam->generateRay(args[1]->ToNumber()->Value(), args[2]->ToNumber()->Value(), args[3]->ToNumber()->Value());
     
-    uint32_t rayId = StaticFactory::putRay(ray);
-    args.GetReturnValue().Set(v8::Uint32::New(isolate, rayId));
+    Local<Object> idHolder = StaticFactory::put<Ray>(isolate, &ray);
+    args.GetReturnValue().Set(idHolder);
     
   }
   
@@ -192,7 +172,7 @@ void CameraModule::setCenterOfInterestPoint(const v8::FunctionCallbackInfo<v8::V
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Camera> cam = StaticFactory::getCamera(id);
+    boost::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
       return;
@@ -215,7 +195,7 @@ void CameraModule::setPerspective(const v8::FunctionCallbackInfo<v8::Value>& arg
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<CameraPersp> cam = StaticFactory::getCamera(id);
+    boost::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
       return;
@@ -282,7 +262,6 @@ void CameraModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   Handle<ObjectTemplate> cameraTemplate = ObjectTemplate::New(getIsolate());
   
   cameraTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "create"), v8::FunctionTemplate::New(getIsolate(), create));
-  cameraTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "destroy"), v8::FunctionTemplate::New(getIsolate(), destroy));
   
   cameraTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setPerspective"), v8::FunctionTemplate::New(getIsolate(), setPerspective));
   cameraTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setEyePoint"), v8::FunctionTemplate::New(getIsolate(), setEyePoint));

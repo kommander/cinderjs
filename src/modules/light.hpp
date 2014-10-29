@@ -43,7 +43,7 @@ class LightModule : public PipeModule {
     }
   
     static void create(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void destroy(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
     static void enable(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void disable(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void setAmbient(const v8::FunctionCallbackInfo<v8::Value>& args);

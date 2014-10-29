@@ -31,55 +31,5 @@ namespace cjs {
   
 std::map<uint32_t, boost::any> StaticFactory::_sObjectMap;
 uint32_t StaticFactory::_sObjectCounter = 0;
-
-std::map<uint32_t, boost::shared_ptr<Ray>> StaticFactory::sRayMap;
-uint32_t StaticFactory::sRayCounter = 0;
-std::map<uint32_t, boost::shared_ptr<CameraPersp>> StaticFactory::sCameraMap;
-uint32_t StaticFactory::sCameraCounter = 0;
-
-
-//
-// Ray
-Wrapped<Ray> StaticFactory::createRay(){
-  Wrapped<Ray> tuple;
-  tuple.id = sRayCounter++;
-  tuple.value = boost::shared_ptr<Ray>( new Ray() );
-  
-  // Store
-  sRayMap[tuple.id] = tuple.value;
-  
-  return tuple;
-}
-
-boost::shared_ptr<Ray> StaticFactory::getRay( uint32_t id ){
-  return sRayMap[id];
-}
-
-uint32_t StaticFactory::putRay(Ray &ray){
-  uint32_t id = sRayCounter++;
-  boost::shared_ptr<Ray> rayPtr(new Ray(ray));
-  sRayMap[id] = rayPtr;
-  return id;
-}
-
-//
-// Camera
-Wrapped<CameraPersp> StaticFactory::createCamera(){
-  Wrapped<CameraPersp> tuple;
-  tuple.id = sCameraCounter++;
-  
-  // Use Perspective camera as default for now...
-  tuple.value = boost::shared_ptr<CameraPersp>( new CameraPersp() );
-  
-  // Store
-  sCameraMap[tuple.id] = tuple.value;
-  
-  return tuple;
-}
-
-boost::shared_ptr<CameraPersp> StaticFactory::getCamera( uint32_t id ){
-  return sCameraMap[id];
-}
-
   
 } // namespace

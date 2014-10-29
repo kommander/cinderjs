@@ -111,13 +111,6 @@ namespace cjs {
         }
       }
     
-      static Wrapped<cinder::Ray> createRay();
-      static boost::shared_ptr<cinder::Ray> getRay( uint32_t id );
-      static uint32_t putRay(cinder::Ray &ray);
-    
-      static Wrapped<cinder::CameraPersp> createCamera();
-      static boost::shared_ptr<cinder::CameraPersp> getCamera( uint32_t id );
-    
       // TODO:
       // To store objects that are created elsewhere
       // and have to be referenced by JS
@@ -130,10 +123,6 @@ namespace cjs {
       static std::map<uint32_t, boost::any> _sObjectMap;
       static uint32_t _sObjectCounter;
     
-      static std::map<uint32_t, boost::shared_ptr<cinder::Ray>> sRayMap;
-      static uint32_t sRayCounter;
-      static std::map<uint32_t, boost::shared_ptr<cinder::CameraPersp>> sCameraMap;
-      static uint32_t sCameraCounter;
   };
   
 } // namespace

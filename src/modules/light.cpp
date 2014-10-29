@@ -190,36 +190,6 @@ void LightModule::setSpecular(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return;
 }
 
-//
-// TODO: If the Light object is not destroyed explicitly, it will float forever
-//       -> Use an object wrapper for the id which is returned from "create",
-//          and delete the referenced light when it is destroyed
-//          (Why not use full object binding? Because it's too much overhead in wrapping/unwrapping
-//          for real time drawing applications)
-void LightModule::destroy(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  v8::Isolate* isolate = args.GetIsolate();
-  v8::HandleScope scope(isolate);
-
-  if(!args[0].IsEmpty()){
-    uint32_t id = args[0]->ToUint32()->Value();
-    
-    boost::shared_ptr<Light> light = StaticFactory::get<Light>(id);
-    
-    if(!light){
-      return;
-    }
-    
-    #ifdef DEBUG_LIGHT_MODULE
-    std::cout << "light destroy " << to_string(id) << std::endl;
-    #endif
-    
-    // TODO:
-    //StaticFactory::removeLight(id)
-  }
-  
-  return;
-}
-
 void LightModule::lookAt(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
@@ -308,7 +278,7 @@ void LightModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   Handle<ObjectTemplate> lightTemplate = ObjectTemplate::New(getIsolate());
   
   lightTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "create"), v8::FunctionTemplate::New(getIsolate(), create));
-  lightTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "destroy"), v8::FunctionTemplate::New(getIsolate(), destroy));
+  
   lightTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "enable"), v8::FunctionTemplate::New(getIsolate(), enable));
   lightTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "disable"), v8::FunctionTemplate::New(getIsolate(), disable));
   
