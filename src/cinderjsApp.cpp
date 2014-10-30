@@ -430,8 +430,12 @@ void CinderjsApp::v8RenderThread(){
       if(sConsoleActive){
         Vec2f cPos;
         // TODO: this still fails sometimes on shutdown
-        cPos.y = getWindowHeight();
-        AppConsole::draw( cPos );
+        try {
+          cPos.y = getWindowHeight();
+          AppConsole::draw( cPos );
+        } catch ( std::exception &e ){
+          // don't draw console if window is not available
+        }
       }
       
       v8Frames++;
