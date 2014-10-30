@@ -33,8 +33,6 @@
 #include "cinder/Ray.h"
 #include "cinder/Camera.h"
 
-#include "node_object_wrap.h"
-
 #include "v8.h"
 
 //
@@ -45,26 +43,59 @@
 
 namespace cjs {
   
-   struct FactorySettings {
+  struct FactorySettings {
     uint16_t maxObjects = 4096;
   };
   
   class StaticFactory {
-  
-   template<class T>
-    class Wrapper : public node::ObjectWrap {
+    
+    //
+    // FIXME: Leaking memory
+    template<class T>
+    class Wrapper {
       public:
       uint32_t id;
       boost::shared_ptr<T> value;
       
-      void _weak( v8::Isolate* isolate ){
-        try {
-          StaticFactory::remove<T>( isolate, id );
-        } catch( std::exception ){
-          std::cout << "Wrapper remove error" << std::endl;
+      ~Wrapper(){
+        if(!handle_.IsEmpty() && handle_.IsWeak()){
+          handle_.ClearWeak();
+          handle_.Reset();
         }
+        value.reset();
       }
       
+      inline v8::Persistent<v8::Object>& persistent() {
+        return handle_;
+      }
+      
+      inline void Wrap(v8::Handle<v8::Object> handle) {
+        assert(persistent().IsEmpty());
+        assert(handle->InternalFieldCount() > 0);
+        handle->SetAlignedPointerInInternalField(0, this);
+        handle_.Reset(v8::Isolate::GetCurrent(), handle);
+        MakeWeak();
+      }
+      
+      private:
+      inline void MakeWeak(void) {
+        persistent().SetWeak(this, WeakCallback);
+        persistent().MarkIndependent();
+      }
+      
+      template<class TT>
+      static void WeakCallback(const v8::WeakCallbackData<v8::Object, Wrapper<TT>>& data) {
+        v8::Isolate* isolate = data.GetIsolate();
+        v8::HandleScope scope(isolate);
+        Wrapper<TT>* wrap = data.GetParameter();
+        assert(wrap->handle_.IsNearDeath());
+        assert(data.GetValue() == v8::Local<v8::Object>::New(isolate, wrap->handle_));
+        wrap->handle_.Reset();
+        StaticFactory::remove<TT>( isolate, wrap->id );
+        //delete wrap;
+      }
+
+      v8::Persistent<v8::Object> handle_;
     };
     
     public:
@@ -75,18 +106,18 @@ namespace cjs {
     
       template<class T>
       static v8::Handle<v8::Object> create( v8::Isolate* isolate ){
-        return put( isolate, new T() );
+        return put( isolate, boost::shared_ptr<T>(new T()) );
       }
     
       template<class T>
-      static v8::Handle<v8::Object> put( v8::Isolate* isolate, T* value ){
+      static v8::Handle<v8::Object> put( v8::Isolate* isolate, boost::shared_ptr<T> value ){
         v8::EscapableHandleScope scope(isolate);
         
         boost::shared_ptr<Wrapper<T>> tuple( new Wrapper<T>() );
         
         // TODO: Replace with _getId()
         tuple->id = _sObjectCounter++;
-        tuple->value = boost::shared_ptr<T>( value );
+        tuple->value = value;
         
         v8::Local<v8::ObjectTemplate> obj = v8::ObjectTemplate::New();
         obj->SetInternalFieldCount(1);
@@ -126,6 +157,7 @@ namespace cjs {
           isolate->AdjustAmountOfExternalAllocatedMemory(-sizeof(*proxy));
           wrap.clear();
           _sObjectMap.erase(id);
+          proxy.reset();
         }
         // Todo: release id for re-use
       }

@@ -157,7 +157,7 @@ void CameraModule::generateRay(const v8::FunctionCallbackInfo<v8::Value>& args) 
     // Args u, v, aspect ration
     Ray ray = cam->generateRay(args[1]->ToNumber()->Value(), args[2]->ToNumber()->Value(), args[3]->ToNumber()->Value());
     
-    Local<Object> idHolder = StaticFactory::put<Ray>(isolate, &ray);
+    Local<Object> idHolder = StaticFactory::put<Ray>(isolate, boost::shared_ptr<Ray>(new Ray(ray)));
     args.GetReturnValue().Set(idHolder);
     
   }

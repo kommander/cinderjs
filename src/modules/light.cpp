@@ -47,7 +47,7 @@ void LightModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
 
   uint32_t type = args[0]->ToUint32()->Value();
   
-  Local<Object> idHolder = StaticFactory::put<Light>( isolate, new Light(type, sLightIds++) );
+  Local<Object> idHolder = StaticFactory::put<Light>( isolate, boost::shared_ptr<Light>(new Light(type, sLightIds++)) );
   
   #ifdef DEBUG_LIGHT_MODULE
   std::cout << "created light " << to_string(id) << "/" << to_string(sLightObjects.size()) << std::endl;

@@ -127,7 +127,6 @@
 		9E0BDE2019FA8FB40036038F /* material.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = material.hpp; path = ../src/modules/material.hpp; sourceTree = "<group>"; };
 		9E51343B19FFE6CF004CF6C5 /* cinderjs copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "cinderjs copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E51343C19FFE6CF004CF6C5 /* cinderjs copy2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "cinderjs copy2-Info.plist"; path = "/Users/sebastian/Dropbox/+Projects/cinderjs/xcode/cinderjs copy2-Info.plist"; sourceTree = "<absolute>"; };
-		9E51343D1A00776B004CF6C5 /* node_object_wrap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = node_object_wrap.h; path = ../src/node_object_wrap.h; sourceTree = "<group>"; };
 		9E51343E1A0125E4004CF6C5 /* ray_picking.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ray_picking.js; path = ../examples/ray_picking.js; sourceTree = "<group>"; };
 		9E7F70F619EDD441002DDCFF /* libicudata.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicudata.a; path = ../v8/xcodebuild/Release/libicudata.a; sourceTree = "<group>"; };
 		9E7F70F719EDD441002DDCFF /* libicui18n.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicui18n.a; path = ../v8/xcodebuild/Release/libicui18n.a; sourceTree = "<group>"; };
@@ -307,7 +306,6 @@
 				BA220610E72E4B7FA515FBCC /* Resources.h */,
 				24A9E79E5BC84C47B0A6A38B /* cinderjs_Prefix.pch */,
 				9ECCE56919FD962800C37522 /* StaticFactory.hpp */,
-				9E51343D1A00776B004CF6C5 /* node_object_wrap.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
