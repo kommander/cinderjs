@@ -31,5 +31,6 @@ namespace cjs {
   
 std::map<uint32_t, boost::any> StaticFactory::_sObjectMap;
 uint32_t StaticFactory::_sObjectCounter = 0;
+FactoryStats StaticFactory::_stats;
   
 } // namespace

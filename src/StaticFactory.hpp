@@ -47,10 +47,16 @@ namespace cjs {
     uint16_t maxObjects = 4096;
   };
   
+  struct FactoryStats {
+    int puts;
+    int removes;
+  };
+  
   class StaticFactory {
     
     //
     // FIXME: Leaking memory
+    // FIXME: Not thread safe
     template<class T>
     class Wrapper {
       public:
@@ -116,7 +122,7 @@ namespace cjs {
         boost::shared_ptr<Wrapper<T>> tuple( new Wrapper<T>() );
         
         // TODO: Replace with _getId()
-        tuple->id = _sObjectCounter++;
+        tuple->id = ++_sObjectCounter;
         tuple->value = value;
         
         v8::Local<v8::ObjectTemplate> obj = v8::ObjectTemplate::New();
@@ -128,7 +134,17 @@ namespace cjs {
         tuple->Wrap(idHolder);
         
         // Store
-        _sObjectMap[tuple->id] = tuple;
+        std::pair<uint32_t, boost::any> pair(tuple->id, tuple);
+        if(_sObjectMap.insert(pair).second == false){
+          std::cout << "Could not insert into _sObjectMap." << std::endl;
+          pair.second.clear();
+          tuple.reset();
+          v8::Local<v8::Boolean> undef = v8::Boolean::New(isolate, false);
+          return scope.Escape( undef.As<v8::Object>() );
+        }
+        
+        // stats
+        _stats.puts++;
         
         // Todo: check if needed
         isolate->AdjustAmountOfExternalAllocatedMemory(sizeof(*tuple));
@@ -160,6 +176,18 @@ namespace cjs {
           proxy.reset();
         }
         // Todo: release id for re-use
+        
+        // stats
+        _stats.removes++;
+        
+      }
+    
+      static unsigned long size(){
+        return _sObjectMap.size();
+      }
+    
+      static FactoryStats& getStats(){
+        return _stats;
       }
     
     private:
@@ -168,6 +196,7 @@ namespace cjs {
       static std::map<uint32_t, boost::any> _sObjectMap;
       static uint32_t _sObjectCounter;
       static FactorySettings _settings;
+      static FactoryStats _stats;
   };
   
 } // namespace
