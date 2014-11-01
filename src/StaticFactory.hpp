@@ -53,6 +53,7 @@ namespace cjs {
   };
   
   class StaticFactory {
+    // TODO: (GC loop (with Timer)) GC finish callback to check for orphaned handles and remove its wraps
     
     //
     // FIXME: Leaking memory
