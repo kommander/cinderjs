@@ -19,6 +19,8 @@ app.draw(function(timePassed, mx, my){
 
   gl.clear( 0.1, 0.1, 0.1 );
 
+  gl.enableDepthRead();
+
   gl.pushMatrices();
   gl.translate(ctxSize.w / 2, ctxSize.h / 2, 0);
     
@@ -42,7 +44,7 @@ app.draw(function(timePassed, mx, my){
   } 
 
   gl.popMatrices();
-
+  gl.disableDepthRead();
 });
 
 app.on('resize', function(w, h){
