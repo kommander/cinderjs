@@ -845,6 +845,8 @@ void CinderjsApp::mouseDown( MouseEvent event )
  */
 void CinderjsApp::keyDown( KeyEvent event )
 {
+  // TODO: Add default failsafe keys (ESC1x exit fullscreen, ESC2x bring up console)
+  
   BufferedEvent evt(new BufferedEventHolder());
   evt->type = CJS_KEY_DOWN;
   evt->kEvt = event;
