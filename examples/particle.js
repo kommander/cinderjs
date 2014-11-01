@@ -12,6 +12,7 @@ var drawMethod = 1;
 var lastParticle;
 var mouse = new Vec2();
 var mouseActive = true;
+var vertSync = gl.isVerticalSyncEnabled();
 
 var particles = [];
 function generateParticles( amt ){
@@ -48,6 +49,8 @@ var cubeSizeBuf = cubeSize;
 //       in a convinience js object when modules have arrived...
 var textId = utils.createSimpleText("Particles: 2000");
 utils.setSimpleTextPosition(textId, 0, 40, 0);
+var textId2 = utils.createSimpleText("Vertical Sync: " + vertSync);
+utils.setSimpleTextPosition(textId2, 0, 60, 0);
 
 // Create example material
 var mat = new Material();
@@ -124,6 +127,7 @@ var loop = function(timePassed, mx, my){
   
   // Draw the earlier created text object...
   utils.drawSimpleText(textId);
+  utils.drawSimpleText(textId2);
 }
 
 // Register draw loop (executed each frame, allows drawing to window)
@@ -152,8 +156,16 @@ app.on('keydown', function( evt ){
     quit();
   } else if(evt.charCode == 118) { // V
     toggleV8Stats();
+  } else if(evt.charCode == 115) { // S
+    if(vertSync){
+      gl.disableVerticalSync();
+    } else {
+      gl.enableVerticalSync();
+    }
+    vertSync = !vertSync;
+    utils.updateSimpleText(textId2, "Vertical Sync: " + vertSync);
   }
-
+  
 });
 
 // Add some particles

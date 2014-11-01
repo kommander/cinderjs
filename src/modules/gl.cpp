@@ -272,6 +272,30 @@ void GLModule::disableDepthWrite(const v8::FunctionCallbackInfo<v8::Value>& args
 /**
  *
  */
+void GLModule::enableVerticalSync(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::enableVerticalSync();
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::disableVerticalSync(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::disableVerticalSync();
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::isVerticalSyncEnabled(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  args.GetReturnValue().Set(gl::isVerticalSyncEnabled());
+  return;
+}
+
+/**
+ *
+ */
 void GLModule::drawCube(const v8::FunctionCallbackInfo<v8::Value>& args) {
   bufVec3f_1.x = args[0]->NumberValue();
   bufVec3f_1.y = args[1]->NumberValue();
@@ -388,6 +412,10 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "disableDepthRead"), v8::FunctionTemplate::New(getIsolate(), disableDepthRead));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "enableDepthWrite"), v8::FunctionTemplate::New(getIsolate(), enableDepthWrite));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "disableDepthWrite"), v8::FunctionTemplate::New(getIsolate(), disableDepthWrite));
+  
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "enableVerticalSync"), v8::FunctionTemplate::New(getIsolate(), enableVerticalSync));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "disableVerticalSync"), v8::FunctionTemplate::New(getIsolate(), disableVerticalSync));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "isVerticalSyncEnabled"), v8::FunctionTemplate::New(getIsolate(), isVerticalSyncEnabled));
   
   
   // Primitives

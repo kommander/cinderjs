@@ -73,6 +73,9 @@ class GLModule : public PipeModule {
     static void disableDepthRead(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void enableDepthWrite(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void disableDepthWrite(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void enableVerticalSync(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void disableVerticalSync(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void isVerticalSyncEnabled(const v8::FunctionCallbackInfo<v8::Value>& args);
   
   private:
     //
