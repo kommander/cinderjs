@@ -69,7 +69,7 @@ std::string testScript = "                                                  \
        if(mat === false){                                                   \
          log('Material could not be created');                              \
        }                                                                    \
-       destroy(mat.id);                                                     \
+       /*destroy(mat.id);*/                                                 \
      }                                                                      \
   log('done');                                                              \
 ";
@@ -96,11 +96,11 @@ int main(int argc, const char * argv[]) {
   v8::V8::InitializePlatform(platform);
   V8::Initialize();
   
-  StaticFactory::initialize();
-  
   // Create a new Isolate and make it the current one.
   Isolate* isolate = Isolate::New();
   Isolate::Scope isolate_scope(isolate);
+  
+  StaticFactory::initialize();
   
   // Create a stack-allocated handle scope.
   HandleScope handle_scope(isolate);
