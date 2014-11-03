@@ -42,7 +42,8 @@ class CameraModule : public PipeModule {
     }
   
     static void create(const v8::FunctionCallbackInfo<v8::Value>& args);
-  
+    static void destroy(const v8::FunctionCallbackInfo<v8::Value>& args);
+    
     static void setEyePoint(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void lookAt(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void setViewDirection(const v8::FunctionCallbackInfo<v8::Value>& args);

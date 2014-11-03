@@ -48,6 +48,20 @@ void CameraModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return;
 }
 
+void CameraModule::destroy(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  if(!args[0].IsEmpty()){
+    uint32_t id = args[0]->ToUint32()->Value();
+    
+    StaticFactory::remove<CameraPersp>(isolate, id);
+  }
+  
+  return;
+}
+
+
 void CameraModule::setEyePoint(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
@@ -259,6 +273,7 @@ void CameraModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   Handle<ObjectTemplate> cameraTemplate = ObjectTemplate::New(getIsolate());
   
   cameraTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "create"), v8::FunctionTemplate::New(getIsolate(), create));
+  cameraTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "destroy"), v8::FunctionTemplate::New(getIsolate(), destroy));
   
   cameraTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setPerspective"), v8::FunctionTemplate::New(getIsolate(), setPerspective));
   cameraTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setEyePoint"), v8::FunctionTemplate::New(getIsolate(), setEyePoint));

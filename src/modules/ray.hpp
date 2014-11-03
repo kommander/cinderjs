@@ -43,7 +43,8 @@ class RayModule : public PipeModule {
     }
   
     static void create(const v8::FunctionCallbackInfo<v8::Value>& args);
-    
+    static void destroy(const v8::FunctionCallbackInfo<v8::Value>& args);
+     
     static void setOrigin(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void getOrigin(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void setDirection(const v8::FunctionCallbackInfo<v8::Value>& args);

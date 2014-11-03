@@ -56,6 +56,19 @@ void LightModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return;
 }
 
+void LightModule::destroy(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  if(!args[0].IsEmpty()){
+    uint32_t id = args[0]->ToUint32()->Value();
+    
+    StaticFactory::remove<Light>(isolate, id);
+  }
+  
+  return;
+}
+
 void LightModule::enable(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
@@ -277,6 +290,7 @@ void LightModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   Handle<ObjectTemplate> lightTemplate = ObjectTemplate::New(getIsolate());
   
   lightTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "create"), v8::FunctionTemplate::New(getIsolate(), create));
+  lightTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "destroy"), v8::FunctionTemplate::New(getIsolate(), destroy));
   
   lightTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "enable"), v8::FunctionTemplate::New(getIsolate(), enable));
   lightTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "disable"), v8::FunctionTemplate::New(getIsolate(), disable));

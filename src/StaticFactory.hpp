@@ -45,6 +45,7 @@ namespace cjs {
   
   struct FactorySettings {
     uint16_t maxObjects = 4096;
+    bool useV8GC = true;
   };
   
   struct FactoryStats {
@@ -106,8 +107,8 @@ namespace cjs {
     
     public:
     
-      static void initialize(){
-        
+      static void initialize( FactorySettings settings ){
+        _settings = settings;
       };
     
       template<class T>
