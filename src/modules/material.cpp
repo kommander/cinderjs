@@ -42,17 +42,25 @@ ColorA MaterialModule::sBufColorA_1;
 void MaterialModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
-
-  Local<Object> idHolder = StaticFactory::create<Material>( isolate );
   
-  //std::cout << "created material material " << to_string(id) << "/" << to_string(sMaterialObjects.size()) << std::endl;
+  StaticFactory::create<Material>( isolate, args[0]->ToObject() );
   
-  assert(idHolder->IsObject());
-  assert(idHolder->Has(v8::String::NewFromUtf8(isolate, "id")));
-  
-  args.GetReturnValue().Set(idHolder);
   return;
 }
+
+void MaterialModule::destroy(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  if(!args[0].IsEmpty()){
+    uint32_t id = args[0]->ToUint32()->Value();
+    
+    StaticFactory::remove<Material>(isolate, id);
+  }
+  
+  return;
+}
+
 
 void MaterialModule::apply(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
@@ -214,6 +222,7 @@ void MaterialModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   Handle<ObjectTemplate> materialTemplate = ObjectTemplate::New(getIsolate());
   
   materialTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "create"), v8::FunctionTemplate::New(getIsolate(), create));
+  materialTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "destroy"), v8::FunctionTemplate::New(getIsolate(), destroy));
  
   materialTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "apply"), v8::FunctionTemplate::New(getIsolate(), apply));
   materialTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setAmbient"), v8::FunctionTemplate::New(getIsolate(), setAmbient));

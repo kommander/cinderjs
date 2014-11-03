@@ -40,14 +40,8 @@ void addMaterial(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope handle_scope(isolate);
   
-  Local<Object> idHolder = StaticFactory::put<Material>(isolate, boost::shared_ptr<Material>(new Material()));
+  StaticFactory::put<Material>(isolate, boost::shared_ptr<Material>(new Material()), args[0]->ToObject());
   
-  assert(idHolder->IsObject());
-  assert(idHolder->Has(v8::String::NewFromUtf8(isolate, "id")));
-  
-  //std::cout << "Creating Material" << std::endl;
-  
-  args.GetReturnValue().Set(idHolder);
   return;
 }
 
@@ -64,8 +58,10 @@ void destroy(const v8::FunctionCallbackInfo<v8::Value>& args) {
 std::string testScript = "                                                  \
   log('Starting');                                                          \
      var mat;                                                               \
-     for(var i = 0; i < 20000; i++){                                        \
-       mat = addMaterial();                                                 \
+     for(var i = 0; i < 100000; i++){                                       \
+       mat = {};                                                            \
+       addMaterial(mat);                                                    \
+       /*log(mat.id);*/                                                     \
        if(mat === false){                                                   \
          log('Material could not be created');                              \
        }                                                                    \
@@ -87,7 +83,7 @@ void runScript(Isolate* isolate, Handle<Context> ctx, std::string scriptStr){
   Local<Script> script = Script::Compile(source);
   
   // Run the script to get the result.
-  Local<Value> result = script->Run();
+  script->Run();
 }
 
 int main(int argc, const char * argv[]) {
@@ -159,6 +155,8 @@ int main(int argc, const char * argv[]) {
   std::cout << "After Dispose Factory size: " << std::to_string(StaticFactory::size()) << std::endl;
   std::cout << std::to_string(StaticFactory::getStats().puts) << " puts / "
     << std::to_string(StaticFactory::getStats().removes) << " removes" << std::endl;
+  
+  std::cin.get();
   
   return 0;
 }

@@ -45,15 +45,14 @@ void LightModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
 
-  uint32_t type = args[0]->ToUint32()->Value();
+  uint32_t type = args[1]->ToUint32()->Value();
   
-  Local<Object> idHolder = StaticFactory::put<Light>( isolate, boost::shared_ptr<Light>(new Light(type, sLightIds++)) );
+  StaticFactory::put<Light>( isolate, boost::shared_ptr<Light>(new Light(type, sLightIds++)), args[0]->ToObject() );
   
   #ifdef DEBUG_LIGHT_MODULE
   std::cout << "created light " << to_string(id) << "/" << to_string(sLightObjects.size()) << std::endl;
   #endif
   
-  args.GetReturnValue().Set(idHolder);
   return;
 }
 

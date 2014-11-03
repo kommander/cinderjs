@@ -69,6 +69,7 @@ namespace cjs {
           handle_.ClearWeak();
           handle_.Reset();
         }
+        handle_.Reset();
         value.reset();
       }
       
@@ -78,8 +79,7 @@ namespace cjs {
       
       inline void Wrap(v8::Handle<v8::Object> handle) {
         assert(persistent().IsEmpty());
-        assert(handle->InternalFieldCount() > 0);
-        handle->SetAlignedPointerInInternalField(0, this);
+        assert(handle->IsObject());
         handle_.Reset(v8::Isolate::GetCurrent(), handle);
         MakeWeak();
       }
@@ -99,7 +99,6 @@ namespace cjs {
         assert(data.GetValue() == v8::Local<v8::Object>::New(isolate, wrap->handle_));
         wrap->handle_.Reset();
         StaticFactory::remove<TT>( isolate, wrap->id );
-        //delete wrap;
       }
 
       v8::Persistent<v8::Object> handle_;
@@ -112,36 +111,30 @@ namespace cjs {
       };
     
       template<class T>
-      static v8::Handle<v8::Object> create( v8::Isolate* isolate ){
-        return put( isolate, boost::shared_ptr<T>(new T()) );
+      static void create( v8::Isolate* isolate, v8::Handle<v8::Object> idHolder ){
+        put( isolate, boost::shared_ptr<T>(new T()), idHolder );
       }
     
       template<class T>
-      static v8::Handle<v8::Object> put( v8::Isolate* isolate, boost::shared_ptr<T> value ){
-        v8::EscapableHandleScope scope(isolate);
-        
+      static void put( v8::Isolate* isolate, boost::shared_ptr<T> value, v8::Handle<v8::Object> idHolder ){
         boost::shared_ptr<Wrapper<T>> tuple( new Wrapper<T>() );
         
         // TODO: Replace with _getId()
-        tuple->id = ++_sObjectCounter;
+        uint32_t id = ++_sObjectCounter;
+        tuple->id = id;
         tuple->value = value;
-        
-        v8::Local<v8::ObjectTemplate> obj = v8::ObjectTemplate::New();
-        obj->SetInternalFieldCount(1);
-        
-        v8::Local<v8::Object> idHolder = obj->NewInstance();
-        idHolder->Set(v8::String::NewFromUtf8(isolate, "id"), v8::Uint32::New(isolate, tuple->id));
+
+        idHolder->Set(v8::String::NewFromUtf8(isolate, "id"), v8::Uint32::New(isolate, id));
         
         tuple->Wrap(idHolder);
         
         // Store
-        std::pair<uint32_t, boost::any> pair(tuple->id, tuple);
+        std::pair<uint32_t, boost::any> pair(id, tuple);
         if(_sObjectMap.insert(pair).second == false){
           std::cout << "Could not insert into _sObjectMap." << std::endl;
           pair.second.clear();
           tuple.reset();
-          v8::Local<v8::Boolean> undef = v8::Boolean::New(isolate, false);
-          return scope.Escape( undef.As<v8::Object>() );
+          return;
         }
         
         // stats
@@ -150,7 +143,6 @@ namespace cjs {
         // Todo: check if needed
         isolate->AdjustAmountOfExternalAllocatedMemory(sizeof(*tuple));
         
-        return scope.Escape(idHolder);
       }
     
       template<class T>
@@ -168,18 +160,21 @@ namespace cjs {
     
       template<class T>
       static void remove( v8::Isolate* isolate, uint32_t id ){
+        
         boost::any wrap = _sObjectMap[id];
         if(!wrap.empty()){
+          v8::HandleScope scope(isolate);
           boost::shared_ptr<Wrapper<T>> proxy = boost::any_cast<boost::shared_ptr<Wrapper<T>>>(wrap);
+
           isolate->AdjustAmountOfExternalAllocatedMemory(-sizeof(*proxy));
-          wrap.clear();
           _sObjectMap.erase(id);
           proxy.reset();
+          
+          // stats
+          _stats.removes++;
+        
         }
         // Todo: release id for re-use
-        
-        // stats
-        _stats.removes++;
         
       }
     

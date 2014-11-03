@@ -43,9 +43,8 @@ void RayModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
 
-  Local<Object> idHolder = StaticFactory::create<Ray>( isolate );
+  StaticFactory::create<Ray>( isolate, args[0]->ToObject() );
   
-  args.GetReturnValue().Set(idHolder);
   return;
 }
 

@@ -42,6 +42,7 @@ class MaterialModule : public PipeModule {
     }
   
     static void create(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void destroy(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void apply(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void setAmbient(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void setDiffuse(const v8::FunctionCallbackInfo<v8::Value>& args);
