@@ -1,3 +1,5 @@
+var text = require('text').text;
+var gl = require('gl').gl;
 var Vec2 = require('./lib/vec2.js');
 var Material = require('material').Material;
 
@@ -47,10 +49,10 @@ var cubeSizeBuf = cubeSize;
 
 // NOTE: Utility methods like these can be wrapped
 //       in a convinience js object when modules have arrived...
-var textId = utils.createSimpleText("Particles: 2000");
-utils.setSimpleTextPosition(textId, 0, 40, 0);
-var textId2 = utils.createSimpleText("Vertical Sync: " + vertSync);
-utils.setSimpleTextPosition(textId2, 0, 60, 0);
+var textId = text.createSimpleText("Particles: 2000");
+text.setSimpleTextPosition(textId, 0, 40, 0);
+var textId2 = text.createSimpleText("Vertical Sync: " + vertSync);
+text.setSimpleTextPosition(textId2, 0, 60, 0);
 
 // Create example material
 var mat = new Material();
@@ -126,8 +128,8 @@ var loop = function(timePassed, mx, my){
   gl.disable(gl.LIGHTING);
   
   // Draw the earlier created text object...
-  utils.drawSimpleText(textId);
-  utils.drawSimpleText(textId2);
+  text.drawSimpleText(textId);
+  text.drawSimpleText(textId2);
 }
 
 // Register draw loop (executed each frame, allows drawing to window)
@@ -143,10 +145,10 @@ app.on('keydown', function( evt ){
     toggleAppConsole();
   } else if(evt.charCode == 109) { // M
     generateParticles(1000);
-    utils.updateSimpleText(textId, "Particles: " + particles.length);
+    text.updateSimpleText(textId, "Particles: " + particles.length);
   } else if(evt.charCode == 108) { // L
     removeParticles(1000);
-    utils.updateSimpleText(textId, "Particles: " + particles.length);
+    text.updateSimpleText(textId, "Particles: " + particles.length);
   } else if(evt.charCode == 114) { // R
     drawMethod++
     if(drawMethod > 2){
@@ -163,7 +165,7 @@ app.on('keydown', function( evt ){
       gl.enableVerticalSync();
     }
     vertSync = !vertSync;
-    utils.updateSimpleText(textId2, "Vertical Sync: " + vertSync);
+    text.updateSimpleText(textId2, "Vertical Sync: " + vertSync);
   }
   
 });

@@ -47,14 +47,16 @@ namespace cjs {
         mod->setIsolate( *mIsolate );
         mod->setContext(&pContext);
         mod->setApp(this);
-        mod->loadGlobalJS( mGlobal );
+        //mod->loadGlobalJS( mGlobal );
         MODULES.push_back( mod );
+        NAMED_MODULES[mod->getName()] = mod;
         return true;
       }
     
       static bool shutdownInProgress;
     protected:
       std::vector<boost::shared_ptr<PipeModule>> MODULES;
+      static std::map<std::string, boost::shared_ptr<PipeModule>> NAMED_MODULES;
       v8::Isolate* mIsolate;
       v8::Local<v8::ObjectTemplate> mGlobal;
       v8::Persistent<v8::Context> pContext;

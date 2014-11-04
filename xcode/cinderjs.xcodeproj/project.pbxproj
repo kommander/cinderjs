@@ -55,7 +55,6 @@
 		9E51342619FFE6CF004CF6C5 /* material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1F19FA8FB40036038F /* material.cpp */; };
 		9E51342719FFE6CF004CF6C5 /* cinderjsApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B26520EF291B4336BEC87FD7 /* cinderjsApp.cpp */; };
 		9E51342819FFE6CF004CF6C5 /* ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCE56119FD7B4500C37522 /* ray.cpp */; };
-		9E51342919FFE6CF004CF6C5 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED123BF19F6EE9F007786A6 /* utils.cpp */; };
 		9E51342A19FFE6CF004CF6C5 /* console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E4219F0390000291CDE /* console.cpp */; };
 		9E51342B19FFE6CF004CF6C5 /* TextHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED123BD19F6EB23007786A6 /* TextHelpers.cpp */; };
 		9E51342C19FFE6CF004CF6C5 /* fs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED123DC19F7ED4E007786A6 /* fs.cpp */; };
@@ -70,6 +69,11 @@
 		9E51343619FFE6CF004CF6C5 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B10FF439BC000DE1D7 /* AudioUnit.framework */; };
 		9E51343719FFE6CF004CF6C5 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
 		9E51343F1A0125E4004CF6C5 /* ray_picking.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E51343E1A0125E4004CF6C5 /* ray_picking.js */; };
+		9E5B93CA1A088A7A00B5BDF4 /* CinderAppBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B93C91A088A7A00B5BDF4 /* CinderAppBase.cpp */; };
+		9E5B93CD1A089AF400B5BDF4 /* text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B93CC1A089AF400B5BDF4 /* text.cpp */; };
+		9E5B93D11A089C5B00B5BDF4 /* gl.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E5B93CE1A089C5B00B5BDF4 /* gl.js */; };
+		9E5B93D21A089C5B00B5BDF4 /* text.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E5B93CF1A089C5B00B5BDF4 /* text.js */; };
+		9E5B93D31A089C5B00B5BDF4 /* console.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E5B93D01A089C5B00B5BDF4 /* console.js */; };
 		9E9B3E3219F002C200291CDE /* AppConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3019F002C200291CDE /* AppConsole.cpp */; };
 		9E9B3E3C19F022C000291CDE /* app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3819F022C000291CDE /* app.cpp */; };
 		9E9B3E3D19F022C000291CDE /* gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3A19F022C000291CDE /* gl.cpp */; };
@@ -86,7 +90,6 @@
 		9ECCE56D19FDB56100C37522 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCE56B19FDB56100C37522 /* camera.cpp */; };
 		9ECCE56F19FDC71F00C37522 /* camera.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ECCE56E19FDC71F00C37522 /* camera.js */; };
 		9ED123BE19F6EB23007786A6 /* TextHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED123BD19F6EB23007786A6 /* TextHelpers.cpp */; };
-		9ED123C119F6EE9F007786A6 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED123BF19F6EE9F007786A6 /* utils.cpp */; };
 		9ED123C419F72B02007786A6 /* cinder.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123C319F72B02007786A6 /* cinder.js */; };
 		9ED123C919F72D4F007786A6 /* test.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123C819F72D4F007786A6 /* test.js */; };
 		9ED123CB19F7309A007786A6 /* prebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123CA19F7309A007786A6 /* prebuild.sh */; };
@@ -128,6 +131,12 @@
 		9E51343B19FFE6CF004CF6C5 /* cinderjs copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "cinderjs copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E51343C19FFE6CF004CF6C5 /* cinderjs copy2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "cinderjs copy2-Info.plist"; path = "/Users/sebastian/Dropbox/+Projects/cinderjs/xcode/cinderjs copy2-Info.plist"; sourceTree = "<absolute>"; };
 		9E51343E1A0125E4004CF6C5 /* ray_picking.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ray_picking.js; path = ../examples/ray_picking.js; sourceTree = "<group>"; };
+		9E5B93C91A088A7A00B5BDF4 /* CinderAppBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CinderAppBase.cpp; path = ../src/CinderAppBase.cpp; sourceTree = "<group>"; };
+		9E5B93CB1A089AF400B5BDF4 /* text.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = text.hpp; path = ../src/modules/text.hpp; sourceTree = "<group>"; };
+		9E5B93CC1A089AF400B5BDF4 /* text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = text.cpp; path = ../src/modules/text.cpp; sourceTree = "<group>"; };
+		9E5B93CE1A089C5B00B5BDF4 /* gl.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = gl.js; path = ../lib/gl.js; sourceTree = "<group>"; };
+		9E5B93CF1A089C5B00B5BDF4 /* text.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = text.js; path = ../lib/text.js; sourceTree = "<group>"; };
+		9E5B93D01A089C5B00B5BDF4 /* console.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = console.js; path = ../lib/console.js; sourceTree = "<group>"; };
 		9E7F70F619EDD441002DDCFF /* libicudata.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicudata.a; path = ../v8/xcodebuild/Release/libicudata.a; sourceTree = "<group>"; };
 		9E7F70F719EDD441002DDCFF /* libicui18n.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicui18n.a; path = ../v8/xcodebuild/Release/libicui18n.a; sourceTree = "<group>"; };
 		9E7F70F819EDD441002DDCFF /* libicuuc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicuuc.a; path = ../v8/xcodebuild/Release/libicuuc.a; sourceTree = "<group>"; };
@@ -170,8 +179,6 @@
 		9ECCE56E19FDC71F00C37522 /* camera.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = camera.js; path = ../lib/camera.js; sourceTree = "<group>"; };
 		9ED123B719F61656007786A6 /* cubes.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = cubes.js; path = ../examples/cubes.js; sourceTree = "<group>"; };
 		9ED123BD19F6EB23007786A6 /* TextHelpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextHelpers.cpp; path = ../src/utils/TextHelpers.cpp; sourceTree = "<group>"; };
-		9ED123BF19F6EE9F007786A6 /* utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = utils.cpp; path = ../src/modules/utils.cpp; sourceTree = "<group>"; };
-		9ED123C019F6EE9F007786A6 /* utils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = utils.hpp; path = ../src/modules/utils.hpp; sourceTree = "<group>"; };
 		9ED123C319F72B02007786A6 /* cinder.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = cinder.js; path = ../lib/cinder.js; sourceTree = "<group>"; };
 		9ED123C619F72B2B007786A6 /* js2c.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = js2c.py; path = ../tools/js2c.py; sourceTree = "<group>"; };
 		9ED123C819F72D4F007786A6 /* test.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = test.js; path = ../examples/test.js; sourceTree = "<group>"; };
@@ -237,6 +244,7 @@
 				9ED123BC19F6AAC7007786A6 /* utils */,
 				9E9B3E3619F022A800291CDE /* modules */,
 				B26520EF291B4336BEC87FD7 /* cinderjsApp.cpp */,
+				9E5B93C91A088A7A00B5BDF4 /* CinderAppBase.cpp */,
 				9E9B3E3E19F0233C00291CDE /* PipeModule.cpp */,
 				9E9B3E3019F002C200291CDE /* AppConsole.cpp */,
 				9ECCE56819FD962800C37522 /* StaticFactory.cpp */,
@@ -367,6 +375,9 @@
 		9E9B3E3319F0121D00291CDE /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				9E5B93CE1A089C5B00B5BDF4 /* gl.js */,
+				9E5B93CF1A089C5B00B5BDF4 /* text.js */,
+				9E5B93D01A089C5B00B5BDF4 /* console.js */,
 				9ECCE56E19FDC71F00C37522 /* camera.js */,
 				9ECCE56419FD837900C37522 /* ray.js */,
 				9EC32A6A19FB140700CECCC3 /* light.js */,
@@ -390,13 +401,13 @@
 		9E9B3E3619F022A800291CDE /* modules */ = {
 			isa = PBXGroup;
 			children = (
+				9E5B93CC1A089AF400B5BDF4 /* text.cpp */,
 				9ECCE56B19FDB56100C37522 /* camera.cpp */,
 				9ECCE56119FD7B4500C37522 /* ray.cpp */,
 				9EC32A6C19FB141B00CECCC3 /* light.cpp */,
 				9E0BDE1F19FA8FB40036038F /* material.cpp */,
 				9E0BDE0E19F803330036038F /* vm.cpp */,
 				9ED123DC19F7ED4E007786A6 /* fs.cpp */,
-				9ED123BF19F6EE9F007786A6 /* utils.cpp */,
 				9E9B3E4219F0390000291CDE /* console.cpp */,
 				9E9B3E3819F022C000291CDE /* app.cpp */,
 				9E9B3E3A19F022C000291CDE /* gl.cpp */,
@@ -407,13 +418,13 @@
 		9E9B3E3719F022B000291CDE /* modules */ = {
 			isa = PBXGroup;
 			children = (
+				9E5B93CB1A089AF400B5BDF4 /* text.hpp */,
 				9ECCE56C19FDB56100C37522 /* camera.hpp */,
 				9ECCE56219FD7B4500C37522 /* ray.hpp */,
 				9EC32A6D19FB141B00CECCC3 /* light.hpp */,
 				9E0BDE2019FA8FB40036038F /* material.hpp */,
 				9E0BDE0F19F803330036038F /* vm.hpp */,
 				9ED123DD19F7ED4E007786A6 /* fs.hpp */,
-				9ED123C019F6EE9F007786A6 /* utils.hpp */,
 				9E9B3E4319F0390000291CDE /* console.hpp */,
 				9E9B3E3919F022C000291CDE /* app.hpp */,
 				9E9B3E3B19F022C000291CDE /* gl.hpp */,
@@ -515,12 +526,15 @@
 				9E0BDE1919F9EFF70036038F /* app.js in Resources */,
 				9ED123D319F7A6AE007786A6 /* util.js in Resources */,
 				9EAF080919EDC4C600C02F65 /* README.md in Resources */,
+				9E5B93D11A089C5B00B5BDF4 /* gl.js in Resources */,
 				B6B86EEF243D496CAA6AC588 /* CinderApp.icns in Resources */,
 				9E0BDE1719F9EFA30036038F /* events.js in Resources */,
+				9E5B93D31A089C5B00B5BDF4 /* console.js in Resources */,
 				9ECCE56519FD837900C37522 /* ray.js in Resources */,
 				9E0BDE1E19F9F8F90036038F /* vec2.js in Resources */,
 				9ED123D719F7C84D007786A6 /* vm.js in Resources */,
 				9E51343F1A0125E4004CF6C5 /* ray_picking.js in Resources */,
+				9E5B93D21A089C5B00B5BDF4 /* text.js in Resources */,
 				9ED123CB19F7309A007786A6 /* prebuild.sh in Resources */,
 				9ED123D119F7A43C007786A6 /* module.js in Resources */,
 				9E0BDE1D19F9F8F90036038F /* trig.js in Resources */,
@@ -606,17 +620,18 @@
 				9ECCE56A19FD962800C37522 /* StaticFactory.cpp in Sources */,
 				9E0BDE1019F803330036038F /* vm.cpp in Sources */,
 				9E9B3E4019F0233C00291CDE /* PipeModule.cpp in Sources */,
+				9E5B93CA1A088A7A00B5BDF4 /* CinderAppBase.cpp in Sources */,
 				9EC32A6E19FB141B00CECCC3 /* light.cpp in Sources */,
 				9ECCE56D19FDB56100C37522 /* camera.cpp in Sources */,
 				9E9B3E3C19F022C000291CDE /* app.cpp in Sources */,
 				9E0BDE2119FA8FB40036038F /* material.cpp in Sources */,
 				69CC5FFAB4E1488598E5D024 /* cinderjsApp.cpp in Sources */,
 				9ECCE56319FD7B4500C37522 /* ray.cpp in Sources */,
-				9ED123C119F6EE9F007786A6 /* utils.cpp in Sources */,
 				9E9B3E4419F0390000291CDE /* console.cpp in Sources */,
 				9ED123BE19F6EB23007786A6 /* TextHelpers.cpp in Sources */,
 				9ED123DE19F7ED4E007786A6 /* fs.cpp in Sources */,
 				9E9B3E3D19F022C000291CDE /* gl.cpp in Sources */,
+				9E5B93CD1A089AF400B5BDF4 /* text.cpp in Sources */,
 				9E9B3E3219F002C200291CDE /* AppConsole.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -634,7 +649,6 @@
 				9E51342619FFE6CF004CF6C5 /* material.cpp in Sources */,
 				9E51342719FFE6CF004CF6C5 /* cinderjsApp.cpp in Sources */,
 				9E51342819FFE6CF004CF6C5 /* ray.cpp in Sources */,
-				9E51342919FFE6CF004CF6C5 /* utils.cpp in Sources */,
 				9E51342A19FFE6CF004CF6C5 /* console.cpp in Sources */,
 				9E51342B19FFE6CF004CF6C5 /* TextHelpers.cpp in Sources */,
 				9E51342C19FFE6CF004CF6C5 /* fs.cpp in Sources */,

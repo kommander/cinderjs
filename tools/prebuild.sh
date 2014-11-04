@@ -16,4 +16,7 @@ python ../tools/js2c.py     \
   ../lib/light.js           \
   ../lib/ray.js             \
   ../lib/camera.js          \
+  ../lib/gl.js              \
+  ../lib/text.js            \
+  ../lib/console.js         \
   ../lib/default_main.js    \

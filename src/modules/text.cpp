@@ -20,7 +20,7 @@
  POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "utils.hpp"
+#include "text.hpp"
 #include "AppConsole.h"
 
 using namespace std;
@@ -29,11 +29,11 @@ using namespace v8;
 
 namespace cjs {
 
-std::map<uint32_t, boost::shared_ptr<SimpleText>> UtilsModule::sTextObjects;
-uint32_t UtilsModule::sTextObjectIds = 0;
-Vec3f UtilsModule::bufVec3f_1;
+std::map<uint32_t, boost::shared_ptr<SimpleText>> TextModule::sTextObjects;
+uint32_t TextModule::sTextObjectIds = 0;
+Vec3f TextModule::bufVec3f_1;
 
-void UtilsModule::createSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void TextModule::createSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
   
@@ -49,7 +49,7 @@ void UtilsModule::createSimpleText(const v8::FunctionCallbackInfo<v8::Value>& ar
   args.GetReturnValue().Set(v8::Uint32::New(isolate, id));
 }
 
-void UtilsModule::drawSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void TextModule::drawSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args) {
   uint32_t id = args[0]->Uint32Value();
   boost::shared_ptr<SimpleText> textObj = sTextObjects[id];
   if( textObj ){
@@ -57,7 +57,7 @@ void UtilsModule::drawSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args
   }
 }
 
-void UtilsModule::updateSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void TextModule::updateSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args) {
   uint32_t id = args[0]->Uint32Value();
   boost::shared_ptr<SimpleText> textObj = sTextObjects[id];
   if( textObj ){
@@ -66,7 +66,7 @@ void UtilsModule::updateSimpleText(const v8::FunctionCallbackInfo<v8::Value>& ar
   }
 }
 
-void UtilsModule::setSimpleTextPos(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void TextModule::setSimpleTextPos(const v8::FunctionCallbackInfo<v8::Value>& args) {
   uint32_t id = args[0]->Uint32Value();
   boost::shared_ptr<SimpleText> textObj = sTextObjects[id];
   if( textObj ){
@@ -80,8 +80,8 @@ void UtilsModule::setSimpleTextPos(const v8::FunctionCallbackInfo<v8::Value>& ar
 /**
  * Load bindings onto global js object
  */
-void UtilsModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
-  // Create global utils object
+void TextModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
+  // Create global text object
   Handle<ObjectTemplate> utilsTemplate = ObjectTemplate::New(getIsolate());
   
   utilsTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "createSimpleText"), v8::FunctionTemplate::New(getIsolate(), createSimpleText));
@@ -89,8 +89,8 @@ void UtilsModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   utilsTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "updateSimpleText"), v8::FunctionTemplate::New(getIsolate(), updateSimpleText));
   utilsTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setSimpleTextPosition"), v8::FunctionTemplate::New(getIsolate(), setSimpleTextPos));
   
-  // Expose global utils object
-  global->Set(v8::String::NewFromUtf8(getIsolate(), "utils"), utilsTemplate);
+  // Expose global text object
+  global->Set(v8::String::NewFromUtf8(getIsolate(), "text"), utilsTemplate);
 }
 
  

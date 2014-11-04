@@ -19,7 +19,7 @@
 #include "modules/app.hpp"
 #include "modules/gl.hpp"
 #include "modules/console.hpp"
-#include "modules/utils.hpp"
+#include "modules/text.hpp"
 #include "modules/fs.hpp"
 #include "modules/vm.hpp"
 #include "modules/material.hpp"
@@ -27,6 +27,7 @@
 #include "modules/ray.hpp"
 #include "modules/camera.hpp"
 
+#include <assert.h>
 
 using namespace ci;
 using namespace ci::app;
@@ -264,7 +265,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   addModule(boost::shared_ptr<AppModule>( new AppModule() ));
   addModule(boost::shared_ptr<GLModule>( new GLModule() ));
   addModule(boost::shared_ptr<ConsoleModule>( new ConsoleModule() ));
-  addModule(boost::shared_ptr<UtilsModule>( new UtilsModule() ));
+  addModule(boost::shared_ptr<TextModule>( new TextModule() ));
   addModule(boost::shared_ptr<FSModule>( new FSModule() ));
   addModule(boost::shared_ptr<VMModule>( new VMModule() ));
   addModule(boost::shared_ptr<MaterialModule>( new MaterialModule() ));
@@ -1182,6 +1183,17 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
       return;
     }
     
+    // Try: v8::Local<Context>::New(isolate, pContext)
+    std::cout << "Looking up native " << cmpModName << std::endl;
+    boost::shared_ptr<PipeModule> nativeMod = CinderjsApp::NAMED_MODULES[cmpModName];
+    Local<Object> modObj = isolate->GetCurrentContext()->Global();
+    if(nativeMod) {
+      std::cout << "Found native " << cmpModName << std::endl;
+      Local<ObjectTemplate> ctxGlb = ObjectTemplate::New(isolate);
+      nativeMod->loadGlobalJS(ctxGlb);
+      modObj = ctxGlb->NewInstance();
+    }
+    
     // Wrap it
     Local<Value> modSource = String::NewFromUtf8(isolate, mod.source);
     v8::String::Utf8Value wrappedSource( wrap->Call(Local<Object>::New(isolate, sEmptyObject), 1, &modSource) );
@@ -1209,8 +1221,7 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
       v8::Local<v8::Value>::Cast(v8::FunctionTemplate::New(isolate, NativeBinding)->GetFunction())
     };
     
-    // Try: v8::Local<Context>::New(isolate, pContext)
-    modFn->Call(isolate->GetCallingContext()->Global(), 2, argv);
+    modFn->Call(modObj, 2, argv);
     
     if(tryCatch.HasCaught()){
       handleV8TryCatch(tryCatch);

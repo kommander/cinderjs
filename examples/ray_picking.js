@@ -1,3 +1,5 @@
+var gl = require('gl').gl;
+
 //
 // Ray usage example
 var Ray = require('ray').Ray;
@@ -13,7 +15,7 @@ var v3 = { x: 75, y: 150, z: 0 };
 var theRay = new Ray();
 theRay.setDirection(0, 0, 0.000001);
 
-log('Ray Example');
+console.log('Ray Example');
 
 app.draw(function(timePassed, mx, my){
 
@@ -37,7 +39,7 @@ app.draw(function(timePassed, mx, my){
   var result = theRay.calcTriangleIntersection( v1, v2, v3 );
 
   if(result){
-    log('intersects');
+    console.log('intersects');
     var pos = theRay.calcPosition(result);
     gl.color(0.9, 0.2, 0.4);
     gl.drawSphere(mx - ctxSize.w / 2, my - ctxSize.h / 2, pos.z, 20, 16);

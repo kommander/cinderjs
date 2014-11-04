@@ -42,6 +42,7 @@ class AppModule : public PipeModule {
     }
   
     inline std::string getName() {
+      //std::string name = "app";
       return "app";
     }
   

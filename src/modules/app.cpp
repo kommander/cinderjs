@@ -47,6 +47,7 @@ void AppModule::getAspectRatio(const v8::FunctionCallbackInfo<v8::Value>& args) 
  * Load bindings onto global js object
  */
 void AppModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
+std::cout << "App load global" << std::endl;
   // Create global app object
   Handle<ObjectTemplate> appTemplate = ObjectTemplate::New(getIsolate());
   

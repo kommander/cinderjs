@@ -65,6 +65,7 @@ namespace cjs {
       }
     
       // Virtual Spec
+      // TODO: rename loadGlobalJS to loadBindings
       virtual void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) = 0;
       virtual void draw() = 0;
       virtual std::string getName() = 0;

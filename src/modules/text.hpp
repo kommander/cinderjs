@@ -19,12 +19,12 @@
  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef _UtilsModule_hpp_
-#define _UtilsModule_hpp_
+#ifndef _TextModule_hpp_
+#define _TextModule_hpp_
 
 #pragma once
 
-#define UTILS_MOD_ID 3
+#define TEXT_MOD_ID 3
 
 #include <map>
 
@@ -35,17 +35,17 @@ using namespace cinder;
 
 namespace cjs {
   
-class UtilsModule : public PipeModule {
+class TextModule : public PipeModule {
   public:
-    UtilsModule(){}
-    ~UtilsModule(){}
+    TextModule(){}
+    ~TextModule(){}
   
     inline int moduleId() {
-      return UTILS_MOD_ID;
+      return TEXT_MOD_ID;
     }
   
     inline std::string getName() {
-      return "utils";
+      return "text";
     }
   
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
