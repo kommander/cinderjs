@@ -52,7 +52,7 @@ class AppConsole {
         cinder::TextLayout text;
         text.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
         
-        int end = sLines.size() > 10 ? 10 : sLines.size();
+        int end = sLines.size() > linesToShow ? linesToShow : sLines.size();
         
         for(std::vector<std::string>::iterator it = sLines.end() - end; it != sLines.end(); ++it) {
           text.addLine(*it);
@@ -62,7 +62,7 @@ class AppConsole {
       }
       
       cinder::gl::pushMatrices();
-      cinder::gl::translate(2, pos.y - 120, 0);
+      cinder::gl::translate(2, pos.y - linesToShow * 12, 0);
       cinder::gl::draw( cinder::gl::Texture( _sSurface ) );
       cinder::gl::popMatrices();
     }
@@ -74,6 +74,7 @@ class AppConsole {
     static int sNumLinesToShow;
     static int sMaxLines;
     static cinder::Surface _sSurface;
+    static int linesToShow;
 };
   
 } // namespace cjs

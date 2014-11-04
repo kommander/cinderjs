@@ -17,5 +17,6 @@ int AppConsole::sNumLinesToShow = 10;
 int AppConsole::sMaxLines = 100;
 cinder::Surface AppConsole::_sSurface;
 std::vector<std::string> AppConsole::sLines = std::vector<std::string>();
+int AppConsole::linesToShow = 20;
 
 }

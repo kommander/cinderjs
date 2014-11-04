@@ -304,6 +304,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/physics.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/ray.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/test/weak_callback.js");
+  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/test/lib/jasmine/runner.js");
   #endif
   
   Local<Array> argvArr = Array::New(mIsolate);
