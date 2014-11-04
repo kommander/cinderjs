@@ -1122,6 +1122,7 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
   
   Local<Object> cache = Local<Object>::New(isolate, sModuleCache);
   Local<Object> exports;
+  Local<Object> moduleObj;
 
   if (!checkExistence && cache->Has(moduleName)) {
     exports = cache->Get(moduleName)->ToObject();
@@ -1163,6 +1164,7 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
   if (found) {
   
     exports = Object::New(isolate);
+    moduleObj = Object::New(isolate);
     
     v8::TryCatch tryCatch;
     
@@ -1213,13 +1215,14 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
     Local<Function> modFn = modResult.As<Function>();
     
     // Call
-    Local<Value> argv[2] = {
+    Local<Value> argv[3] = {
       exports,
       // use this method as require as native modules won't require external ones(?)
-      v8::Local<v8::Value>::Cast(v8::FunctionTemplate::New(isolate, NativeBinding)->GetFunction())
+      v8::Local<v8::Value>::Cast(v8::FunctionTemplate::New(isolate, NativeBinding)->GetFunction()),
+      moduleObj
     };
     
-    modFn->Call(modObj, 2, argv);
+    modFn->Call(modObj, 3, argv);
     
     if(tryCatch.HasCaught()){
       handleV8TryCatch(tryCatch);
@@ -1227,8 +1230,11 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
       return;
     }
     
-    // TODO: give module object to modFn, check if module.exports exists,
-    //       if so, cache and return module.exports
+    // check if module.exports exists,
+    // if so, cache and return module.exports
+    if( moduleObj->Has(v8::String::NewFromUtf8(isolate, "exports"))){
+      exports = moduleObj->Get(v8::String::NewFromUtf8(isolate, "exports")).As<Object>();
+    }
     
     cache->Set(moduleName, exports);
   } else {

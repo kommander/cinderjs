@@ -1,8 +1,8 @@
-var gl = require('gl').gl;
+var gl = require('gl');
 
 //
 // Ray usage example
-var Ray = require('ray').Ray;
+var Ray = require('ray');
 
 // Screen Size
 var ctxSize = { w: 640, h: 480 };

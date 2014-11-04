@@ -1,7 +1,7 @@
-var text = require('text').text;
-var gl = require('gl').gl;
+var text = require('text');
+var gl = require('gl');
 var Vec2 = require('./lib/vec2.js');
-var Material = require('material').Material;
+var Material = require('material');
 
 // Screen size holder
 var ctxSize = {

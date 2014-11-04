@@ -1,8 +1,8 @@
 //
 // Cubes Example
-var Material = require('material').Material;
-var Light = require('light').Light;
-var gl = require('gl').gl;
+var Material = require('material');
+var Light = require('light');
+var gl = require('gl');
 
 // Screen size holder
 var ctxSize = { x: 640, y: 480 };

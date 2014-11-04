@@ -1,4 +1,4 @@
-var gl = require('gl').gl;
+var gl = require('gl');
 
 // Screen size holder
 var ctxSize = {
