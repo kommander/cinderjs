@@ -208,6 +208,9 @@ class CinderjsApp : public CinderAppBase  {
 
   // Quit
   static bool sQuitRequested;
+  
+  // Default key behaviour
+  double mLastEscPressed = getElapsedSeconds();
 };
 
   

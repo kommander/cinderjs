@@ -872,7 +872,20 @@ void CinderjsApp::mouseDown( MouseEvent event )
  */
 void CinderjsApp::keyDown( KeyEvent event )
 {
-  // TODO: Add default failsafe keys (ESC1x exit fullscreen, ESC2x bring up console)
+  // Add default failsafe keys (ESC1x exit fullscreen, ESC2x exit app)
+  std::cout << to_string(mLastEscPressed) << " / " << to_string(getElapsedSeconds() - mLastEscPressed) << std::endl;
+  if(getElapsedSeconds() - mLastEscPressed < 0.5){
+    if(isFullScreen()){
+      setFullScreen(false);
+    } else {
+      sQuitRequested = true;
+    }
+    return;
+  }
+  if(event.getCode() == 27){
+    mLastEscPressed = getElapsedSeconds();
+  }
+  
   
   BufferedEvent evt(new BufferedEventHolder());
   evt->type = CJS_KEY_DOWN;
