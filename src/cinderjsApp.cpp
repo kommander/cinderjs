@@ -403,8 +403,33 @@ void CinderjsApp::v8RenderThread(){
       v8::Locker lock(mIsolate);
       
       // JS Draw callback
-      v8Draw( timePassed );
       
+      // Isolate
+      v8::Isolate::Scope isolate_scope(mIsolate);
+      v8::HandleScope handleScope(mIsolate);
+      
+      // Callback
+      v8::Local<v8::Function> callback = v8::Local<v8::Function>::New(mIsolate, sDrawCallback);
+      
+      if( !callback.IsEmpty() ){
+        
+        v8::Handle<v8::Value> argv[3] = {
+          v8::Number::New(mIsolate, timePassed),
+          v8::Number::New(mIsolate, mousePosBuf.x),
+          v8::Number::New(mIsolate, mousePosBuf.y)
+        };
+
+        v8::TryCatch try_catch;
+        
+        callback->Call(callback->CreationContext()->Global(), 3, argv);
+        
+        // Check for errors
+        if(try_catch.HasCaught()){
+          handleV8TryCatch(try_catch);
+        }
+
+      }
+
       // Draw modules
 //      for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
 //        it->get()->draw();
@@ -919,40 +944,6 @@ void CinderjsApp::draw()
   
 }
 
-/**
- * V8 Draw
- * Called by v8 render thread
- */
-void CinderjsApp::v8Draw( double timePassed ){
-  v8::Locker lock(mIsolate);
-  
-  // Isolate
-  v8::Isolate::Scope isolate_scope(mIsolate);
-  v8::HandleScope handleScope(mIsolate);
-  
-  // Callback
-  v8::Local<v8::Function> callback = v8::Local<v8::Function>::New(mIsolate, sDrawCallback);
-  
-  if( !callback.IsEmpty() ){
-    
-    v8::Handle<v8::Value> argv[3] = {
-      v8::Number::New(mIsolate, timePassed),
-      v8::Number::New(mIsolate, mousePosBuf.x),
-      v8::Number::New(mIsolate, mousePosBuf.y)
-    };
-
-    v8::TryCatch try_catch;
-    
-    callback->Call(callback->CreationContext()->Global(), 3, argv);
-    
-    // Check for errors
-    if(try_catch.HasCaught()){
-      handleV8TryCatch(try_catch);
-    }
-
-  }
-  
-}
 
 /**
  * Set the draw callback from javascript

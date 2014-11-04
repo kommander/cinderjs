@@ -129,10 +129,6 @@ class CinderjsApp : public CinderAppBase  {
   //
   private:
   
-  // v8 thread methods
-  void v8Draw( double timePassed );
-
-  
   // Stats
   volatile int v8Frames = 0;
   volatile double v8FPS = 0;
