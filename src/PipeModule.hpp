@@ -67,6 +67,7 @@ namespace cjs {
       // Virtual Spec
       virtual void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) = 0;
       virtual void draw() = 0;
+      virtual std::string getName() = 0;
       
     private:
       v8::Isolate* mIsolate;

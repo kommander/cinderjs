@@ -44,6 +44,10 @@ class GLModule : public PipeModule {
       return GL_MOD_ID;
     }
   
+    inline std::string getName() {
+      return "gl";
+    }
+  
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
     void draw(){}
   

@@ -42,6 +42,10 @@ class LightModule : public PipeModule {
       return LIGHT_MOD_ID;
     }
   
+    inline std::string getName() {
+      return "light";
+    }
+  
     static void create(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void destroy(const v8::FunctionCallbackInfo<v8::Value>& args);
     

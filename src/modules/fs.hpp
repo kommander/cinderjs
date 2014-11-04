@@ -41,6 +41,10 @@ class FSModule : public PipeModule {
       return FS_MOD_ID;
     }
   
+    inline std::string getName() {
+      return "fs";
+    }
+  
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
     void draw(){}
   

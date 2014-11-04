@@ -44,6 +44,10 @@ class UtilsModule : public PipeModule {
       return UTILS_MOD_ID;
     }
   
+    inline std::string getName() {
+      return "utils";
+    }
+  
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
     void draw(){};
   

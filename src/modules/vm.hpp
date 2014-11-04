@@ -41,6 +41,10 @@ class VMModule : public PipeModule {
       return VM_MOD_ID;
     }
   
+    inline std::string getName() {
+      return "vm";
+    }
+  
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
     void draw(){}
   

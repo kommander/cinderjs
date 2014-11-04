@@ -41,6 +41,10 @@ class AppModule : public PipeModule {
       return APP_MOD_ID;
     }
   
+    inline std::string getName() {
+      return "app";
+    }
+  
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
     void draw(){};
   

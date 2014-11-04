@@ -41,6 +41,10 @@ class ConsoleModule : public PipeModule {
       return CONSOLE_MOD_ID;
     }
   
+    inline std::string getName() {
+      return "console";
+    }
+  
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
     void draw(){}
   
