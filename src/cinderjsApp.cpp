@@ -1184,11 +1184,9 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
     }
     
     // Try: v8::Local<Context>::New(isolate, pContext)
-    std::cout << "Looking up native " << cmpModName << std::endl;
     boost::shared_ptr<PipeModule> nativeMod = CinderjsApp::NAMED_MODULES[cmpModName];
     Local<Object> modObj = isolate->GetCurrentContext()->Global();
     if(nativeMod) {
-      std::cout << "Found native " << cmpModName << std::endl;
       Local<ObjectTemplate> ctxGlb = ObjectTemplate::New(isolate);
       nativeMod->loadGlobalJS(ctxGlb);
       modObj = ctxGlb->NewInstance();
