@@ -53,6 +53,8 @@ class AppModule : public PipeModule {
   private:
     static void getAspectRatio(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void addAssetDirectory(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void disableFrameRate(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void setFrameRate(const v8::FunctionCallbackInfo<v8::Value>& args);
   
  };
   

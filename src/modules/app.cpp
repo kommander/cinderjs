@@ -57,6 +57,30 @@ void AppModule::addAssetDirectory(const v8::FunctionCallbackInfo<v8::Value>& arg
   return;
 }
 
+/**
+ *
+ */
+void AppModule::disableFrameRate(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  
+  getApp()->disableFrameRate();
+  
+  return;
+}
+
+/**
+ *
+ */
+void AppModule::setFrameRate(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  Isolate* isolate = args.GetIsolate();
+  HandleScope scope(isolate);
+  
+  if(args[0]->IsNumber()){
+    getApp()->setFrameRate(args[0]->ToNumber()->Value());
+  }
+  
+  return;
+}
+
 
 /**
  * Load bindings onto global js object
@@ -68,6 +92,8 @@ void AppModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   
   appTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "getAspectRatio"), v8::FunctionTemplate::New(getIsolate(), getAspectRatio));
   appTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "addAssetDirectory"), v8::FunctionTemplate::New(getIsolate(), addAssetDirectory));
+  appTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "disableFrameRate"), v8::FunctionTemplate::New(getIsolate(), disableFrameRate));
+  appTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setFrameRate"), v8::FunctionTemplate::New(getIsolate(), setFrameRate));
   
   // Expose global app object
   global->Set(v8::String::NewFromUtf8(getIsolate(), "app"), appTemplate);

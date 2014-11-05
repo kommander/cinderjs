@@ -30,8 +30,10 @@ var texture = new Texture( 'texture.jpg', texFormat );
 var glslProg = new Shader( 'shader.vert', 'shader.frag' );
 var batch = new Batch(0, glslProg);
 
-// Uncomment this if you are experiencing casual frame rate drops to 45 or 30 fps
-gl.disableVerticalSync();
+// Uncomment these lines if you are experiencing casual frame rate drops to 45 or 30 fps
+app.disableFrameRate();
+gl.enableVerticalSync();
+
 console.log('vsync:', gl.isVerticalSyncEnabled());
 // GL Draw loop
 var loop = function(timePassed, mx, my){
