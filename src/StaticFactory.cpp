@@ -22,8 +22,6 @@
 
 #include "StaticFactory.hpp"
 
-using namespace cinder;
-using namespace cinder::gl;
 using namespace v8;
 using namespace std;
 

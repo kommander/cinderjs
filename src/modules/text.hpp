@@ -64,7 +64,7 @@ class TextModule : public PipeModule {
     static uint32_t sTextObjectIds;
   
     // Buffers
-    static Vec3f bufVec3f_1;
+    static vec3 bufVec3f_1;
  };
   
 } // namespace cjs

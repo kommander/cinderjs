@@ -34,10 +34,11 @@ using namespace v8;
 
 namespace cjs {
 
-Vec2f GLModule::bufVec2f_1;
-Vec2f GLModule::bufVec2f_2;
-Vec3f GLModule::bufVec3f_1;
-Vec3f GLModule::bufVec3f_2;
+vec2 GLModule::bufVec2f_1;
+vec2 GLModule::bufVec2f_2;
+vec3 GLModule::bufVec3f_1;
+vec3 GLModule::bufVec3f_2;
+quat GLModule::bufQuat_1;
 ColorA GLModule::sBufColorA_1;
 Color GLModule::sBufColor_1;
 
@@ -176,11 +177,13 @@ void GLModule::scale(const v8::FunctionCallbackInfo<v8::Value>& args) {
  *
  */
 void GLModule::rotate(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  if(args.Length() == 3){
-    bufVec3f_1.x = args[0]->NumberValue();
-    bufVec3f_1.y = args[1]->NumberValue();
-    bufVec3f_1.z = args[2]->NumberValue();
-    gl::rotate(bufVec3f_1);
+  if(args.Length() >= 3){
+    
+    bufQuat_1.x = args[0]->NumberValue();
+    bufQuat_1.y = args[1]->NumberValue();
+    bufQuat_1.z = args[2]->NumberValue();
+    bufQuat_1.w = args[3]->NumberValue();
+    gl::rotate(bufQuat_1);
     
     return;
   }
@@ -281,7 +284,7 @@ void GLModule::enableVerticalSync(const v8::FunctionCallbackInfo<v8::Value>& arg
  *
  */
 void GLModule::disableVerticalSync(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  gl::disableVerticalSync();
+  gl::enableVerticalSync( false );
   return;
 }
 
@@ -297,6 +300,7 @@ void GLModule::isVerticalSyncEnabled(const v8::FunctionCallbackInfo<v8::Value>& 
  *
  */
 void GLModule::drawCube(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  
   bufVec3f_1.x = args[0]->NumberValue();
   bufVec3f_1.y = args[1]->NumberValue();
   bufVec3f_1.z = args[2]->NumberValue();
@@ -321,22 +325,6 @@ void GLModule::drawSphere(const v8::FunctionCallbackInfo<v8::Value>& args) {
   // ( const Vec3f &center, float radius, int segments = 12 )
   gl::drawSphere(bufVec3f_1, args[3]->NumberValue(), args[4]->NumberValue());
   
-  return;
-}
-
-/**
- *
- */
-void GLModule::drawTorus(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  gl::drawTorus(args[0]->NumberValue(), args[1]->NumberValue(), args[2]->NumberValue(), args[3]->NumberValue());
-  return;
-}
-
-/**
- *
- */
-void GLModule::drawCylinder(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  gl::drawCylinder(args[0]->NumberValue(), args[1]->NumberValue(), args[2]->NumberValue(), args[3]->NumberValue(), args[3]->NumberValue());
   return;
 }
 
@@ -421,27 +409,16 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   // Primitives
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawCube"), v8::FunctionTemplate::New(getIsolate(), drawCube));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawSphere"), v8::FunctionTemplate::New(getIsolate(), drawSphere));
-  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawTorus"), v8::FunctionTemplate::New(getIsolate(), drawTorus));
-  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawCylinder"), v8::FunctionTemplate::New(getIsolate(), drawCylinder));
   
   // Some GL Constants
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "CULL_FACE"), v8::Uint32::New(getIsolate(), GL_CULL_FACE));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "CULL_FACE_MODE"), v8::Uint32::New(getIsolate(), GL_CULL_FACE_MODE));
-  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHTING"), v8::Uint32::New(getIsolate(), GL_LIGHTING));
-  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHT0"), v8::Uint32::New(getIsolate(), GL_LIGHT0));
-  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHT1"), v8::Uint32::New(getIsolate(), GL_LIGHT1));
-  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHT2"), v8::Uint32::New(getIsolate(), GL_LIGHT2));
-  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHT3"), v8::Uint32::New(getIsolate(), GL_LIGHT3));
-  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHT4"), v8::Uint32::New(getIsolate(), GL_LIGHT4));
-  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHT5"), v8::Uint32::New(getIsolate(), GL_LIGHT5));
-  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHT6"), v8::Uint32::New(getIsolate(), GL_LIGHT6));
-  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LIGHT7"), v8::Uint32::New(getIsolate(), GL_LIGHT7));
+  
   
   // Primitive Types
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "POINTS"), v8::Uint32::New(getIsolate(), GL_POINTS));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "LINES"), v8::Uint32::New(getIsolate(), GL_LINES));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "TRIANGLES"), v8::Uint32::New(getIsolate(), GL_TRIANGLES));
-  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "POLYGON"), v8::Uint32::New(getIsolate(), GL_POLYGON));
   
   // TODO: Types
 //  LINE_LOOP					= 0x0002

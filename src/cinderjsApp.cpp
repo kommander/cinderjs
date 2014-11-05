@@ -1,4 +1,5 @@
 #include "cinderjsApp.hpp"
+#include "cinder/app/RendererGl.h"
 
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
@@ -22,8 +23,6 @@
 #include "modules/text.hpp"
 #include "modules/fs.hpp"
 #include "modules/vm.hpp"
-#include "modules/material.hpp"
-#include "modules/light.hpp"
 #include "modules/ray.hpp"
 #include "modules/camera.hpp"
 
@@ -151,6 +150,8 @@ void CinderjsApp::setup()
   // Init Console
   AppConsole::initialize();
   
+  mLastEscPressed = getElapsedSeconds();
+  
   // Command line arguments
   vector<std::string> args = getArgs();
 
@@ -268,8 +269,6 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   addModule(boost::shared_ptr<TextModule>( new TextModule() ));
   addModule(boost::shared_ptr<FSModule>( new FSModule() ));
   addModule(boost::shared_ptr<VMModule>( new VMModule() ));
-  addModule(boost::shared_ptr<MaterialModule>( new MaterialModule() ));
-  addModule(boost::shared_ptr<LightModule>( new LightModule() ));
   addModule(boost::shared_ptr<RayModule>( new RayModule() ));
   addModule(boost::shared_ptr<CameraModule>( new CameraModule() ));
   
@@ -300,7 +299,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/test.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js");
-  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
+  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/physics.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/ray.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/test/weak_callback.js");
@@ -451,11 +450,11 @@ void CinderjsApp::v8RenderThread(){
         fpsText.addLine( "V8 Heap Used: " + std::to_string( stats.used_heap_size() ) );
       }
       
-      cinder::gl::draw( cinder::gl::Texture( fpsText.render() ) );
+      cinder::gl::draw( cinder::gl::Texture::create( fpsText.render() ) );
 
       // Draw console (if active)
       if(sConsoleActive){
-        Vec2f cPos;
+        vec2 cPos;
         // TODO: this still fails sometimes on shutdown
         try {
           cPos.y = getWindowHeight();

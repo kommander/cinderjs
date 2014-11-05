@@ -34,10 +34,10 @@ using namespace v8;
 
 namespace cjs {
 
-Vec3f RayModule::sBufVec3f_1;
-Vec3f RayModule::sBufVec3f_2;
-Vec3f RayModule::sBufVec3f_3;
-Vec3f RayModule::sBufVec3f_4;
+vec3 RayModule::sBufVec3f_1;
+vec3 RayModule::sBufVec3f_2;
+vec3 RayModule::sBufVec3f_3;
+vec3 RayModule::sBufVec3f_4;
 
 void RayModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();

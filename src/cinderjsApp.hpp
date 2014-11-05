@@ -153,7 +153,7 @@ class CinderjsApp : public CinderAppBase  {
   // Eventing
   cinder::ConcurrentCircularBuffer<BufferedEvent> mEventQueue;
   static cinder::ConcurrentCircularBuffer<NextFrameFn> sExecutionQueue;
-  volatile cinder::Vec2f mousePosBuf;
+  volatile cinder::vec2 mousePosBuf;
   
   // Path
   Path mCwd;
@@ -210,7 +210,7 @@ class CinderjsApp : public CinderAppBase  {
   static bool sQuitRequested;
   
   // Default key behaviour
-  double mLastEscPressed = getElapsedSeconds();
+  double mLastEscPressed;
 };
 
   

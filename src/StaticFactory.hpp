@@ -28,11 +28,6 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/any.hpp>
 
-#include "cinder/gl/Material.h"
-#include "cinder/gl/Light.h"
-#include "cinder/Ray.h"
-#include "cinder/Camera.h"
-
 #include "v8.h"
 
 //

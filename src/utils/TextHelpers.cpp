@@ -23,6 +23,7 @@
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Texture.h"
 #include "cinder/Text.h"
+#include "cinder/Vector.h"
 
 using namespace std;
 using namespace cinder;
@@ -41,12 +42,12 @@ namespace cjs {
       SceneObject(){}
       ~SceneObject(){}
     
-      inline void setPosition( Vec3f newPos ){
-        pos.set(newPos);
+      inline void setPosition( vec3 newPos ){
+        pos = newPos;
       }
     
     protected:
-      Vec3f pos;
+      vec3 pos;
       bool active = true;
     
       virtual void draw() = 0;
@@ -64,7 +65,7 @@ namespace cjs {
         TextLayout tl;
         tl.setColor( ColorA( 1, 1, 1, 1 ) );
         tl.addLine( _text );
-        _texture = gl::Texture( tl.render() );
+        _texture = gl::Texture::create( tl.render() );
       }
     
       inline void draw() {
@@ -76,7 +77,7 @@ namespace cjs {
     
     private:
       std::string _text;
-      gl::Texture _texture;
+      gl::Texture2dRef _texture;
 
   };
   

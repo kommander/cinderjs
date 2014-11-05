@@ -35,9 +35,9 @@ using namespace v8;
 
 namespace cjs {
 
-Vec3f CameraModule::sBufVec3f_1;
-Vec3f CameraModule::sBufVec3f_2;
-Quatf CameraModule::sBufQuatf_1 = *new Quatf();
+vec3 CameraModule::sBufVec3f_1;
+vec3 CameraModule::sBufVec3f_2;
+quat CameraModule::sBufQuatf_1;
 
 void CameraModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
@@ -144,11 +144,11 @@ void CameraModule::setOrientation(const v8::FunctionCallbackInfo<v8::Value>& arg
       return;
     }
     
-    sBufVec3f_1.x = args[1]->ToNumber()->Value();
-    sBufVec3f_1.y = args[2]->ToNumber()->Value();
-    sBufVec3f_1.z = args[3]->ToNumber()->Value();
+    sBufQuatf_1.x = args[1]->ToNumber()->Value();
+    sBufQuatf_1.y = args[2]->ToNumber()->Value();
+    sBufQuatf_1.z = args[3]->ToNumber()->Value();
     
-    cam->setOrientation(*new Quatf(sBufVec3f_1.z, sBufVec3f_1.y, sBufVec3f_1.x));
+    cam->setOrientation(sBufQuatf_1);
   }
   
   return;

@@ -61,9 +61,9 @@ class CameraModule : public PipeModule {
   
   //
   private:
-    static cinder::Vec3f sBufVec3f_1;
-    static cinder::Vec3f sBufVec3f_2;
-    static cinder::Quatf sBufQuatf_1;
+    static cinder::vec3 sBufVec3f_1;
+    static cinder::vec3 sBufVec3f_2;
+    static cinder::quat sBufQuatf_1;
  };
   
 } // namespace cjs

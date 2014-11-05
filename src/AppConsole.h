@@ -44,7 +44,7 @@ class AppConsole {
     }
     
     // Draw
-    inline static void draw( cinder::Vec2f &pos ){
+    inline static void draw( cinder::vec2 &pos ){
       
       if( sChanged ) {
         sChanged = false;
@@ -58,12 +58,12 @@ class AppConsole {
           text.addLine(*it);
         }
         
-        _sSurface = text.render();
+        _sTexture = cinder::gl::Texture::create( text.render() );
       }
       
       cinder::gl::pushMatrices();
       cinder::gl::translate(2, pos.y - linesToShow * 12, 0);
-      cinder::gl::draw( cinder::gl::Texture( _sSurface ) );
+      cinder::gl::draw( _sTexture );
       cinder::gl::popMatrices();
     }
     
@@ -73,7 +73,7 @@ class AppConsole {
     static std::vector<std::string> sLines;
     static int sNumLinesToShow;
     static int sMaxLines;
-    static cinder::Surface _sSurface;
+    static cinder::gl::TextureRef _sTexture;
     static int linesToShow;
 };
   

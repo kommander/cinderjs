@@ -69,8 +69,6 @@ class GLModule : public PipeModule {
     static void disableWireframe(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void drawCube(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void drawSphere(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void drawTorus(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void drawCylinder(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void setMatrices(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void clear(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void enableDepthRead(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -85,10 +83,11 @@ class GLModule : public PipeModule {
     //
     static ColorA sBufColorA_1;
     static Color sBufColor_1;
-    static Vec2f bufVec2f_1;
-    static Vec2f bufVec2f_2;
-    static Vec3f bufVec3f_1;
-    static Vec3f bufVec3f_2;
+    static vec2 bufVec2f_1;
+    static vec2 bufVec2f_2;
+    static vec3 bufVec3f_1;
+    static vec3 bufVec3f_2;
+    static quat bufQuat_1;
 };
   
 } // namespace cjs

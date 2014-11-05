@@ -31,7 +31,7 @@ namespace cjs {
 
 std::map<uint32_t, boost::shared_ptr<SimpleText>> TextModule::sTextObjects;
 uint32_t TextModule::sTextObjectIds = 0;
-Vec3f TextModule::bufVec3f_1;
+vec3 TextModule::bufVec3f_1;
 
 void TextModule::createSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();

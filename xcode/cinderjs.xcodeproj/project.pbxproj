@@ -23,7 +23,6 @@
 		9E0BDE1919F9EFF70036038F /* app.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1819F9EFF70036038F /* app.js */; };
 		9E0BDE1D19F9F8F90036038F /* trig.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1B19F9F8F90036038F /* trig.js */; };
 		9E0BDE1E19F9F8F90036038F /* vec2.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1C19F9F8F90036038F /* vec2.js */; };
-		9E0BDE2119FA8FB40036038F /* material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1F19FA8FB40036038F /* material.cpp */; };
 		9E51340819FFE6CF004CF6C5 /* app.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1819F9EFF70036038F /* app.js */; };
 		9E51340919FFE6CF004CF6C5 /* util.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123D219F7A6AE007786A6 /* util.js */; };
 		9E51340A19FFE6CF004CF6C5 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9EAF080819EDC4C600C02F65 /* README.md */; };
@@ -36,8 +35,6 @@
 		9E51341119FFE6CF004CF6C5 /* module.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123D019F7A43C007786A6 /* module.js */; };
 		9E51341219FFE6CF004CF6C5 /* trig.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1B19F9F8F90036038F /* trig.js */; };
 		9E51341419FFE6CF004CF6C5 /* default_main.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1419F9EEC80036038F /* default_main.js */; };
-		9E51341519FFE6CF004CF6C5 /* light.js in Resources */ = {isa = PBXBuildFile; fileRef = 9EC32A6A19FB140700CECCC3 /* light.js */; };
-		9E51341619FFE6CF004CF6C5 /* material.js in Resources */ = {isa = PBXBuildFile; fileRef = 9EC32A4B19FAEAFA00CECCC3 /* material.js */; };
 		9E51341719FFE6CF004CF6C5 /* assert.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123DA19F7DD02007786A6 /* assert.js */; };
 		9E51341819FFE6CF004CF6C5 /* color.js in Resources */ = {isa = PBXBuildFile; fileRef = 9EC32A6819FAF42400CECCC3 /* color.js */; };
 		9E51341919FFE6CF004CF6C5 /* path.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123CE19F78F85007786A6 /* path.js */; };
@@ -49,10 +46,8 @@
 		9E51342019FFE6CF004CF6C5 /* StaticFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCE56819FD962800C37522 /* StaticFactory.cpp */; };
 		9E51342119FFE6CF004CF6C5 /* vm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E0BDE0E19F803330036038F /* vm.cpp */; };
 		9E51342219FFE6CF004CF6C5 /* PipeModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3E19F0233C00291CDE /* PipeModule.cpp */; };
-		9E51342319FFE6CF004CF6C5 /* light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9EC32A6C19FB141B00CECCC3 /* light.cpp */; };
 		9E51342419FFE6CF004CF6C5 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCE56B19FDB56100C37522 /* camera.cpp */; };
 		9E51342519FFE6CF004CF6C5 /* app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3819F022C000291CDE /* app.cpp */; };
-		9E51342619FFE6CF004CF6C5 /* material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1F19FA8FB40036038F /* material.cpp */; };
 		9E51342719FFE6CF004CF6C5 /* cinderjsApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B26520EF291B4336BEC87FD7 /* cinderjsApp.cpp */; };
 		9E51342819FFE6CF004CF6C5 /* ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCE56119FD7B4500C37522 /* ray.cpp */; };
 		9E51342A19FFE6CF004CF6C5 /* console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E4219F0390000291CDE /* console.cpp */; };
@@ -74,16 +69,25 @@
 		9E5B93D11A089C5B00B5BDF4 /* gl.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E5B93CE1A089C5B00B5BDF4 /* gl.js */; };
 		9E5B93D21A089C5B00B5BDF4 /* text.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E5B93CF1A089C5B00B5BDF4 /* text.js */; };
 		9E5B93D31A089C5B00B5BDF4 /* console.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E5B93D01A089C5B00B5BDF4 /* console.js */; };
+		9E5B93D51A09AB3D00B5BDF4 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93D41A09AB3D00B5BDF4 /* CoreLocation.framework */; };
+		9E5B93D61A09AB3D00B5BDF4 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93D41A09AB3D00B5BDF4 /* CoreLocation.framework */; };
+		9E5B93DA1A09AB5900B5BDF4 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93D71A09AB5900B5BDF4 /* ApplicationServices.framework */; };
+		9E5B93DB1A09AB5900B5BDF4 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93D71A09AB5900B5BDF4 /* ApplicationServices.framework */; };
+		9E5B93DC1A09AB5900B5BDF4 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93D81A09AB5900B5BDF4 /* QuickTime.framework */; };
+		9E5B93DD1A09AB5900B5BDF4 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93D81A09AB5900B5BDF4 /* QuickTime.framework */; };
+		9E5B93DE1A09AB5900B5BDF4 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93D91A09AB5900B5BDF4 /* Carbon.framework */; };
+		9E5B93DF1A09AB5900B5BDF4 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93D91A09AB5900B5BDF4 /* Carbon.framework */; };
+		9E5B93E21A09AB6400B5BDF4 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93E01A09AB6400B5BDF4 /* AVFoundation.framework */; };
+		9E5B93E31A09AB6400B5BDF4 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93E01A09AB6400B5BDF4 /* AVFoundation.framework */; };
+		9E5B93E41A09AB6400B5BDF4 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93E11A09AB6400B5BDF4 /* CoreMedia.framework */; };
+		9E5B93E51A09AB6400B5BDF4 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93E11A09AB6400B5BDF4 /* CoreMedia.framework */; };
 		9E9B3E3219F002C200291CDE /* AppConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3019F002C200291CDE /* AppConsole.cpp */; };
 		9E9B3E3C19F022C000291CDE /* app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3819F022C000291CDE /* app.cpp */; };
 		9E9B3E3D19F022C000291CDE /* gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3A19F022C000291CDE /* gl.cpp */; };
 		9E9B3E4019F0233C00291CDE /* PipeModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3E19F0233C00291CDE /* PipeModule.cpp */; };
 		9E9B3E4419F0390000291CDE /* console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E4219F0390000291CDE /* console.cpp */; };
 		9EAF080919EDC4C600C02F65 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9EAF080819EDC4C600C02F65 /* README.md */; };
-		9EC32A4C19FAEAFA00CECCC3 /* material.js in Resources */ = {isa = PBXBuildFile; fileRef = 9EC32A4B19FAEAFA00CECCC3 /* material.js */; };
 		9EC32A6919FAF42400CECCC3 /* color.js in Resources */ = {isa = PBXBuildFile; fileRef = 9EC32A6819FAF42400CECCC3 /* color.js */; };
-		9EC32A6B19FB140700CECCC3 /* light.js in Resources */ = {isa = PBXBuildFile; fileRef = 9EC32A6A19FB140700CECCC3 /* light.js */; };
-		9EC32A6E19FB141B00CECCC3 /* light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9EC32A6C19FB141B00CECCC3 /* light.cpp */; };
 		9ECCE56319FD7B4500C37522 /* ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCE56119FD7B4500C37522 /* ray.cpp */; };
 		9ECCE56519FD837900C37522 /* ray.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ECCE56419FD837900C37522 /* ray.js */; };
 		9ECCE56A19FD962800C37522 /* StaticFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCE56819FD962800C37522 /* StaticFactory.cpp */; };
@@ -126,8 +130,6 @@
 		9E0BDE1819F9EFF70036038F /* app.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = app.js; path = ../lib/app.js; sourceTree = "<group>"; };
 		9E0BDE1B19F9F8F90036038F /* trig.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = trig.js; path = ../examples/lib/trig.js; sourceTree = "<group>"; };
 		9E0BDE1C19F9F8F90036038F /* vec2.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = vec2.js; path = ../examples/lib/vec2.js; sourceTree = "<group>"; };
-		9E0BDE1F19FA8FB40036038F /* material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = material.cpp; path = ../src/modules/material.cpp; sourceTree = "<group>"; };
-		9E0BDE2019FA8FB40036038F /* material.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = material.hpp; path = ../src/modules/material.hpp; sourceTree = "<group>"; };
 		9E51343B19FFE6CF004CF6C5 /* cinderjs copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "cinderjs copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E51343C19FFE6CF004CF6C5 /* cinderjs copy2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "cinderjs copy2-Info.plist"; path = "/Users/sebastian/Dropbox/+Projects/cinderjs/xcode/cinderjs copy2-Info.plist"; sourceTree = "<absolute>"; };
 		9E51343E1A0125E4004CF6C5 /* ray_picking.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ray_picking.js; path = ../examples/ray_picking.js; sourceTree = "<group>"; };
@@ -137,20 +139,14 @@
 		9E5B93CE1A089C5B00B5BDF4 /* gl.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = gl.js; path = ../lib/gl.js; sourceTree = "<group>"; };
 		9E5B93CF1A089C5B00B5BDF4 /* text.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = text.js; path = ../lib/text.js; sourceTree = "<group>"; };
 		9E5B93D01A089C5B00B5BDF4 /* console.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = console.js; path = ../lib/console.js; sourceTree = "<group>"; };
-		9E7F70F619EDD441002DDCFF /* libicudata.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicudata.a; path = ../v8/xcodebuild/Release/libicudata.a; sourceTree = "<group>"; };
-		9E7F70F719EDD441002DDCFF /* libicui18n.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicui18n.a; path = ../v8/xcodebuild/Release/libicui18n.a; sourceTree = "<group>"; };
-		9E7F70F819EDD441002DDCFF /* libicuuc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicuuc.a; path = ../v8/xcodebuild/Release/libicuuc.a; sourceTree = "<group>"; };
-		9E7F70F919EDD441002DDCFF /* libv8_base.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_base.a; path = ../v8/xcodebuild/Release/libv8_base.a; sourceTree = "<group>"; };
-		9E7F70FA19EDD441002DDCFF /* libv8_libbase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libbase.a; path = ../v8/xcodebuild/Release/libv8_libbase.a; sourceTree = "<group>"; };
-		9E7F70FB19EDD441002DDCFF /* libv8_snapshot.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_snapshot.a; path = ../v8/xcodebuild/Release/libv8_snapshot.a; sourceTree = "<group>"; };
-		9E7F710219EDD462002DDCFF /* libgmock.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgmock.a; path = ../v8/xcodebuild/Release/libgmock.a; sourceTree = "<group>"; };
-		9E7F710319EDD462002DDCFF /* libgtest.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgtest.a; path = ../v8/xcodebuild/Release/libgtest.a; sourceTree = "<group>"; };
-		9E7F710419EDD462002DDCFF /* libv8_libplatform.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libv8_libplatform.a; path = ../v8/xcodebuild/Release/libv8_libplatform.a; sourceTree = "<group>"; };
+		9E5B93D41A09AB3D00B5BDF4 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		9E5B93D71A09AB5900B5BDF4 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
+		9E5B93D81A09AB5900B5BDF4 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = ../../../../../../System/Library/Frameworks/QuickTime.framework; sourceTree = "<group>"; };
+		9E5B93D91A09AB5900B5BDF4 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = ../../../../../../System/Library/Frameworks/Carbon.framework; sourceTree = "<group>"; };
+		9E5B93E01A09AB6400B5BDF4 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		9E5B93E11A09AB6400B5BDF4 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		9E7F711B19EDDF23002DDCFF /* cinderjs copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "cinderjs copy-Info.plist"; path = "/Users/sebastian/Dropbox/+Projects/cinderjs/xcode/cinderjs copy-Info.plist"; sourceTree = "<absolute>"; };
 		9E7F711C19EDE93B002DDCFF /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
-		9E7F713019EE0C67002DDCFF /* libicui18n.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicui18n.dylib; path = ../v8/out/x64.release/libicui18n.dylib; sourceTree = "<group>"; };
-		9E7F713119EE0C67002DDCFF /* libicuuc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicuuc.dylib; path = ../v8/out/x64.release/libicuuc.dylib; sourceTree = "<group>"; };
-		9E7F713219EE0C67002DDCFF /* libv8.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libv8.dylib; path = ../v8/out/x64.release/libv8.dylib; sourceTree = "<group>"; };
 		9E9877F119F1EA19002DC7C8 /* particle.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = particle.js; path = ../examples/particle.js; sourceTree = "<group>"; };
 		9E9B3E3019F002C200291CDE /* AppConsole.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppConsole.cpp; path = ../src/AppConsole.cpp; sourceTree = "<group>"; };
 		9E9B3E3119F002C200291CDE /* AppConsole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppConsole.h; path = ../src/AppConsole.h; sourceTree = "<group>"; };
@@ -164,11 +160,7 @@
 		9E9B3E4219F0390000291CDE /* console.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = console.cpp; path = ../src/modules/console.cpp; sourceTree = "<group>"; };
 		9E9B3E4319F0390000291CDE /* console.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = console.hpp; path = ../src/modules/console.hpp; sourceTree = "<group>"; };
 		9EAF080819EDC4C600C02F65 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		9EC32A4B19FAEAFA00CECCC3 /* material.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = material.js; path = ../lib/material.js; sourceTree = "<group>"; };
 		9EC32A6819FAF42400CECCC3 /* color.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = color.js; path = ../lib/color.js; sourceTree = "<group>"; };
-		9EC32A6A19FB140700CECCC3 /* light.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = light.js; path = ../lib/light.js; sourceTree = "<group>"; };
-		9EC32A6C19FB141B00CECCC3 /* light.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = light.cpp; path = ../src/modules/light.cpp; sourceTree = "<group>"; };
-		9EC32A6D19FB141B00CECCC3 /* light.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = light.hpp; path = ../src/modules/light.hpp; sourceTree = "<group>"; };
 		9ECCE56119FD7B4500C37522 /* ray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ray.cpp; path = ../src/modules/ray.cpp; sourceTree = "<group>"; };
 		9ECCE56219FD7B4500C37522 /* ray.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ray.hpp; path = ../src/modules/ray.hpp; sourceTree = "<group>"; };
 		9ECCE56419FD837900C37522 /* ray.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ray.js; path = ../lib/ray.js; sourceTree = "<group>"; };
@@ -203,13 +195,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+				9E5B93DE1A09AB5900B5BDF4 /* Carbon.framework in Frameworks */,
 				0091D8F90E81B9330029341E /* OpenGL.framework in Frameworks */,
 				5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */,
+				9E5B93D51A09AB3D00B5BDF4 /* CoreLocation.framework in Frameworks */,
 				5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */,
+				9E5B93E41A09AB6400B5BDF4 /* CoreMedia.framework in Frameworks */,
+				9E5B93DA1A09AB5900B5BDF4 /* ApplicationServices.framework in Frameworks */,
 				00B784B30FF439BC000DE1D7 /* Accelerate.framework in Frameworks */,
+				9E5B93DC1A09AB5900B5BDF4 /* QuickTime.framework in Frameworks */,
 				00B784B40FF439BC000DE1D7 /* AudioToolbox.framework in Frameworks */,
 				00B784B50FF439BC000DE1D7 /* AudioUnit.framework in Frameworks */,
 				00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */,
+				9E5B93E21A09AB6400B5BDF4 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,13 +216,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E51343019FFE6CF004CF6C5 /* Cocoa.framework in Frameworks */,
+				9E5B93DF1A09AB5900B5BDF4 /* Carbon.framework in Frameworks */,
 				9E51343119FFE6CF004CF6C5 /* OpenGL.framework in Frameworks */,
 				9E51343219FFE6CF004CF6C5 /* CoreVideo.framework in Frameworks */,
+				9E5B93D61A09AB3D00B5BDF4 /* CoreLocation.framework in Frameworks */,
 				9E51343319FFE6CF004CF6C5 /* QTKit.framework in Frameworks */,
+				9E5B93E51A09AB6400B5BDF4 /* CoreMedia.framework in Frameworks */,
+				9E5B93DB1A09AB5900B5BDF4 /* ApplicationServices.framework in Frameworks */,
 				9E51343419FFE6CF004CF6C5 /* Accelerate.framework in Frameworks */,
+				9E5B93DD1A09AB5900B5BDF4 /* QuickTime.framework in Frameworks */,
 				9E51343519FFE6CF004CF6C5 /* AudioToolbox.framework in Frameworks */,
 				9E51343619FFE6CF004CF6C5 /* AudioUnit.framework in Frameworks */,
 				9E51343719FFE6CF004CF6C5 /* CoreAudio.framework in Frameworks */,
+				9E5B93E31A09AB6400B5BDF4 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,6 +259,10 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9E5B93D71A09AB5900B5BDF4 /* ApplicationServices.framework */,
+				9E5B93D81A09AB5900B5BDF4 /* QuickTime.framework */,
+				9E5B93D91A09AB5900B5BDF4 /* Carbon.framework */,
+				9E5B93D41A09AB3D00B5BDF4 /* CoreLocation.framework */,
 				00B784AF0FF439BC000DE1D7 /* Accelerate.framework */,
 				00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */,
 				00B784B10FF439BC000DE1D7 /* AudioUnit.framework */,
@@ -331,19 +339,9 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9E7F713019EE0C67002DDCFF /* libicui18n.dylib */,
-				9E7F713119EE0C67002DDCFF /* libicuuc.dylib */,
-				9E7F713219EE0C67002DDCFF /* libv8.dylib */,
+				9E5B93E01A09AB6400B5BDF4 /* AVFoundation.framework */,
+				9E5B93E11A09AB6400B5BDF4 /* CoreMedia.framework */,
 				9E7F711C19EDE93B002DDCFF /* libc++.dylib */,
-				9E7F710219EDD462002DDCFF /* libgmock.a */,
-				9E7F710319EDD462002DDCFF /* libgtest.a */,
-				9E7F710419EDD462002DDCFF /* libv8_libplatform.a */,
-				9E7F70F619EDD441002DDCFF /* libicudata.a */,
-				9E7F70F719EDD441002DDCFF /* libicui18n.a */,
-				9E7F70F819EDD441002DDCFF /* libicuuc.a */,
-				9E7F70F919EDD441002DDCFF /* libv8_base.a */,
-				9E7F70FA19EDD441002DDCFF /* libv8_libbase.a */,
-				9E7F70FB19EDD441002DDCFF /* libv8_snapshot.a */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
@@ -380,9 +378,7 @@
 				9E5B93D01A089C5B00B5BDF4 /* console.js */,
 				9ECCE56E19FDC71F00C37522 /* camera.js */,
 				9ECCE56419FD837900C37522 /* ray.js */,
-				9EC32A6A19FB140700CECCC3 /* light.js */,
 				9EC32A6819FAF42400CECCC3 /* color.js */,
-				9EC32A4B19FAEAFA00CECCC3 /* material.js */,
 				9E0BDE1819F9EFF70036038F /* app.js */,
 				9E0BDE1619F9EFA30036038F /* events.js */,
 				9E0BDE1419F9EEC80036038F /* default_main.js */,
@@ -404,8 +400,6 @@
 				9E5B93CC1A089AF400B5BDF4 /* text.cpp */,
 				9ECCE56B19FDB56100C37522 /* camera.cpp */,
 				9ECCE56119FD7B4500C37522 /* ray.cpp */,
-				9EC32A6C19FB141B00CECCC3 /* light.cpp */,
-				9E0BDE1F19FA8FB40036038F /* material.cpp */,
 				9E0BDE0E19F803330036038F /* vm.cpp */,
 				9ED123DC19F7ED4E007786A6 /* fs.cpp */,
 				9E9B3E4219F0390000291CDE /* console.cpp */,
@@ -421,8 +415,6 @@
 				9E5B93CB1A089AF400B5BDF4 /* text.hpp */,
 				9ECCE56C19FDB56100C37522 /* camera.hpp */,
 				9ECCE56219FD7B4500C37522 /* ray.hpp */,
-				9EC32A6D19FB141B00CECCC3 /* light.hpp */,
-				9E0BDE2019FA8FB40036038F /* material.hpp */,
 				9E0BDE0F19F803330036038F /* vm.hpp */,
 				9ED123DD19F7ED4E007786A6 /* fs.hpp */,
 				9E9B3E4319F0390000291CDE /* console.hpp */,
@@ -539,8 +531,6 @@
 				9ED123D119F7A43C007786A6 /* module.js in Resources */,
 				9E0BDE1D19F9F8F90036038F /* trig.js in Resources */,
 				9E0BDE1519F9EEC80036038F /* default_main.js in Resources */,
-				9EC32A6B19FB140700CECCC3 /* light.js in Resources */,
-				9EC32A4C19FAEAFA00CECCC3 /* material.js in Resources */,
 				9ED123DB19F7DD02007786A6 /* assert.js in Resources */,
 				9EC32A6919FAF42400CECCC3 /* color.js in Resources */,
 				9ED123CF19F78F85007786A6 /* path.js in Resources */,
@@ -568,8 +558,6 @@
 				9E51341119FFE6CF004CF6C5 /* module.js in Resources */,
 				9E51341219FFE6CF004CF6C5 /* trig.js in Resources */,
 				9E51341419FFE6CF004CF6C5 /* default_main.js in Resources */,
-				9E51341519FFE6CF004CF6C5 /* light.js in Resources */,
-				9E51341619FFE6CF004CF6C5 /* material.js in Resources */,
 				9E51341719FFE6CF004CF6C5 /* assert.js in Resources */,
 				9E51341819FFE6CF004CF6C5 /* color.js in Resources */,
 				9E51341919FFE6CF004CF6C5 /* path.js in Resources */,
@@ -621,10 +609,8 @@
 				9E0BDE1019F803330036038F /* vm.cpp in Sources */,
 				9E9B3E4019F0233C00291CDE /* PipeModule.cpp in Sources */,
 				9E5B93CA1A088A7A00B5BDF4 /* CinderAppBase.cpp in Sources */,
-				9EC32A6E19FB141B00CECCC3 /* light.cpp in Sources */,
 				9ECCE56D19FDB56100C37522 /* camera.cpp in Sources */,
 				9E9B3E3C19F022C000291CDE /* app.cpp in Sources */,
-				9E0BDE2119FA8FB40036038F /* material.cpp in Sources */,
 				69CC5FFAB4E1488598E5D024 /* cinderjsApp.cpp in Sources */,
 				9ECCE56319FD7B4500C37522 /* ray.cpp in Sources */,
 				9E9B3E4419F0390000291CDE /* console.cpp in Sources */,
@@ -643,10 +629,8 @@
 				9E51342019FFE6CF004CF6C5 /* StaticFactory.cpp in Sources */,
 				9E51342119FFE6CF004CF6C5 /* vm.cpp in Sources */,
 				9E51342219FFE6CF004CF6C5 /* PipeModule.cpp in Sources */,
-				9E51342319FFE6CF004CF6C5 /* light.cpp in Sources */,
 				9E51342419FFE6CF004CF6C5 /* camera.cpp in Sources */,
 				9E51342519FFE6CF004CF6C5 /* app.cpp in Sources */,
-				9E51342619FFE6CF004CF6C5 /* material.cpp in Sources */,
 				9E51342719FFE6CF004CF6C5 /* cinderjsApp.cpp in Sources */,
 				9E51342819FFE6CF004CF6C5 /* ray.cpp in Sources */,
 				9E51342A19FFE6CF004CF6C5 /* console.cpp in Sources */,

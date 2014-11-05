@@ -65,10 +65,10 @@ class RayModule : public PipeModule {
   
   //
   private:
-    static Vec3f sBufVec3f_1;
-    static Vec3f sBufVec3f_2;
-    static Vec3f sBufVec3f_3;
-    static Vec3f sBufVec3f_4;
+    static vec3 sBufVec3f_1;
+    static vec3 sBufVec3f_2;
+    static vec3 sBufVec3f_3;
+    static vec3 sBufVec3f_4;
  };
   
 } // namespace cjs
