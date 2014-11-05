@@ -27,6 +27,7 @@
 #include "modules/shader.hpp"
 #include "modules/batch.hpp"
 #include "modules/texture.hpp"
+#include "modules/glm.hpp"
 
 #include <assert.h>
 
@@ -182,6 +183,7 @@ void CinderjsApp::setup()
     // FATAL: No main entry source
     quit();
   }
+  
 }
 
 /**
@@ -278,6 +280,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   addModule(std::shared_ptr<ShaderModule>( new ShaderModule() ));
   addModule(std::shared_ptr<BatchModule>( new BatchModule() ));
   addModule(std::shared_ptr<TextureModule>( new TextureModule() ));
+  addModule(std::shared_ptr<GlmModule>( new GlmModule() ));
   
   
   // Create a new context.
@@ -851,7 +854,6 @@ void CinderjsApp::mouseDown( MouseEvent event )
 void CinderjsApp::keyDown( KeyEvent event )
 {
   // Add default failsafe keys (ESC1x exit fullscreen, ESC2x exit app)
-  std::cout << to_string(mLastEscPressed) << " / " << to_string(getElapsedSeconds() - mLastEscPressed) << std::endl;
   if(getElapsedSeconds() - mLastEscPressed < 0.5){
     if(isFullScreen()){
       setFullScreen(false);

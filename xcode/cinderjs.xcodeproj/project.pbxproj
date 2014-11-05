@@ -65,6 +65,8 @@
 		9E4ABF211A0A009100AF2706 /* test.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF0C1A0A009100AF2706 /* test.js */; };
 		9E4ABF221A0A009100AF2706 /* js2c.py in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF0E1A0A009100AF2706 /* js2c.py */; };
 		9E4ABF231A0A009100AF2706 /* prebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF0F1A0A009100AF2706 /* prebuild.sh */; };
+		9E5ACA3E1A0AA4F400FB75E8 /* glm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E5ACA3C1A0AA4F400FB75E8 /* glm.cpp */; };
+		9E5ACA401A0AA50400FB75E8 /* glm.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E5ACA3F1A0AA50400FB75E8 /* glm.js */; };
 		9ED25AC71A0A790A009CEDC4 /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED25AC51A0A790A009CEDC4 /* texture.cpp */; };
 		9ED25AC91A0A7918009CEDC4 /* texture.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED25AC81A0A7918009CEDC4 /* texture.js */; };
 /* End PBXBuildFile section */
@@ -147,6 +149,9 @@
 		9E4ABF0C1A0A009100AF2706 /* test.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test.js; sourceTree = "<group>"; };
 		9E4ABF0E1A0A009100AF2706 /* js2c.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = js2c.py; sourceTree = "<group>"; };
 		9E4ABF0F1A0A009100AF2706 /* prebuild.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = prebuild.sh; sourceTree = "<group>"; };
+		9E5ACA3C1A0AA4F400FB75E8 /* glm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glm.cpp; path = ../src/modules/glm.cpp; sourceTree = "<group>"; };
+		9E5ACA3D1A0AA4F400FB75E8 /* glm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = glm.hpp; sourceTree = "<group>"; };
+		9E5ACA3F1A0AA50400FB75E8 /* glm.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = glm.js; sourceTree = "<group>"; };
 		9ED25AC51A0A790A009CEDC4 /* texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = texture.cpp; path = ../src/modules/texture.cpp; sourceTree = "<group>"; };
 		9ED25AC61A0A790A009CEDC4 /* texture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = texture.hpp; sourceTree = "<group>"; };
 		9ED25AC81A0A7918009CEDC4 /* texture.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = texture.js; sourceTree = "<group>"; };
@@ -286,6 +291,7 @@
 				9E4ABEAA1A09FF6A00AF2706 /* console.hpp */,
 				9E4ABEAC1A09FF6A00AF2706 /* fs.hpp */,
 				9E4ABEAE1A09FF6A00AF2706 /* gl.hpp */,
+				9E5ACA3D1A0AA4F400FB75E8 /* glm.hpp */,
 				9E4ABEB01A09FF6A00AF2706 /* ray.hpp */,
 				9E4ABEB21A09FF6A00AF2706 /* shader.hpp */,
 				9ED25AC61A0A790A009CEDC4 /* texture.hpp */,
@@ -314,6 +320,7 @@
 				9E4ABEA91A09FF6A00AF2706 /* console.cpp */,
 				9E4ABEAB1A09FF6A00AF2706 /* fs.cpp */,
 				9E4ABEAD1A09FF6A00AF2706 /* gl.cpp */,
+				9E5ACA3C1A0AA4F400FB75E8 /* glm.cpp */,
 				9E4ABEAF1A09FF6A00AF2706 /* ray.cpp */,
 				9E4ABEB11A09FF6A00AF2706 /* shader.cpp */,
 				9ED25AC51A0A790A009CEDC4 /* texture.cpp */,
@@ -337,6 +344,7 @@
 				9E4ABEDE1A0A008500AF2706 /* events.js */,
 				9E4ABEDF1A0A008500AF2706 /* fs.js */,
 				9E4ABEE01A0A008500AF2706 /* gl.js */,
+				9E5ACA3F1A0AA50400FB75E8 /* glm.js */,
 				9E4ABEE11A0A008500AF2706 /* module.js */,
 				9E4ABEE21A0A008500AF2706 /* path.js */,
 				9E4ABEE31A0A008500AF2706 /* ray.js */,
@@ -461,6 +469,7 @@
 				9E4ABEF61A0A008500AF2706 /* ray.js in Resources */,
 				9E4ABEF81A0A008500AF2706 /* text.js in Resources */,
 				9E4ABEEB1A0A008500AF2706 /* batch.js in Resources */,
+				9E5ACA401A0AA50400FB75E8 /* glm.js in Resources */,
 				9E4ABEED1A0A008500AF2706 /* cinder.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -503,6 +512,7 @@
 				9E4ABED41A0A007500AF2706 /* README.md in Sources */,
 				9E4ABEC21A09FF6A00AF2706 /* camera.cpp in Sources */,
 				9E4ABECB1A09FF6A00AF2706 /* TextHelpers.cpp in Sources */,
+				9E5ACA3E1A0AA4F400FB75E8 /* glm.cpp in Sources */,
 				9E4ABEC31A09FF6A00AF2706 /* console.cpp in Sources */,
 				9E4ABEC11A09FF6A00AF2706 /* batch.cpp in Sources */,
 				9E4ABEC51A09FF6A00AF2706 /* gl.cpp in Sources */,

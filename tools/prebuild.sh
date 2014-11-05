@@ -20,4 +20,5 @@ python ../tools/js2c.py     \
   ../lib/shader.js          \
   ../lib/batch.js           \
   ../lib/texture.js         \
+  ../lib/glm.js             \
   ../lib/default_main.js    \

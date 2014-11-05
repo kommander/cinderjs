@@ -19,55 +19,39 @@
  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef _CinderAppBase_hpp_
-#define _CinderAppBase_hpp_
+#ifndef _GlmModule_hpp_
+#define _GlmModule_hpp_
 
 #pragma once
 
-#include "cinder/app/AppNative.h"
-#include <stdexcept>
+#define GLM_MOD_ID 12
 
-#include "v8.h"
-#include "PipeModule.hpp"
+#include "../PipeModule.hpp"
 
 namespace cjs {
-
-  class CinderAppBase : public cinder::app::AppNative {
-    public:
-      CinderAppBase(){}
-      ~CinderAppBase(){}
-    
-      /**
-       * Add a module
-       * Returns true if module successfully added
-       */
-      inline bool addModule( std::shared_ptr<PipeModule> mod )
-      {
-        // TODO: Check if module with name and id already exists
-        mod->setIsolate( *mIsolate );
-        mod->setContext(&pContext);
-        mod->setApp(this);
-        
-        MODULES.push_back( mod );
-        
-        if(NAMED_MODULES.find(mod->getName())->second){
-          std::string msg = "Module '" + mod->getName() + "' already exists.";
-          throw std::runtime_error(msg.c_str());
-        }
-        
-        NAMED_MODULES[mod->getName()] = mod;
-        return true;
-      }
-    
-      static bool shutdownInProgress;
-    protected:
-      std::vector<std::shared_ptr<PipeModule>> MODULES;
-      static std::map<std::string, std::shared_ptr<PipeModule>> NAMED_MODULES;
-      v8::Isolate* mIsolate;
-      v8::Local<v8::ObjectTemplate> mGlobal;
-      v8::Persistent<v8::Context> pContext;
-    
-  };
+  
+class GlmModule : public PipeModule {
+  public:
+    GlmModule(){}
+    ~GlmModule(){}
+  
+    inline int moduleId() {
+      return GLM_MOD_ID;
+    }
+  
+    inline std::string getName() {
+      return "glm";
+    }
+  
+    static void createMat4(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void destroyMat4(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void rotate(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void multMat4(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
+    void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
+    void draw(){};
+  
+ };
   
 } // namespace cjs
 

@@ -5,19 +5,14 @@ var Camera = require('camera');
 var Shader = require('shader');
 var Batch = require('batch');
 var Texture = require('texture');
+var glm = require('glm');
+var Mat4 = glm.Mat4;
 
 app.addAssetDirectory(__dirname + '/assets/');
 
 // Screen size holder
 var ctxSize = { x: 640, y: 480 };
 
-// Mouse
-var mouse = { x: 0, y: 0 };
-
-// Rotation
-var rotation = { x: 0, y: 0, z: 0 };
-
-var drawMethod = 0;
 var wireframe = false;
 
 var cam = new Camera();
@@ -30,43 +25,40 @@ var texture = new Texture( 'texture.jpg', texFormat );
 var glslProg = new Shader( 'shader.vert', 'shader.frag' );
 var batch = new Batch(0, glslProg);
 
+// Setup rotation matrices
+var cubeRotation = new Mat4();
+var rotationMatrix = glm.rotate(0.01, 0, 1, 0);
+
 // Uncomment these lines if you are experiencing casual frame rate drops to 45 or 30 fps
 app.disableFrameRate();
 gl.enableVerticalSync();
 
-console.log('vsync:', gl.isVerticalSyncEnabled());
 // GL Draw loop
 var loop = function(timePassed, mx, my){
   gl.enableDepthRead();
   gl.enableDepthWrite();
 
-  // Update mouse position
-  mouse.x = mx;
-  mouse.y = my;
-  
+  if(wireframe) gl.enableWireframe();
+
   gl.clear( 0.1, 0.1, 0.11 );
   
   // Update rotation
-  rotation.y += 0.6;
-  rotation.z += 0.8;
+  cubeRotation.mult(rotationMatrix);
   
   gl.setMatrices(cam.id);
-
   gl.pushMatrices();
-  
-  if(wireframe) gl.enableWireframe();
+    gl.multModelMatrix(cubeRotation.id); // TODO: missing a wrapper for multModelMatrix to take Mat4 objects directly
 
-  texture.bind();
-  batch.draw();
-
-  if(wireframe) gl.disableWireframe();
+    texture.bind();
+    batch.draw();
 
   gl.popMatrices();
 
+  if(wireframe) gl.disableWireframe();
+
   gl.disableDepthRead();
   gl.disableDepthWrite();
-
-}
+};
 
 // Register draw loop (executed each frame, allows drawing to window)
 app.draw(loop);

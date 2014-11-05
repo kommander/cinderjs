@@ -369,6 +369,21 @@ void GLModule::clear(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return;
 }
 
+/**
+ *
+ */
+void GLModule::multModelMatrix(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  uint32_t id = args[0]->ToUint32()->Value();
+  std::shared_ptr<mat4> matrix = StaticFactory::get<mat4>(id);
+  
+  if(!matrix){
+    return;
+  }
+  
+  gl::multModelMatrix(*matrix);
+  return;
+}
+
 // TODO
 //void setMatrices( const Camera &cam );
 //void setModelView( const Camera &cam );
@@ -407,6 +422,7 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "disableVerticalSync"), v8::FunctionTemplate::New(getIsolate(), disableVerticalSync));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "isVerticalSyncEnabled"), v8::FunctionTemplate::New(getIsolate(), isVerticalSyncEnabled));
   
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "multModelMatrix"), v8::FunctionTemplate::New(getIsolate(), multModelMatrix));
   
   // Primitives
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawCube"), v8::FunctionTemplate::New(getIsolate(), drawCube));
