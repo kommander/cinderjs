@@ -30,6 +30,9 @@ var texture = new Texture( 'texture.jpg', texFormat );
 var glslProg = new Shader( 'shader.vert', 'shader.frag' );
 var batch = new Batch(0, glslProg);
 
+// Uncomment this if you are experiencing casual frame rate drops to 45 or 30 fps
+gl.disableVerticalSync();
+console.log('vsync:', gl.isVerticalSyncEnabled());
 // GL Draw loop
 var loop = function(timePassed, mx, my){
   gl.enableDepthRead();
@@ -39,8 +42,6 @@ var loop = function(timePassed, mx, my){
   mouse.x = mx;
   mouse.y = my;
   
-  gl.pushMatrices();
-  
   gl.clear( 0.1, 0.1, 0.11 );
   
   // Update rotation
@@ -49,6 +50,8 @@ var loop = function(timePassed, mx, my){
   
   gl.setMatrices(cam.id);
 
+  gl.pushMatrices();
+  
   if(wireframe) gl.enableWireframe();
 
   texture.bind();
