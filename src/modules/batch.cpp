@@ -46,6 +46,12 @@ void BatchModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
     uint32_t shaderId = args[2]->ToUint32()->Value();
     
     GlslProgRef shader = StaticFactory::get<GlslProg>(shaderId);
+    
+    if(!shader){
+      isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Shader (GlslProg) does not exist.")));
+      return;
+    }
+    
     BatchRef batch = Batch::create(geom::Cube(), shader);
     
     StaticFactory::put<Batch>( isolate, batch, args[0]->ToObject() );
