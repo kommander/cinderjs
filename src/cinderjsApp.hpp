@@ -54,13 +54,13 @@ class BufferedEventHolder {
   std::vector<cinder::fs::path> fdFiles;
   v8::Persistent<v8::Function> v8Fn;
 };
-typedef boost::shared_ptr<BufferedEventHolder> BufferedEvent;
+typedef std::shared_ptr<BufferedEventHolder> BufferedEvent;
 
 class NextFrameFnHolder {
   public:
   v8::Persistent<v8::Function> v8Fn;
 };
-typedef boost::shared_ptr<NextFrameFnHolder> NextFrameFn;
+typedef std::shared_ptr<NextFrameFnHolder> NextFrameFn;
 
 class TimerFnHolder {
   public:
@@ -71,7 +71,7 @@ class TimerFnHolder {
   bool _repeat = false;
   bool _remove = false;
 };
-typedef boost::shared_ptr<TimerFnHolder> TimerFn;
+typedef std::shared_ptr<TimerFnHolder> TimerFn;
 
 enum EventType {
   CJS_SHUTDOWN_REQUEST = 0,

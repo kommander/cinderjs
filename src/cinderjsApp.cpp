@@ -2,7 +2,6 @@
 #include "cinder/app/RendererGl.h"
 
 #include <boost/bind.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/thread/thread.hpp>
 
 #include <string.h>
@@ -264,15 +263,15 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   
   //
   // Load Modules
-  addModule(boost::shared_ptr<AppModule>( new AppModule() ));
-  addModule(boost::shared_ptr<GLModule>( new GLModule() ));
-  addModule(boost::shared_ptr<ConsoleModule>( new ConsoleModule() ));
-  addModule(boost::shared_ptr<TextModule>( new TextModule() ));
-  addModule(boost::shared_ptr<FSModule>( new FSModule() ));
-  addModule(boost::shared_ptr<VMModule>( new VMModule() ));
-  addModule(boost::shared_ptr<RayModule>( new RayModule() ));
-  addModule(boost::shared_ptr<CameraModule>( new CameraModule() ));
-  addModule(boost::shared_ptr<ShaderModule>( new ShaderModule() ));
+  addModule(std::shared_ptr<AppModule>( new AppModule() ));
+  addModule(std::shared_ptr<GLModule>( new GLModule() ));
+  addModule(std::shared_ptr<ConsoleModule>( new ConsoleModule() ));
+  addModule(std::shared_ptr<TextModule>( new TextModule() ));
+  addModule(std::shared_ptr<FSModule>( new FSModule() ));
+  addModule(std::shared_ptr<VMModule>( new VMModule() ));
+  addModule(std::shared_ptr<RayModule>( new RayModule() ));
+  addModule(std::shared_ptr<CameraModule>( new CameraModule() ));
+  addModule(std::shared_ptr<ShaderModule>( new ShaderModule() ));
   
   
   // Create a new context.
@@ -436,7 +435,7 @@ void CinderjsApp::v8RenderThread(){
       }
 
       // Draw modules
-//      for( std::vector<boost::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
+//      for( std::vector<std::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
 //        it->get()->draw();
 //      }
       
@@ -1203,7 +1202,7 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
     }
     
     // Try: v8::Local<Context>::New(isolate, pContext)
-    boost::shared_ptr<PipeModule> nativeMod = CinderjsApp::NAMED_MODULES[cmpModName];
+    std::shared_ptr<PipeModule> nativeMod = CinderjsApp::NAMED_MODULES[cmpModName];
     Local<Object> modObj = isolate->GetCurrentContext()->Global();
     if(nativeMod) {
       Local<ObjectTemplate> ctxGlb = ObjectTemplate::New(isolate);

@@ -334,7 +334,7 @@ void GLModule::drawSphere(const v8::FunctionCallbackInfo<v8::Value>& args) {
 void GLModule::setMatrices(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(args[0]->IsUint32()){
     uint32_t id = args[0]->ToUint32()->Value();
-    boost::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
+    std::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
       Isolate* isolate = args.GetIsolate();

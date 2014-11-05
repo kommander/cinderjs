@@ -26,8 +26,6 @@
 
 #include "cinder/app/AppNative.h"
 
-#include <boost/shared_ptr.hpp>
-
 #include "v8.h"
 #include "PipeModule.hpp"
 
@@ -42,7 +40,7 @@ namespace cjs {
        * Add a module
        * Returns true if module successfully added
        */
-      inline bool addModule( boost::shared_ptr<PipeModule> mod )
+      inline bool addModule( std::shared_ptr<PipeModule> mod )
       {
         mod->setIsolate( *mIsolate );
         mod->setContext(&pContext);
@@ -55,8 +53,8 @@ namespace cjs {
     
       static bool shutdownInProgress;
     protected:
-      std::vector<boost::shared_ptr<PipeModule>> MODULES;
-      static std::map<std::string, boost::shared_ptr<PipeModule>> NAMED_MODULES;
+      std::vector<std::shared_ptr<PipeModule>> MODULES;
+      static std::map<std::string, std::shared_ptr<PipeModule>> NAMED_MODULES;
       v8::Isolate* mIsolate;
       v8::Local<v8::ObjectTemplate> mGlobal;
       v8::Persistent<v8::Context> pContext;

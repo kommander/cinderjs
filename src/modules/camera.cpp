@@ -66,7 +66,7 @@ void CameraModule::setEyePoint(const v8::FunctionCallbackInfo<v8::Value>& args) 
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
+    std::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
       return;
@@ -89,7 +89,7 @@ void CameraModule::lookAt(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
+    std::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
       return;
@@ -112,7 +112,7 @@ void CameraModule::setViewDirection(const v8::FunctionCallbackInfo<v8::Value>& a
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
+    std::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
       return;
@@ -135,7 +135,7 @@ void CameraModule::setOrientation(const v8::FunctionCallbackInfo<v8::Value>& arg
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
+    std::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
       return;
@@ -158,7 +158,7 @@ void CameraModule::generateRay(const v8::FunctionCallbackInfo<v8::Value>& args) 
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
+    std::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
       return;
@@ -167,7 +167,7 @@ void CameraModule::generateRay(const v8::FunctionCallbackInfo<v8::Value>& args) 
     // Args u, v, aspect ration
     Ray ray = cam->generateRay(args[1]->ToNumber()->Value(), args[2]->ToNumber()->Value(), args[3]->ToNumber()->Value());
     
-    StaticFactory::put<Ray>(isolate, boost::shared_ptr<Ray>(new Ray(ray)), args[4]->ToObject());
+    StaticFactory::put<Ray>(isolate, std::shared_ptr<Ray>(new Ray(ray)), args[4]->ToObject());
   }
   
   return;
@@ -180,7 +180,7 @@ void CameraModule::setCenterOfInterestPoint(const v8::FunctionCallbackInfo<v8::V
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
+    std::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
       return;
@@ -203,7 +203,7 @@ void CameraModule::setPerspective(const v8::FunctionCallbackInfo<v8::Value>& arg
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
+    std::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
       return;

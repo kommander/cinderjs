@@ -24,9 +24,6 @@
 
 #pragma once
 
-#include <boost/shared_array.hpp>
-#include <boost/shared_ptr.hpp>
-
 #include "cinder/app/Event.h"
 
 #include "cinder/app/AppNative.h"

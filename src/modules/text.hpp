@@ -58,7 +58,7 @@ class TextModule : public PipeModule {
     static void drawSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void updateSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void setSimpleTextPos(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static std::map<uint32_t, boost::shared_ptr<SimpleText>> sTextObjects;
+    static std::map<uint32_t, std::shared_ptr<SimpleText>> sTextObjects;
     static uint32_t sTextObjectIds;
   
     // Buffers

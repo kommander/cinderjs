@@ -68,7 +68,7 @@ void RayModule::setOrigin(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Ray> ray = StaticFactory::get<Ray>(id);
+    std::shared_ptr<Ray> ray = StaticFactory::get<Ray>(id);
     
     if(!ray){
       return;
@@ -91,7 +91,7 @@ void RayModule::getOrigin(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Ray> ray = StaticFactory::get<Ray>(id);
+    std::shared_ptr<Ray> ray = StaticFactory::get<Ray>(id);
     
     if(!ray){
       return;
@@ -118,7 +118,7 @@ void RayModule::setDirection(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Ray> ray = StaticFactory::get<Ray>(id);
+    std::shared_ptr<Ray> ray = StaticFactory::get<Ray>(id);
     
     if(!ray){
       return;
@@ -141,7 +141,7 @@ void RayModule::getDirection(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Ray> ray = StaticFactory::get<Ray>(id);
+    std::shared_ptr<Ray> ray = StaticFactory::get<Ray>(id);
     
     if(!ray){
       return;
@@ -169,7 +169,7 @@ void RayModule::calcPosition(const v8::FunctionCallbackInfo<v8::Value>& args) {
     uint32_t id = args[0]->ToUint32()->Value();
     double t = args[1]->ToNumber()->Value();
     
-    boost::shared_ptr<Ray> ray = StaticFactory::get<Ray>(id);
+    std::shared_ptr<Ray> ray = StaticFactory::get<Ray>(id);
     
     if(!ray){
       return;
@@ -196,7 +196,7 @@ void RayModule::calcTriangleIntersection(const v8::FunctionCallbackInfo<v8::Valu
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    boost::shared_ptr<Ray> ray = StaticFactory::get<Ray>(id);
+    std::shared_ptr<Ray> ray = StaticFactory::get<Ray>(id);
     
     if(!ray){
       return;

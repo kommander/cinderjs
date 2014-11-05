@@ -25,7 +25,9 @@
 #pragma once
 
 #include <map>
-#include <boost/shared_ptr.hpp>
+#include <iostream>
+#include <assert.h>
+
 #include <boost/any.hpp>
 
 #include "v8.h"
@@ -58,7 +60,7 @@ namespace cjs {
     class Wrapper {
       public:
       uint32_t id;
-      boost::shared_ptr<T> value;
+      std::shared_ptr<T> value;
       
       ~Wrapper(){
         if(!handle_.IsEmpty() && handle_.IsWeak()){
@@ -108,12 +110,12 @@ namespace cjs {
     
       template<class T>
       static void create( v8::Isolate* isolate, v8::Handle<v8::Object> idHolder ){
-        put( isolate, boost::shared_ptr<T>(new T()), idHolder );
+        put( isolate, std::shared_ptr<T>(new T()), idHolder );
       }
     
       template<class T>
-      static void put( v8::Isolate* isolate, boost::shared_ptr<T> value, v8::Handle<v8::Object> idHolder ){
-        boost::shared_ptr<Wrapper<T>> tuple( new Wrapper<T>() );
+      static void put( v8::Isolate* isolate, std::shared_ptr<T> value, v8::Handle<v8::Object> idHolder ){
+        std::shared_ptr<Wrapper<T>> tuple( new Wrapper<T>() );
         
         // TODO: Replace with _getId()
         uint32_t id = ++_sObjectCounter;
@@ -142,14 +144,14 @@ namespace cjs {
       }
     
       template<class T>
-      static boost::shared_ptr<T> get( uint32_t id ){
+      static std::shared_ptr<T> get( uint32_t id ){
         boost::any wrap = _sObjectMap[id];
         if(wrap.empty()){
-          return boost::shared_ptr<T>();
+          return std::shared_ptr<T>();
         } else {
           // If conversion fails, the ids are probably mixed up
           // and the map returns the wrong object so it cannot be converted to T
-          boost::shared_ptr<Wrapper<T>> proxy = boost::any_cast<boost::shared_ptr<Wrapper<T>>>(wrap);
+          std::shared_ptr<Wrapper<T>> proxy = boost::any_cast<std::shared_ptr<Wrapper<T>>>(wrap);
           return proxy->value;
         }
       }
@@ -160,7 +162,7 @@ namespace cjs {
         boost::any wrap = _sObjectMap[id];
         if(!wrap.empty()){
           v8::HandleScope scope(isolate);
-          boost::shared_ptr<Wrapper<T>> proxy = boost::any_cast<boost::shared_ptr<Wrapper<T>>>(wrap);
+          std::shared_ptr<Wrapper<T>> proxy = boost::any_cast<std::shared_ptr<Wrapper<T>>>(wrap);
 
           isolate->AdjustAmountOfExternalAllocatedMemory(-sizeof(*proxy));
           _sObjectMap.erase(id);

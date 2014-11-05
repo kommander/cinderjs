@@ -29,7 +29,7 @@ using namespace v8;
 
 namespace cjs {
 
-std::map<uint32_t, boost::shared_ptr<SimpleText>> TextModule::sTextObjects;
+std::map<uint32_t, std::shared_ptr<SimpleText>> TextModule::sTextObjects;
 uint32_t TextModule::sTextObjectIds = 0;
 vec3 TextModule::bufVec3f_1;
 
@@ -41,7 +41,7 @@ void TextModule::createSimpleText(const v8::FunctionCallbackInfo<v8::Value>& arg
   
   uint32_t id = ++sTextObjectIds;
   
-  boost::shared_ptr<SimpleText> newText( new SimpleText() );
+  std::shared_ptr<SimpleText> newText( new SimpleText() );
   newText->setText( *str );
   
   sTextObjects[id] = newText;
@@ -51,7 +51,7 @@ void TextModule::createSimpleText(const v8::FunctionCallbackInfo<v8::Value>& arg
 
 void TextModule::drawSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args) {
   uint32_t id = args[0]->Uint32Value();
-  boost::shared_ptr<SimpleText> textObj = sTextObjects[id];
+  std::shared_ptr<SimpleText> textObj = sTextObjects[id];
   if( textObj ){
     textObj->draw();
   }
@@ -59,7 +59,7 @@ void TextModule::drawSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args)
 
 void TextModule::updateSimpleText(const v8::FunctionCallbackInfo<v8::Value>& args) {
   uint32_t id = args[0]->Uint32Value();
-  boost::shared_ptr<SimpleText> textObj = sTextObjects[id];
+  std::shared_ptr<SimpleText> textObj = sTextObjects[id];
   if( textObj ){
     v8::String::Utf8Value str(args[1]);
     textObj->setText( *str );
@@ -68,7 +68,7 @@ void TextModule::updateSimpleText(const v8::FunctionCallbackInfo<v8::Value>& arg
 
 void TextModule::setSimpleTextPos(const v8::FunctionCallbackInfo<v8::Value>& args) {
   uint32_t id = args[0]->Uint32Value();
-  boost::shared_ptr<SimpleText> textObj = sTextObjects[id];
+  std::shared_ptr<SimpleText> textObj = sTextObjects[id];
   if( textObj ){
     bufVec3f_1.x = args[1]->NumberValue();
     bufVec3f_1.y = args[2]->NumberValue();

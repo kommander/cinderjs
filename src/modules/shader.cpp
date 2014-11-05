@@ -48,6 +48,7 @@ void ShaderModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
     gl::GlslProgRef glsl;
     
     try {
+      // TODO: Take prog strings optionally (-> shader.js)
       //glsl = gl::GlslProg::create( *utf8Vert, *utf8Frag );
       glsl = gl::GlslProg::create(getApp()->loadAsset(fs::path(*utf8Vert)),
         getApp()->loadAsset(fs::path(*utf8Frag)));
@@ -63,9 +64,7 @@ void ShaderModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
       return;
     }
     
-    // FIXME: Use std::shared_ptr's instead of boost?
-    boost::shared_ptr<GlslProgRef> ref(&glsl);
-    StaticFactory::put<GlslProgRef>( isolate, ref, args[0]->ToObject() );
+    StaticFactory::put<GlslProg>( isolate, glsl, args[0]->ToObject() );
   }
   
   return;

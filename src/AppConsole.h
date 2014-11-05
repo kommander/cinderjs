@@ -15,8 +15,6 @@
 #include "cinder/Text.h"
 #include "cinder/Color.h"
 
-#include <boost/shared_ptr.hpp>
-
 #include <vector>
 #include <string>
 
