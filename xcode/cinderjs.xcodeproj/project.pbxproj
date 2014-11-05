@@ -65,6 +65,8 @@
 		9E4ABF211A0A009100AF2706 /* test.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF0C1A0A009100AF2706 /* test.js */; };
 		9E4ABF221A0A009100AF2706 /* js2c.py in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF0E1A0A009100AF2706 /* js2c.py */; };
 		9E4ABF231A0A009100AF2706 /* prebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF0F1A0A009100AF2706 /* prebuild.sh */; };
+		9ED25AC71A0A790A009CEDC4 /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED25AC51A0A790A009CEDC4 /* texture.cpp */; };
+		9ED25AC91A0A7918009CEDC4 /* texture.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED25AC81A0A7918009CEDC4 /* texture.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -145,6 +147,9 @@
 		9E4ABF0C1A0A009100AF2706 /* test.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test.js; sourceTree = "<group>"; };
 		9E4ABF0E1A0A009100AF2706 /* js2c.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = js2c.py; sourceTree = "<group>"; };
 		9E4ABF0F1A0A009100AF2706 /* prebuild.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = prebuild.sh; sourceTree = "<group>"; };
+		9ED25AC51A0A790A009CEDC4 /* texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = texture.cpp; path = ../src/modules/texture.cpp; sourceTree = "<group>"; };
+		9ED25AC61A0A790A009CEDC4 /* texture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = texture.hpp; sourceTree = "<group>"; };
+		9ED25AC81A0A7918009CEDC4 /* texture.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = texture.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -241,9 +246,9 @@
 			isa = PBXGroup;
 			children = (
 				9E4ABEA21A09FF6A00AF2706 /* modules */,
+				9E4ABEA01A09FF6A00AF2706 /* cinderjsApp.hpp */,
 				9E4ABE9C1A09FF6A00AF2706 /* AppConsole.h */,
 				9E4ABE9E1A09FF6A00AF2706 /* CinderAppBase.hpp */,
-				9E4ABEA01A09FF6A00AF2706 /* cinderjsApp.hpp */,
 				9E4ABEB71A09FF6A00AF2706 /* PipeModule.hpp */,
 				9E4ABEB91A09FF6A00AF2706 /* StaticFactory.hpp */,
 				9E4ABECE1A09FFBE00AF2706 /* Resources.h */,
@@ -283,6 +288,7 @@
 				9E4ABEAE1A09FF6A00AF2706 /* gl.hpp */,
 				9E4ABEB01A09FF6A00AF2706 /* ray.hpp */,
 				9E4ABEB21A09FF6A00AF2706 /* shader.hpp */,
+				9ED25AC61A0A790A009CEDC4 /* texture.hpp */,
 				9E4ABEB41A09FF6A00AF2706 /* text.hpp */,
 				9E4ABEB61A09FF6A00AF2706 /* vm.hpp */,
 			);
@@ -310,6 +316,7 @@
 				9E4ABEAD1A09FF6A00AF2706 /* gl.cpp */,
 				9E4ABEAF1A09FF6A00AF2706 /* ray.cpp */,
 				9E4ABEB11A09FF6A00AF2706 /* shader.cpp */,
+				9ED25AC51A0A790A009CEDC4 /* texture.cpp */,
 				9E4ABEB31A09FF6A00AF2706 /* text.cpp */,
 				9E4ABEB51A09FF6A00AF2706 /* vm.cpp */,
 			);
@@ -334,6 +341,7 @@
 				9E4ABEE21A0A008500AF2706 /* path.js */,
 				9E4ABEE31A0A008500AF2706 /* ray.js */,
 				9E4ABEE41A0A008500AF2706 /* shader.js */,
+				9ED25AC81A0A7918009CEDC4 /* texture.js */,
 				9E4ABEE51A0A008500AF2706 /* text.js */,
 				9E4ABEE61A0A008500AF2706 /* timers.js */,
 				9E4ABEE71A0A008500AF2706 /* util.js */,
@@ -428,6 +436,7 @@
 				9E4ABEEC1A0A008500AF2706 /* camera.js in Resources */,
 				9E4ABF1D1A0A009100AF2706 /* physics.js in Resources */,
 				9E4ABF211A0A009100AF2706 /* test.js in Resources */,
+				9ED25AC91A0A7918009CEDC4 /* texture.js in Resources */,
 				9E4ABEEE1A0A008500AF2706 /* color.js in Resources */,
 				9E4ABF171A0A009100AF2706 /* cubes.js in Resources */,
 				9E4ABEF91A0A008500AF2706 /* timers.js in Resources */,
@@ -482,6 +491,7 @@
 				9E4ABECA1A09FF6A00AF2706 /* StaticFactory.cpp in Sources */,
 				9E4ABEC91A09FF6A00AF2706 /* vm.cpp in Sources */,
 				9E4ABEC41A09FF6A00AF2706 /* fs.cpp in Sources */,
+				9ED25AC71A0A790A009CEDC4 /* texture.cpp in Sources */,
 				9E4ABECC1A09FF6A00AF2706 /* PipeModule.cpp in Sources */,
 				9E4ABEC71A09FF6A00AF2706 /* shader.cpp in Sources */,
 				9E4ABEC81A09FF6A00AF2706 /* text.cpp in Sources */,

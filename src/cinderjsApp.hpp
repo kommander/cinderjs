@@ -83,21 +83,15 @@ enum EventType {
 };
 
 // TODO
-// - Make object creation/lookup reusable within modules (Ray/Light/Material)
-// - Lazy load module bindings only when a native module that uses the bindings is required
-// - !!! Fix "exports" object usage in js modules (cannot be replaced with something like exports = function(){},
-//   will return an empty exports object (not sure why)
-// - Load a js module by dropping it on the app window
-// - Split cinderjsApp in header file
 // - Expose Env info like OS etc.
 // - Expose versions object (cinder, v8, cinderjs)
 // - uncaughtException handler
 
 // Design Notes:
 // - The implementation and native/js communication is trying to avoid object instantiation
-//   to have less conversion (object wrapping/unwrapping) costs when calling C++ methods from js and the other way waround.
+//   to have less conversion (object wrapping/unwrapping) costs when calling C++ methods from js and the other way around.
 //   This behaviour can be mimiced within js itself. Converting numbers is way faster then
-//   unpacking full fledged js objects to C++. ( eg. args[0]->ToObject()->Get(...) )
+//   Unpacking full fledged js objects to C++ seems more expensive. ( eg. args[0]->ToObject()->Get(...) )
 
 class CinderjsApp : public CinderAppBase  {
   public:
@@ -214,6 +208,7 @@ class CinderjsApp : public CinderAppBase  {
   
   void v8Draw();
   double lastFrameTime = 0;
+  v8::HeapStatistics _mHeapStats;
 };
 
   

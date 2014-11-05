@@ -26,6 +26,7 @@
 #include "modules/camera.hpp"
 #include "modules/shader.hpp"
 #include "modules/batch.hpp"
+#include "modules/texture.hpp"
 
 #include <assert.h>
 
@@ -38,10 +39,11 @@ namespace cjs {
 
 #ifdef DEBUG
 volatile bool CinderjsApp::sConsoleActive = true;
+volatile bool CinderjsApp::sV8StatsActive = true;
 #else
 volatile bool CinderjsApp::sConsoleActive = false;
-#endif
 volatile bool CinderjsApp::sV8StatsActive = false;
+#endif
 
 bool CinderjsApp::sQuitRequested = false;
 bool CinderAppBase::shutdownInProgress = false;
@@ -275,6 +277,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   addModule(std::shared_ptr<CameraModule>( new CameraModule() ));
   addModule(std::shared_ptr<ShaderModule>( new ShaderModule() ));
   addModule(std::shared_ptr<BatchModule>( new BatchModule() ));
+  addModule(std::shared_ptr<TextureModule>( new TextureModule() ));
   
   
   // Create a new context.
@@ -392,7 +395,6 @@ void CinderjsApp::v8RenderThread(){
 }
   
 void CinderjsApp::v8Draw(){
-  v8::HeapStatistics stats;
   
   // Gather some info...
   double now = getElapsedSeconds() * 1000;
@@ -403,7 +405,7 @@ void CinderjsApp::v8Draw(){
     v8FPS = v8Frames;
     v8Frames = 0;
     mLastUpdate = now;
-    if(sV8StatsActive) mIsolate->GetHeapStatistics(&stats);
+    if(sV8StatsActive) mIsolate->GetHeapStatistics(&_mHeapStats);
   }
 
   v8::Locker lock(mIsolate);
@@ -427,7 +429,11 @@ void CinderjsApp::v8Draw(){
 
     v8::TryCatch try_catch;
     
+    gl::pushMatrices();
+    
     callback->Call(callback->CreationContext()->Global(), 3, argv);
+    
+    gl::popMatrices();
     
     // Check for errors
     if(try_catch.HasCaught()){
@@ -450,9 +456,9 @@ void CinderjsApp::v8Draw(){
   fpsText.addLine( "V8 FPS: " + std::to_string( v8FPS ) );
   
   if(sV8StatsActive){
-    fpsText.addLine( "V8 Heap limit: " + std::to_string( stats.heap_size_limit() ) );
-    fpsText.addLine( "V8 Heap total: " + std::to_string( stats.total_heap_size() ) );
-    fpsText.addLine( "V8 Heap Used: " + std::to_string( stats.used_heap_size() ) );
+    fpsText.addLine( "V8 Heap limit: " + std::to_string( _mHeapStats.heap_size_limit() ) );
+    fpsText.addLine( "V8 Heap total: " + std::to_string( _mHeapStats.total_heap_size() ) );
+    fpsText.addLine( "V8 Heap Used: " + std::to_string( _mHeapStats.used_heap_size() ) );
   }
   
   cinder::gl::draw( cinder::gl::Texture::create( fpsText.render() ) );
@@ -948,8 +954,6 @@ void CinderjsApp::setDrawCallback(const v8::FunctionCallbackInfo<v8::Value>& arg
   
   sDrawCallback.Reset(isolate, args[0].As<v8::Function>());
   
-  // TODO: strip drawCallback from global obj, so only one main loop can be used
-  
   return;
 }
 
@@ -969,8 +973,6 @@ void CinderjsApp::setEventCallback(const v8::FunctionCallbackInfo<v8::Value>& ar
   AppConsole::log("event callback set.");
   
   sEventCallback.Reset(isolate, args[0].As<v8::Function>());
-  
-  // TODO: Remove event callback setter function from global context
   
   return;
 }

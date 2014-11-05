@@ -19,48 +19,41 @@
  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef _CinderAppBase_hpp_
-#define _CinderAppBase_hpp_
+#ifndef _TextureModule_hpp_
+#define _TextureModule_hpp_
 
 #pragma once
 
-#include "cinder/app/AppNative.h"
+#define TEXTURE_MOD_ID 11
 
-#include "v8.h"
-#include "PipeModule.hpp"
+#include "../PipeModule.hpp"
 
 namespace cjs {
-
-  class CinderAppBase : public cinder::app::AppNative {
-    public:
-      CinderAppBase(){}
-      ~CinderAppBase(){}
-    
-      /**
-       * Add a module
-       * Returns true if module successfully added
-       */
-      inline bool addModule( std::shared_ptr<PipeModule> mod )
-      {
-        // TODO: Check if module with name and id already exists
-        mod->setIsolate( *mIsolate );
-        mod->setContext(&pContext);
-        mod->setApp(this);
-        
-        MODULES.push_back( mod );
-        NAMED_MODULES[mod->getName()] = mod;
-        return true;
-      }
-    
-      static bool shutdownInProgress;
-    protected:
-      std::vector<std::shared_ptr<PipeModule>> MODULES;
-      static std::map<std::string, std::shared_ptr<PipeModule>> NAMED_MODULES;
-      v8::Isolate* mIsolate;
-      v8::Local<v8::ObjectTemplate> mGlobal;
-      v8::Persistent<v8::Context> pContext;
-    
-  };
+  
+class TextureModule : public PipeModule {
+  public:
+    TextureModule(){}
+    ~TextureModule(){}
+  
+    inline int moduleId() {
+      return TEXTURE_MOD_ID;
+    }
+  
+    inline std::string getName() {
+      return "texture";
+    }
+  
+    static void create(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void destroy(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void bind(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
+    void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
+    void draw(){};
+  
+  //
+  private:
+  
+ };
   
 } // namespace cjs
 

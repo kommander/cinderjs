@@ -4,6 +4,7 @@ var gl = require('gl');
 var Camera = require('camera');
 var Shader = require('shader');
 var Batch = require('batch');
+var Texture = require('texture');
 
 app.addAssetDirectory(__dirname + '/assets/');
 
@@ -22,6 +23,9 @@ var wireframe = false;
 var cam = new Camera();
 cam.lookAt( 3, 2, 4, 0, 0, 0 );
 cam.setPerspective( 60.0, app.getAspectRatio(), 1.0, 1000.0 );
+
+var texFormat = null; // TODO: implement
+var texture = new Texture( 'texture.jpg', texFormat );
 
 var glslProg = new Shader( 'shader.vert', 'shader.frag' );
 var batch = new Batch(0, glslProg);
@@ -46,7 +50,8 @@ var loop = function(timePassed, mx, my){
   gl.setMatrices(cam.id);
 
   if(wireframe) gl.enableWireframe();
-  
+
+  texture.bind();
   batch.draw();
 
   if(wireframe) gl.disableWireframe();
@@ -68,8 +73,8 @@ app.on('resize', function(w, h){
   cam.setPerspective( 60.0, app.getAspectRatio(), 1.0, 1000.0 );
 });
 
-// Handle key events
 app.on('keydown', function( evt ){
+
   if(evt.charCode == 99) { // C
     toggleAppConsole();
   } else if(evt.charCode == 27) { // ESC
