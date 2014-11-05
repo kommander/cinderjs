@@ -19,59 +19,44 @@
  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  POSSIBILITY OF SUCH DAMAGE.
  */
+#ifndef _BatchModule_hpp_
+#define _BatchModule_hpp_
 
-#include "app.hpp"
-#include "AppConsole.h"
+#pragma once
 
-using namespace std;
-using namespace cinder;
-using namespace v8;
+#define BATCH_MOD_ID 10
+
+#include "../PipeModule.hpp"
 
 namespace cjs {
-
-/**
- *
- */
-void AppModule::getAspectRatio(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  Isolate* isolate = args.GetIsolate();
-  HandleScope scope(isolate);
   
-  float ratio = getApp()->getWindowAspectRatio();
+class BatchModule : public PipeModule {
+  public:
+    BatchModule(){}
+    ~BatchModule(){}
   
-  args.GetReturnValue().Set(v8::Number::New(isolate, ratio));
-  return;
-}
-
-/**
- *
- */
-void AppModule::addAssetDirectory(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  Isolate* isolate = args.GetIsolate();
-  HandleScope scope(isolate);
+    inline int moduleId() {
+      return BATCH_MOD_ID;
+    }
   
-  if(args[0]->IsString()){
-    v8::String::Utf8Value pathStr(args[0]->ToString());
-    getApp()->addAssetDirectory(fs::path(*pathStr));
-  }
+    inline std::string getName() {
+      return "batch";
+    }
   
-  return;
-}
-
-
-/**
- * Load bindings onto global js object
- */
-void AppModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
-
-  // Create global app object
-  Handle<ObjectTemplate> appTemplate = ObjectTemplate::New(getIsolate());
+    static void create(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void destroy(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void draw(const v8::FunctionCallbackInfo<v8::Value>& args);
   
-  appTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "getAspectRatio"), v8::FunctionTemplate::New(getIsolate(), getAspectRatio));
-  appTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "addAssetDirectory"), v8::FunctionTemplate::New(getIsolate(), addAssetDirectory));
+    void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
+    void draw(){};
   
-  // Expose global app object
-  global->Set(v8::String::NewFromUtf8(getIsolate(), "app"), appTemplate);
-}
-
- 
+  //
+  private:
+  
+    // Buffers
+    static cinder::vec3 sBufVec3f_1;
+ };
+  
 } // namespace cjs
+
+#endif

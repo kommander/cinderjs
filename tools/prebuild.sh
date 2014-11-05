@@ -18,4 +18,5 @@ python ../tools/js2c.py     \
   ../lib/text.js            \
   ../lib/console.js         \
   ../lib/shader.js          \
+  ../lib/batch.js           \
   ../lib/default_main.js    \

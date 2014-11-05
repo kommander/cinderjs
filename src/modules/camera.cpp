@@ -36,6 +36,10 @@ vec3 CameraModule::sBufVec3f_1;
 vec3 CameraModule::sBufVec3f_2;
 quat CameraModule::sBufQuatf_1;
 
+void _handleNoCameraError(Isolate* isolate){
+  isolate->ThrowException(v8::Exception::TypeError(v8::String::NewFromUtf8(isolate, "Camera does not exist")));
+};
+
 void CameraModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
@@ -69,6 +73,7 @@ void CameraModule::setEyePoint(const v8::FunctionCallbackInfo<v8::Value>& args) 
     std::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
+      _handleNoCameraError(isolate);
       return;
     }
     
@@ -92,14 +97,19 @@ void CameraModule::lookAt(const v8::FunctionCallbackInfo<v8::Value>& args) {
     std::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
+      _handleNoCameraError(isolate);
       return;
     }
     
-    sBufVec3f_1.x = args[1]->ToNumber()->Value();
-    sBufVec3f_1.y = args[2]->ToNumber()->Value();
-    sBufVec3f_1.z = args[3]->ToNumber()->Value();
-    
-    cam->lookAt(sBufVec3f_1);
+    cam->lookAt(vec3(
+      args[1]->ToNumber()->Value(),
+      args[2]->ToNumber()->Value(),
+      args[3]->ToNumber()->Value()
+    ), vec3(
+      args[4]->ToNumber()->Value(),
+      args[5]->ToNumber()->Value(),
+      args[6]->ToNumber()->Value()
+    ));
   }
   
   return;
@@ -115,6 +125,7 @@ void CameraModule::setViewDirection(const v8::FunctionCallbackInfo<v8::Value>& a
     std::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
+      _handleNoCameraError(isolate);
       return;
     }
     
@@ -138,6 +149,7 @@ void CameraModule::setOrientation(const v8::FunctionCallbackInfo<v8::Value>& arg
     std::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
+      _handleNoCameraError(isolate);
       return;
     }
     
@@ -161,6 +173,7 @@ void CameraModule::generateRay(const v8::FunctionCallbackInfo<v8::Value>& args) 
     std::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
+      _handleNoCameraError(isolate);
       return;
     }
     
@@ -183,6 +196,7 @@ void CameraModule::setCenterOfInterestPoint(const v8::FunctionCallbackInfo<v8::V
     std::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
+      _handleNoCameraError(isolate);
       return;
     }
     
@@ -206,6 +220,7 @@ void CameraModule::setPerspective(const v8::FunctionCallbackInfo<v8::Value>& arg
     std::shared_ptr<CameraPersp> cam = StaticFactory::get<CameraPersp>(id);
     
     if(!cam){
+      _handleNoCameraError(isolate);
       return;
     }
     
@@ -220,8 +235,6 @@ void CameraModule::setPerspective(const v8::FunctionCallbackInfo<v8::Value>& arg
   
   return;
 }
-
-//void		( const Vec3f &centerOfInterestPoint );
 
 // TODO:
 //Vec3f		getEyePoint() const { return mEyePoint; }

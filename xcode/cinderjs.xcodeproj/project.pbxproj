@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		006D720819952D0A008149E2 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 006D720619952D0A008149E2 /* AVFoundation.framework */; };
+		006D720919952D0A008149E2 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 006D720719952D0A008149E2 /* CoreMedia.framework */; };
 		0091D8F90E81B9330029341E /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0091D8F80E81B9330029341E /* OpenGL.framework */; };
 		00B784B30FF439BC000DE1D7 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784AF0FF439BC000DE1D7 /* Accelerate.framework */; };
 		00B784B40FF439BC000DE1D7 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */; };
@@ -14,186 +16,135 @@
 		00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
-		69CC5FFAB4E1488598E5D024 /* cinderjsApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B26520EF291B4336BEC87FD7 /* cinderjsApp.cpp */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		9E0BDE1019F803330036038F /* vm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E0BDE0E19F803330036038F /* vm.cpp */; };
-		9E0BDE1319F954530036038F /* timers.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1219F954530036038F /* timers.js */; };
-		9E0BDE1519F9EEC80036038F /* default_main.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1419F9EEC80036038F /* default_main.js */; };
-		9E0BDE1719F9EFA30036038F /* events.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1619F9EFA30036038F /* events.js */; };
-		9E0BDE1919F9EFF70036038F /* app.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1819F9EFF70036038F /* app.js */; };
-		9E0BDE1D19F9F8F90036038F /* trig.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1B19F9F8F90036038F /* trig.js */; };
-		9E0BDE1E19F9F8F90036038F /* vec2.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1C19F9F8F90036038F /* vec2.js */; };
-		9E51340819FFE6CF004CF6C5 /* app.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1819F9EFF70036038F /* app.js */; };
-		9E51340919FFE6CF004CF6C5 /* util.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123D219F7A6AE007786A6 /* util.js */; };
-		9E51340A19FFE6CF004CF6C5 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9EAF080819EDC4C600C02F65 /* README.md */; };
-		9E51340B19FFE6CF004CF6C5 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = A16F000F7FC04E0DA0360B7B /* CinderApp.icns */; };
-		9E51340C19FFE6CF004CF6C5 /* events.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1619F9EFA30036038F /* events.js */; };
-		9E51340D19FFE6CF004CF6C5 /* ray.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ECCE56419FD837900C37522 /* ray.js */; };
-		9E51340E19FFE6CF004CF6C5 /* vec2.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1C19F9F8F90036038F /* vec2.js */; };
-		9E51340F19FFE6CF004CF6C5 /* vm.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123D519F7C84D007786A6 /* vm.js */; };
-		9E51341019FFE6CF004CF6C5 /* prebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123CA19F7309A007786A6 /* prebuild.sh */; };
-		9E51341119FFE6CF004CF6C5 /* module.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123D019F7A43C007786A6 /* module.js */; };
-		9E51341219FFE6CF004CF6C5 /* trig.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1B19F9F8F90036038F /* trig.js */; };
-		9E51341419FFE6CF004CF6C5 /* default_main.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1419F9EEC80036038F /* default_main.js */; };
-		9E51341719FFE6CF004CF6C5 /* assert.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123DA19F7DD02007786A6 /* assert.js */; };
-		9E51341819FFE6CF004CF6C5 /* color.js in Resources */ = {isa = PBXBuildFile; fileRef = 9EC32A6819FAF42400CECCC3 /* color.js */; };
-		9E51341919FFE6CF004CF6C5 /* path.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123CE19F78F85007786A6 /* path.js */; };
-		9E51341A19FFE6CF004CF6C5 /* camera.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ECCE56E19FDC71F00C37522 /* camera.js */; };
-		9E51341B19FFE6CF004CF6C5 /* timers.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E0BDE1219F954530036038F /* timers.js */; };
-		9E51341C19FFE6CF004CF6C5 /* test.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123C819F72D4F007786A6 /* test.js */; };
-		9E51341D19FFE6CF004CF6C5 /* cinder.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123C319F72B02007786A6 /* cinder.js */; };
-		9E51341E19FFE6CF004CF6C5 /* fs.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123D819F7C86A007786A6 /* fs.js */; };
-		9E51342019FFE6CF004CF6C5 /* StaticFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCE56819FD962800C37522 /* StaticFactory.cpp */; };
-		9E51342119FFE6CF004CF6C5 /* vm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E0BDE0E19F803330036038F /* vm.cpp */; };
-		9E51342219FFE6CF004CF6C5 /* PipeModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3E19F0233C00291CDE /* PipeModule.cpp */; };
-		9E51342419FFE6CF004CF6C5 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCE56B19FDB56100C37522 /* camera.cpp */; };
-		9E51342519FFE6CF004CF6C5 /* app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3819F022C000291CDE /* app.cpp */; };
-		9E51342719FFE6CF004CF6C5 /* cinderjsApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B26520EF291B4336BEC87FD7 /* cinderjsApp.cpp */; };
-		9E51342819FFE6CF004CF6C5 /* ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCE56119FD7B4500C37522 /* ray.cpp */; };
-		9E51342A19FFE6CF004CF6C5 /* console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E4219F0390000291CDE /* console.cpp */; };
-		9E51342B19FFE6CF004CF6C5 /* TextHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED123BD19F6EB23007786A6 /* TextHelpers.cpp */; };
-		9E51342C19FFE6CF004CF6C5 /* fs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED123DC19F7ED4E007786A6 /* fs.cpp */; };
-		9E51342D19FFE6CF004CF6C5 /* gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3A19F022C000291CDE /* gl.cpp */; };
-		9E51342E19FFE6CF004CF6C5 /* AppConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3019F002C200291CDE /* AppConsole.cpp */; };
-		9E51343019FFE6CF004CF6C5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		9E51343119FFE6CF004CF6C5 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0091D8F80E81B9330029341E /* OpenGL.framework */; };
-		9E51343219FFE6CF004CF6C5 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
-		9E51343319FFE6CF004CF6C5 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
-		9E51343419FFE6CF004CF6C5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784AF0FF439BC000DE1D7 /* Accelerate.framework */; };
-		9E51343519FFE6CF004CF6C5 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */; };
-		9E51343619FFE6CF004CF6C5 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B10FF439BC000DE1D7 /* AudioUnit.framework */; };
-		9E51343719FFE6CF004CF6C5 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
-		9E51343F1A0125E4004CF6C5 /* ray_picking.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E51343E1A0125E4004CF6C5 /* ray_picking.js */; };
-		9E5B93CA1A088A7A00B5BDF4 /* CinderAppBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B93C91A088A7A00B5BDF4 /* CinderAppBase.cpp */; };
-		9E5B93CD1A089AF400B5BDF4 /* text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B93CC1A089AF400B5BDF4 /* text.cpp */; };
-		9E5B93D11A089C5B00B5BDF4 /* gl.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E5B93CE1A089C5B00B5BDF4 /* gl.js */; };
-		9E5B93D21A089C5B00B5BDF4 /* text.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E5B93CF1A089C5B00B5BDF4 /* text.js */; };
-		9E5B93D31A089C5B00B5BDF4 /* console.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E5B93D01A089C5B00B5BDF4 /* console.js */; };
-		9E5B93D51A09AB3D00B5BDF4 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93D41A09AB3D00B5BDF4 /* CoreLocation.framework */; };
-		9E5B93D61A09AB3D00B5BDF4 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93D41A09AB3D00B5BDF4 /* CoreLocation.framework */; };
-		9E5B93DA1A09AB5900B5BDF4 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93D71A09AB5900B5BDF4 /* ApplicationServices.framework */; };
-		9E5B93DB1A09AB5900B5BDF4 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93D71A09AB5900B5BDF4 /* ApplicationServices.framework */; };
-		9E5B93DC1A09AB5900B5BDF4 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93D81A09AB5900B5BDF4 /* QuickTime.framework */; };
-		9E5B93DD1A09AB5900B5BDF4 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93D81A09AB5900B5BDF4 /* QuickTime.framework */; };
-		9E5B93DE1A09AB5900B5BDF4 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93D91A09AB5900B5BDF4 /* Carbon.framework */; };
-		9E5B93DF1A09AB5900B5BDF4 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93D91A09AB5900B5BDF4 /* Carbon.framework */; };
-		9E5B93E21A09AB6400B5BDF4 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93E01A09AB6400B5BDF4 /* AVFoundation.framework */; };
-		9E5B93E31A09AB6400B5BDF4 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93E01A09AB6400B5BDF4 /* AVFoundation.framework */; };
-		9E5B93E41A09AB6400B5BDF4 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93E11A09AB6400B5BDF4 /* CoreMedia.framework */; };
-		9E5B93E51A09AB6400B5BDF4 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5B93E11A09AB6400B5BDF4 /* CoreMedia.framework */; };
-		9E5B93E81A09B8D300B5BDF4 /* shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B93E61A09B8D300B5BDF4 /* shader.cpp */; };
-		9E5B93E91A09B8D300B5BDF4 /* shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B93E61A09B8D300B5BDF4 /* shader.cpp */; };
-		9E5B93EB1A09B8E500B5BDF4 /* shader.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E5B93EA1A09B8E500B5BDF4 /* shader.js */; };
-		9E5B93EC1A09B8E500B5BDF4 /* shader.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E5B93EA1A09B8E500B5BDF4 /* shader.js */; };
-		9E9B3E3219F002C200291CDE /* AppConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3019F002C200291CDE /* AppConsole.cpp */; };
-		9E9B3E3C19F022C000291CDE /* app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3819F022C000291CDE /* app.cpp */; };
-		9E9B3E3D19F022C000291CDE /* gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3A19F022C000291CDE /* gl.cpp */; };
-		9E9B3E4019F0233C00291CDE /* PipeModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E3E19F0233C00291CDE /* PipeModule.cpp */; };
-		9E9B3E4419F0390000291CDE /* console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E9B3E4219F0390000291CDE /* console.cpp */; };
-		9EAF080919EDC4C600C02F65 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9EAF080819EDC4C600C02F65 /* README.md */; };
-		9EC32A6919FAF42400CECCC3 /* color.js in Resources */ = {isa = PBXBuildFile; fileRef = 9EC32A6819FAF42400CECCC3 /* color.js */; };
-		9ECCE56319FD7B4500C37522 /* ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCE56119FD7B4500C37522 /* ray.cpp */; };
-		9ECCE56519FD837900C37522 /* ray.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ECCE56419FD837900C37522 /* ray.js */; };
-		9ECCE56A19FD962800C37522 /* StaticFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCE56819FD962800C37522 /* StaticFactory.cpp */; };
-		9ECCE56D19FDB56100C37522 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCE56B19FDB56100C37522 /* camera.cpp */; };
-		9ECCE56F19FDC71F00C37522 /* camera.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ECCE56E19FDC71F00C37522 /* camera.js */; };
-		9ED123BE19F6EB23007786A6 /* TextHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED123BD19F6EB23007786A6 /* TextHelpers.cpp */; };
-		9ED123C419F72B02007786A6 /* cinder.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123C319F72B02007786A6 /* cinder.js */; };
-		9ED123C919F72D4F007786A6 /* test.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123C819F72D4F007786A6 /* test.js */; };
-		9ED123CB19F7309A007786A6 /* prebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123CA19F7309A007786A6 /* prebuild.sh */; };
-		9ED123CF19F78F85007786A6 /* path.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123CE19F78F85007786A6 /* path.js */; };
-		9ED123D119F7A43C007786A6 /* module.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123D019F7A43C007786A6 /* module.js */; };
-		9ED123D319F7A6AE007786A6 /* util.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123D219F7A6AE007786A6 /* util.js */; };
-		9ED123D719F7C84D007786A6 /* vm.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123D519F7C84D007786A6 /* vm.js */; };
-		9ED123D919F7C86A007786A6 /* fs.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123D819F7C86A007786A6 /* fs.js */; };
-		9ED123DB19F7DD02007786A6 /* assert.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED123DA19F7DD02007786A6 /* assert.js */; };
-		9ED123DE19F7ED4E007786A6 /* fs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED123DC19F7ED4E007786A6 /* fs.cpp */; };
-		B6B86EEF243D496CAA6AC588 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = A16F000F7FC04E0DA0360B7B /* CinderApp.icns */; };
+		9E4ABEBD1A09FF6A00AF2706 /* AppConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABE9B1A09FF6A00AF2706 /* AppConsole.cpp */; };
+		9E4ABEBE1A09FF6A00AF2706 /* CinderAppBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABE9D1A09FF6A00AF2706 /* CinderAppBase.cpp */; };
+		9E4ABEBF1A09FF6A00AF2706 /* cinderjsApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABE9F1A09FF6A00AF2706 /* cinderjsApp.cpp */; };
+		9E4ABEC01A09FF6A00AF2706 /* app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABEA31A09FF6A00AF2706 /* app.cpp */; };
+		9E4ABEC11A09FF6A00AF2706 /* batch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABEA51A09FF6A00AF2706 /* batch.cpp */; };
+		9E4ABEC21A09FF6A00AF2706 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABEA71A09FF6A00AF2706 /* camera.cpp */; };
+		9E4ABEC31A09FF6A00AF2706 /* console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABEA91A09FF6A00AF2706 /* console.cpp */; };
+		9E4ABEC41A09FF6A00AF2706 /* fs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABEAB1A09FF6A00AF2706 /* fs.cpp */; };
+		9E4ABEC51A09FF6A00AF2706 /* gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABEAD1A09FF6A00AF2706 /* gl.cpp */; };
+		9E4ABEC61A09FF6A00AF2706 /* ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABEAF1A09FF6A00AF2706 /* ray.cpp */; };
+		9E4ABEC71A09FF6A00AF2706 /* shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABEB11A09FF6A00AF2706 /* shader.cpp */; };
+		9E4ABEC81A09FF6A00AF2706 /* text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABEB31A09FF6A00AF2706 /* text.cpp */; };
+		9E4ABEC91A09FF6A00AF2706 /* vm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABEB51A09FF6A00AF2706 /* vm.cpp */; };
+		9E4ABECA1A09FF6A00AF2706 /* StaticFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABEB81A09FF6A00AF2706 /* StaticFactory.cpp */; };
+		9E4ABECB1A09FF6A00AF2706 /* TextHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABEBB1A09FF6A00AF2706 /* TextHelpers.cpp */; };
+		9E4ABECC1A09FF6A00AF2706 /* PipeModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABEBC1A09FF6A00AF2706 /* PipeModule.cpp */; };
+		9E4ABED01A0A005400AF2706 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABECF1A0A005400AF2706 /* CinderApp.icns */; };
+		9E4ABED21A0A006900AF2706 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABED11A0A006900AF2706 /* Info.plist */; };
+		9E4ABED41A0A007500AF2706 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABED31A0A007500AF2706 /* README.md */; };
+		9E4ABEE91A0A008500AF2706 /* app.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABED61A0A008400AF2706 /* app.js */; };
+		9E4ABEEA1A0A008500AF2706 /* assert.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABED71A0A008400AF2706 /* assert.js */; };
+		9E4ABEEB1A0A008500AF2706 /* batch.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABED81A0A008400AF2706 /* batch.js */; };
+		9E4ABEEC1A0A008500AF2706 /* camera.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABED91A0A008400AF2706 /* camera.js */; };
+		9E4ABEED1A0A008500AF2706 /* cinder.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABEDA1A0A008400AF2706 /* cinder.js */; };
+		9E4ABEEE1A0A008500AF2706 /* color.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABEDB1A0A008400AF2706 /* color.js */; };
+		9E4ABEEF1A0A008500AF2706 /* console.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABEDC1A0A008500AF2706 /* console.js */; };
+		9E4ABEF01A0A008500AF2706 /* default_main.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABEDD1A0A008500AF2706 /* default_main.js */; };
+		9E4ABEF11A0A008500AF2706 /* events.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABEDE1A0A008500AF2706 /* events.js */; };
+		9E4ABEF21A0A008500AF2706 /* fs.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABEDF1A0A008500AF2706 /* fs.js */; };
+		9E4ABEF31A0A008500AF2706 /* gl.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABEE01A0A008500AF2706 /* gl.js */; };
+		9E4ABEF41A0A008500AF2706 /* module.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABEE11A0A008500AF2706 /* module.js */; };
+		9E4ABEF51A0A008500AF2706 /* path.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABEE21A0A008500AF2706 /* path.js */; };
+		9E4ABEF61A0A008500AF2706 /* ray.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABEE31A0A008500AF2706 /* ray.js */; };
+		9E4ABEF71A0A008500AF2706 /* shader.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABEE41A0A008500AF2706 /* shader.js */; };
+		9E4ABEF81A0A008500AF2706 /* text.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABEE51A0A008500AF2706 /* text.js */; };
+		9E4ABEF91A0A008500AF2706 /* timers.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABEE61A0A008500AF2706 /* timers.js */; };
+		9E4ABEFA1A0A008500AF2706 /* util.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABEE71A0A008500AF2706 /* util.js */; };
+		9E4ABEFB1A0A008500AF2706 /* vm.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABEE81A0A008500AF2706 /* vm.js */; };
+		9E4ABF171A0A009100AF2706 /* cubes.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF011A0A009100AF2706 /* cubes.js */; };
+		9E4ABF1B1A0A009100AF2706 /* lines.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF061A0A009100AF2706 /* lines.js */; };
+		9E4ABF1C1A0A009100AF2706 /* particle.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF071A0A009100AF2706 /* particle.js */; };
+		9E4ABF1D1A0A009100AF2706 /* physics.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF081A0A009100AF2706 /* physics.js */; };
+		9E4ABF1E1A0A009100AF2706 /* ray_cam.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF091A0A009100AF2706 /* ray_cam.js */; };
+		9E4ABF1F1A0A009100AF2706 /* ray_camera.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF0A1A0A009100AF2706 /* ray_camera.js */; };
+		9E4ABF201A0A009100AF2706 /* ray_picking.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF0B1A0A009100AF2706 /* ray_picking.js */; };
+		9E4ABF211A0A009100AF2706 /* test.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF0C1A0A009100AF2706 /* test.js */; };
+		9E4ABF221A0A009100AF2706 /* js2c.py in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF0E1A0A009100AF2706 /* js2c.py */; };
+		9E4ABF231A0A009100AF2706 /* prebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF0F1A0A009100AF2706 /* prebuild.sh */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		006D720619952D0A008149E2 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		006D720719952D0A008149E2 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		0091D8F80E81B9330029341E /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		00B784AF0FF439BC000DE1D7 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		00B784B10FF439BC000DE1D7 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		00B784B20FF439BC000DE1D7 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		24A9E79E5BC84C47B0A6A38B /* cinderjs_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = cinderjs_Prefix.pch; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		52FC3EB2615B476FB64B3AC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		5323E6B50EAFCA7E003A9687 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
-		8D1107320486CEB800E47090 /* cinderjs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = cinderjs.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9E0BDE0E19F803330036038F /* vm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = vm.cpp; path = ../src/modules/vm.cpp; sourceTree = "<group>"; };
-		9E0BDE0F19F803330036038F /* vm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = vm.hpp; path = ../src/modules/vm.hpp; sourceTree = "<group>"; };
-		9E0BDE1119F915200036038F /* cinderjsApp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = cinderjsApp.hpp; path = ../src/cinderjsApp.hpp; sourceTree = "<group>"; };
-		9E0BDE1219F954530036038F /* timers.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = timers.js; path = ../lib/timers.js; sourceTree = "<group>"; };
-		9E0BDE1419F9EEC80036038F /* default_main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = default_main.js; path = ../lib/default_main.js; sourceTree = "<group>"; };
-		9E0BDE1619F9EFA30036038F /* events.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = events.js; path = ../lib/events.js; sourceTree = "<group>"; };
-		9E0BDE1819F9EFF70036038F /* app.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = app.js; path = ../lib/app.js; sourceTree = "<group>"; };
-		9E0BDE1B19F9F8F90036038F /* trig.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = trig.js; path = ../examples/lib/trig.js; sourceTree = "<group>"; };
-		9E0BDE1C19F9F8F90036038F /* vec2.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = vec2.js; path = ../examples/lib/vec2.js; sourceTree = "<group>"; };
-		9E51343B19FFE6CF004CF6C5 /* cinderjs copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "cinderjs copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9E51343C19FFE6CF004CF6C5 /* cinderjs copy2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "cinderjs copy2-Info.plist"; path = "/Users/sebastian/Dropbox/+Projects/cinderjs/xcode/cinderjs copy2-Info.plist"; sourceTree = "<absolute>"; };
-		9E51343E1A0125E4004CF6C5 /* ray_picking.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ray_picking.js; path = ../examples/ray_picking.js; sourceTree = "<group>"; };
-		9E5B93C91A088A7A00B5BDF4 /* CinderAppBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CinderAppBase.cpp; path = ../src/CinderAppBase.cpp; sourceTree = "<group>"; };
-		9E5B93CB1A089AF400B5BDF4 /* text.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = text.hpp; path = ../src/modules/text.hpp; sourceTree = "<group>"; };
-		9E5B93CC1A089AF400B5BDF4 /* text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = text.cpp; path = ../src/modules/text.cpp; sourceTree = "<group>"; };
-		9E5B93CE1A089C5B00B5BDF4 /* gl.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = gl.js; path = ../lib/gl.js; sourceTree = "<group>"; };
-		9E5B93CF1A089C5B00B5BDF4 /* text.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = text.js; path = ../lib/text.js; sourceTree = "<group>"; };
-		9E5B93D01A089C5B00B5BDF4 /* console.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = console.js; path = ../lib/console.js; sourceTree = "<group>"; };
-		9E5B93D41A09AB3D00B5BDF4 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		9E5B93D71A09AB5900B5BDF4 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
-		9E5B93D81A09AB5900B5BDF4 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = ../../../../../../System/Library/Frameworks/QuickTime.framework; sourceTree = "<group>"; };
-		9E5B93D91A09AB5900B5BDF4 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = ../../../../../../System/Library/Frameworks/Carbon.framework; sourceTree = "<group>"; };
-		9E5B93E01A09AB6400B5BDF4 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		9E5B93E11A09AB6400B5BDF4 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		9E5B93E61A09B8D300B5BDF4 /* shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = shader.cpp; path = ../src/modules/shader.cpp; sourceTree = "<group>"; };
-		9E5B93E71A09B8D300B5BDF4 /* shader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = shader.hpp; path = ../src/modules/shader.hpp; sourceTree = "<group>"; };
-		9E5B93EA1A09B8E500B5BDF4 /* shader.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = shader.js; path = ../lib/shader.js; sourceTree = "<group>"; };
-		9E7F711B19EDDF23002DDCFF /* cinderjs copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "cinderjs copy-Info.plist"; path = "/Users/sebastian/Dropbox/+Projects/cinderjs/xcode/cinderjs copy-Info.plist"; sourceTree = "<absolute>"; };
-		9E7F711C19EDE93B002DDCFF /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
-		9E9877F119F1EA19002DC7C8 /* particle.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = particle.js; path = ../examples/particle.js; sourceTree = "<group>"; };
-		9E9B3E3019F002C200291CDE /* AppConsole.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppConsole.cpp; path = ../src/AppConsole.cpp; sourceTree = "<group>"; };
-		9E9B3E3119F002C200291CDE /* AppConsole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppConsole.h; path = ../src/AppConsole.h; sourceTree = "<group>"; };
-		9E9B3E3819F022C000291CDE /* app.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = app.cpp; path = ../src/modules/app.cpp; sourceTree = "<group>"; };
-		9E9B3E3919F022C000291CDE /* app.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = app.hpp; path = ../src/modules/app.hpp; sourceTree = "<group>"; };
-		9E9B3E3A19F022C000291CDE /* gl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gl.cpp; path = ../src/modules/gl.cpp; sourceTree = "<group>"; };
-		9E9B3E3B19F022C000291CDE /* gl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = gl.hpp; path = ../src/modules/gl.hpp; sourceTree = "<group>"; };
-		9E9B3E3E19F0233C00291CDE /* PipeModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PipeModule.cpp; path = ../src/PipeModule.cpp; sourceTree = "<group>"; };
-		9E9B3E3F19F0233C00291CDE /* PipeModule.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PipeModule.hpp; path = ../src/PipeModule.hpp; sourceTree = "<group>"; };
-		9E9B3E4119F0240C00291CDE /* CinderAppBase.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CinderAppBase.hpp; path = ../src/CinderAppBase.hpp; sourceTree = "<group>"; };
-		9E9B3E4219F0390000291CDE /* console.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = console.cpp; path = ../src/modules/console.cpp; sourceTree = "<group>"; };
-		9E9B3E4319F0390000291CDE /* console.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = console.hpp; path = ../src/modules/console.hpp; sourceTree = "<group>"; };
-		9EAF080819EDC4C600C02F65 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		9EC32A6819FAF42400CECCC3 /* color.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = color.js; path = ../lib/color.js; sourceTree = "<group>"; };
-		9ECCE56119FD7B4500C37522 /* ray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ray.cpp; path = ../src/modules/ray.cpp; sourceTree = "<group>"; };
-		9ECCE56219FD7B4500C37522 /* ray.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ray.hpp; path = ../src/modules/ray.hpp; sourceTree = "<group>"; };
-		9ECCE56419FD837900C37522 /* ray.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ray.js; path = ../lib/ray.js; sourceTree = "<group>"; };
-		9ECCE56819FD962800C37522 /* StaticFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StaticFactory.cpp; path = ../src/StaticFactory.cpp; sourceTree = "<group>"; };
-		9ECCE56919FD962800C37522 /* StaticFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StaticFactory.hpp; path = ../src/StaticFactory.hpp; sourceTree = "<group>"; };
-		9ECCE56B19FDB56100C37522 /* camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = camera.cpp; path = ../src/modules/camera.cpp; sourceTree = "<group>"; };
-		9ECCE56C19FDB56100C37522 /* camera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = camera.hpp; path = ../src/modules/camera.hpp; sourceTree = "<group>"; };
-		9ECCE56E19FDC71F00C37522 /* camera.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = camera.js; path = ../lib/camera.js; sourceTree = "<group>"; };
-		9ED123B719F61656007786A6 /* cubes.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = cubes.js; path = ../examples/cubes.js; sourceTree = "<group>"; };
-		9ED123BD19F6EB23007786A6 /* TextHelpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextHelpers.cpp; path = ../src/utils/TextHelpers.cpp; sourceTree = "<group>"; };
-		9ED123C319F72B02007786A6 /* cinder.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = cinder.js; path = ../lib/cinder.js; sourceTree = "<group>"; };
-		9ED123C619F72B2B007786A6 /* js2c.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = js2c.py; path = ../tools/js2c.py; sourceTree = "<group>"; };
-		9ED123C819F72D4F007786A6 /* test.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = test.js; path = ../examples/test.js; sourceTree = "<group>"; };
-		9ED123CA19F7309A007786A6 /* prebuild.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = prebuild.sh; path = ../tools/prebuild.sh; sourceTree = "<group>"; };
-		9ED123CE19F78F85007786A6 /* path.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = path.js; path = ../lib/path.js; sourceTree = "<group>"; };
-		9ED123D019F7A43C007786A6 /* module.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = module.js; path = ../lib/module.js; sourceTree = "<group>"; };
-		9ED123D219F7A6AE007786A6 /* util.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = util.js; path = ../lib/util.js; sourceTree = "<group>"; };
-		9ED123D519F7C84D007786A6 /* vm.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = vm.js; path = ../lib/vm.js; sourceTree = "<group>"; };
-		9ED123D819F7C86A007786A6 /* fs.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = fs.js; path = ../lib/fs.js; sourceTree = "<group>"; };
-		9ED123DA19F7DD02007786A6 /* assert.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = assert.js; path = ../lib/assert.js; sourceTree = "<group>"; };
-		9ED123DC19F7ED4E007786A6 /* fs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fs.cpp; path = ../src/modules/fs.cpp; sourceTree = "<group>"; };
-		9ED123DD19F7ED4E007786A6 /* fs.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = fs.hpp; path = ../src/modules/fs.hpp; sourceTree = "<group>"; };
-		9EFB3A3A19F480BB00013216 /* lines.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = lines.js; path = ../examples/lines.js; sourceTree = "<group>"; };
-		A16F000F7FC04E0DA0360B7B /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
-		B26520EF291B4336BEC87FD7 /* cinderjsApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = cinderjsApp.cpp; path = ../src/cinderjsApp.cpp; sourceTree = "<group>"; };
-		BA220610E72E4B7FA515FBCC /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* Cinderjs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cinderjs.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E4ABE9B1A09FF6A00AF2706 /* AppConsole.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppConsole.cpp; path = ../src/AppConsole.cpp; sourceTree = "<group>"; };
+		9E4ABE9C1A09FF6A00AF2706 /* AppConsole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppConsole.h; path = ../src/AppConsole.h; sourceTree = "<group>"; };
+		9E4ABE9D1A09FF6A00AF2706 /* CinderAppBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CinderAppBase.cpp; path = ../src/CinderAppBase.cpp; sourceTree = "<group>"; };
+		9E4ABE9E1A09FF6A00AF2706 /* CinderAppBase.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CinderAppBase.hpp; path = ../src/CinderAppBase.hpp; sourceTree = "<group>"; };
+		9E4ABE9F1A09FF6A00AF2706 /* cinderjsApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cinderjsApp.cpp; path = ../src/cinderjsApp.cpp; sourceTree = "<group>"; };
+		9E4ABEA01A09FF6A00AF2706 /* cinderjsApp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = cinderjsApp.hpp; path = ../src/cinderjsApp.hpp; sourceTree = "<group>"; };
+		9E4ABEA31A09FF6A00AF2706 /* app.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = app.cpp; path = ../src/modules/app.cpp; sourceTree = "<group>"; };
+		9E4ABEA41A09FF6A00AF2706 /* app.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = app.hpp; sourceTree = "<group>"; };
+		9E4ABEA51A09FF6A00AF2706 /* batch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = batch.cpp; path = ../src/modules/batch.cpp; sourceTree = "<group>"; };
+		9E4ABEA61A09FF6A00AF2706 /* batch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = batch.hpp; sourceTree = "<group>"; };
+		9E4ABEA71A09FF6A00AF2706 /* camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = camera.cpp; path = ../src/modules/camera.cpp; sourceTree = "<group>"; };
+		9E4ABEA81A09FF6A00AF2706 /* camera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = camera.hpp; sourceTree = "<group>"; };
+		9E4ABEA91A09FF6A00AF2706 /* console.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = console.cpp; path = ../src/modules/console.cpp; sourceTree = "<group>"; };
+		9E4ABEAA1A09FF6A00AF2706 /* console.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = console.hpp; sourceTree = "<group>"; };
+		9E4ABEAB1A09FF6A00AF2706 /* fs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fs.cpp; path = ../src/modules/fs.cpp; sourceTree = "<group>"; };
+		9E4ABEAC1A09FF6A00AF2706 /* fs.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fs.hpp; sourceTree = "<group>"; };
+		9E4ABEAD1A09FF6A00AF2706 /* gl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gl.cpp; path = ../src/modules/gl.cpp; sourceTree = "<group>"; };
+		9E4ABEAE1A09FF6A00AF2706 /* gl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = gl.hpp; sourceTree = "<group>"; };
+		9E4ABEAF1A09FF6A00AF2706 /* ray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ray.cpp; path = ../src/modules/ray.cpp; sourceTree = "<group>"; };
+		9E4ABEB01A09FF6A00AF2706 /* ray.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ray.hpp; sourceTree = "<group>"; };
+		9E4ABEB11A09FF6A00AF2706 /* shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = shader.cpp; path = ../src/modules/shader.cpp; sourceTree = "<group>"; };
+		9E4ABEB21A09FF6A00AF2706 /* shader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = shader.hpp; sourceTree = "<group>"; };
+		9E4ABEB31A09FF6A00AF2706 /* text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = text.cpp; path = ../src/modules/text.cpp; sourceTree = "<group>"; };
+		9E4ABEB41A09FF6A00AF2706 /* text.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = text.hpp; sourceTree = "<group>"; };
+		9E4ABEB51A09FF6A00AF2706 /* vm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = vm.cpp; path = ../src/modules/vm.cpp; sourceTree = "<group>"; };
+		9E4ABEB61A09FF6A00AF2706 /* vm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = vm.hpp; sourceTree = "<group>"; };
+		9E4ABEB71A09FF6A00AF2706 /* PipeModule.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PipeModule.hpp; path = ../src/PipeModule.hpp; sourceTree = "<group>"; };
+		9E4ABEB81A09FF6A00AF2706 /* StaticFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StaticFactory.cpp; path = ../src/StaticFactory.cpp; sourceTree = "<group>"; };
+		9E4ABEB91A09FF6A00AF2706 /* StaticFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StaticFactory.hpp; path = ../src/StaticFactory.hpp; sourceTree = "<group>"; };
+		9E4ABEBB1A09FF6A00AF2706 /* TextHelpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextHelpers.cpp; sourceTree = "<group>"; };
+		9E4ABEBC1A09FF6A00AF2706 /* PipeModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PipeModule.cpp; path = ../src/PipeModule.cpp; sourceTree = "<group>"; };
+		9E4ABECE1A09FFBE00AF2706 /* Resources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
+		9E4ABECF1A0A005400AF2706 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
+		9E4ABED11A0A006900AF2706 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9E4ABED31A0A007500AF2706 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		9E4ABED61A0A008400AF2706 /* app.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = app.js; sourceTree = "<group>"; };
+		9E4ABED71A0A008400AF2706 /* assert.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = assert.js; sourceTree = "<group>"; };
+		9E4ABED81A0A008400AF2706 /* batch.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = batch.js; sourceTree = "<group>"; };
+		9E4ABED91A0A008400AF2706 /* camera.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = camera.js; sourceTree = "<group>"; };
+		9E4ABEDA1A0A008400AF2706 /* cinder.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = cinder.js; sourceTree = "<group>"; };
+		9E4ABEDB1A0A008400AF2706 /* color.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = color.js; sourceTree = "<group>"; };
+		9E4ABEDC1A0A008500AF2706 /* console.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = console.js; sourceTree = "<group>"; };
+		9E4ABEDD1A0A008500AF2706 /* default_main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = default_main.js; sourceTree = "<group>"; };
+		9E4ABEDE1A0A008500AF2706 /* events.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = events.js; sourceTree = "<group>"; };
+		9E4ABEDF1A0A008500AF2706 /* fs.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = fs.js; sourceTree = "<group>"; };
+		9E4ABEE01A0A008500AF2706 /* gl.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = gl.js; sourceTree = "<group>"; };
+		9E4ABEE11A0A008500AF2706 /* module.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = module.js; sourceTree = "<group>"; };
+		9E4ABEE21A0A008500AF2706 /* path.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = path.js; sourceTree = "<group>"; };
+		9E4ABEE31A0A008500AF2706 /* ray.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ray.js; sourceTree = "<group>"; };
+		9E4ABEE41A0A008500AF2706 /* shader.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = shader.js; sourceTree = "<group>"; };
+		9E4ABEE51A0A008500AF2706 /* text.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = text.js; sourceTree = "<group>"; };
+		9E4ABEE61A0A008500AF2706 /* timers.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = timers.js; sourceTree = "<group>"; };
+		9E4ABEE71A0A008500AF2706 /* util.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = util.js; sourceTree = "<group>"; };
+		9E4ABEE81A0A008500AF2706 /* vm.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = vm.js; sourceTree = "<group>"; };
+		9E4ABF011A0A009100AF2706 /* cubes.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = cubes.js; sourceTree = "<group>"; };
+		9E4ABF061A0A009100AF2706 /* lines.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = lines.js; sourceTree = "<group>"; };
+		9E4ABF071A0A009100AF2706 /* particle.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = particle.js; sourceTree = "<group>"; };
+		9E4ABF081A0A009100AF2706 /* physics.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = physics.js; sourceTree = "<group>"; };
+		9E4ABF091A0A009100AF2706 /* ray_cam.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ray_cam.js; sourceTree = "<group>"; };
+		9E4ABF0A1A0A009100AF2706 /* ray_camera.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ray_camera.js; sourceTree = "<group>"; };
+		9E4ABF0B1A0A009100AF2706 /* ray_picking.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ray_picking.js; sourceTree = "<group>"; };
+		9E4ABF0C1A0A009100AF2706 /* test.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test.js; sourceTree = "<group>"; };
+		9E4ABF0E1A0A009100AF2706 /* js2c.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = js2c.py; sourceTree = "<group>"; };
+		9E4ABF0F1A0A009100AF2706 /* prebuild.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = prebuild.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,41 +152,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				006D720819952D0A008149E2 /* AVFoundation.framework in Frameworks */,
+				006D720919952D0A008149E2 /* CoreMedia.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
-				9E5B93DE1A09AB5900B5BDF4 /* Carbon.framework in Frameworks */,
 				0091D8F90E81B9330029341E /* OpenGL.framework in Frameworks */,
 				5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */,
-				9E5B93D51A09AB3D00B5BDF4 /* CoreLocation.framework in Frameworks */,
 				5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */,
-				9E5B93E41A09AB6400B5BDF4 /* CoreMedia.framework in Frameworks */,
-				9E5B93DA1A09AB5900B5BDF4 /* ApplicationServices.framework in Frameworks */,
 				00B784B30FF439BC000DE1D7 /* Accelerate.framework in Frameworks */,
-				9E5B93DC1A09AB5900B5BDF4 /* QuickTime.framework in Frameworks */,
 				00B784B40FF439BC000DE1D7 /* AudioToolbox.framework in Frameworks */,
 				00B784B50FF439BC000DE1D7 /* AudioUnit.framework in Frameworks */,
 				00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */,
-				9E5B93E21A09AB6400B5BDF4 /* AVFoundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9E51342F19FFE6CF004CF6C5 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9E51343019FFE6CF004CF6C5 /* Cocoa.framework in Frameworks */,
-				9E5B93DF1A09AB5900B5BDF4 /* Carbon.framework in Frameworks */,
-				9E51343119FFE6CF004CF6C5 /* OpenGL.framework in Frameworks */,
-				9E51343219FFE6CF004CF6C5 /* CoreVideo.framework in Frameworks */,
-				9E5B93D61A09AB3D00B5BDF4 /* CoreLocation.framework in Frameworks */,
-				9E51343319FFE6CF004CF6C5 /* QTKit.framework in Frameworks */,
-				9E5B93E51A09AB6400B5BDF4 /* CoreMedia.framework in Frameworks */,
-				9E5B93DB1A09AB5900B5BDF4 /* ApplicationServices.framework in Frameworks */,
-				9E51343419FFE6CF004CF6C5 /* Accelerate.framework in Frameworks */,
-				9E5B93DD1A09AB5900B5BDF4 /* QuickTime.framework in Frameworks */,
-				9E51343519FFE6CF004CF6C5 /* AudioToolbox.framework in Frameworks */,
-				9E51343619FFE6CF004CF6C5 /* AudioUnit.framework in Frameworks */,
-				9E51343719FFE6CF004CF6C5 /* CoreAudio.framework in Frameworks */,
-				9E5B93E31A09AB6400B5BDF4 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,13 +178,13 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				9ED123BC19F6AAC7007786A6 /* utils */,
-				9E9B3E3619F022A800291CDE /* modules */,
-				B26520EF291B4336BEC87FD7 /* cinderjsApp.cpp */,
-				9E5B93C91A088A7A00B5BDF4 /* CinderAppBase.cpp */,
-				9E9B3E3E19F0233C00291CDE /* PipeModule.cpp */,
-				9E9B3E3019F002C200291CDE /* AppConsole.cpp */,
-				9ECCE56819FD962800C37522 /* StaticFactory.cpp */,
+				9E4ABEBA1A09FF6A00AF2706 /* utils */,
+				9E4ABECD1A09FF7200AF2706 /* modules */,
+				9E4ABE9F1A09FF6A00AF2706 /* cinderjsApp.cpp */,
+				9E4ABE9B1A09FF6A00AF2706 /* AppConsole.cpp */,
+				9E4ABE9D1A09FF6A00AF2706 /* CinderAppBase.cpp */,
+				9E4ABEB81A09FF6A00AF2706 /* StaticFactory.cpp */,
+				9E4ABEBC1A09FF6A00AF2706 /* PipeModule.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -266,10 +192,6 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9E5B93D71A09AB5900B5BDF4 /* ApplicationServices.framework */,
-				9E5B93D81A09AB5900B5BDF4 /* QuickTime.framework */,
-				9E5B93D91A09AB5900B5BDF4 /* Carbon.framework */,
-				9E5B93D41A09AB3D00B5BDF4 /* CoreLocation.framework */,
 				00B784AF0FF439BC000DE1D7 /* Accelerate.framework */,
 				00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */,
 				00B784B10FF439BC000DE1D7 /* AudioUnit.framework */,
@@ -294,41 +216,37 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* cinderjs.app */,
-				9E51343B19FFE6CF004CF6C5 /* cinderjs copy.app */,
+				8D1107320486CEB800E47090 /* Cinderjs.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		29B97314FDCFA39411CA2CEA /* cinderjs */ = {
+		29B97314FDCFA39411CA2CEA /* Cinderjs */ = {
 			isa = PBXGroup;
 			children = (
-				9ED123C519F72B08007786A6 /* tools */,
-				9E9877F019F1EA06002DC7C8 /* examples */,
-				9E9B3E3319F0121D00291CDE /* lib */,
+				9E4ABEFC1A0A009100AF2706 /* examples */,
+				9E4ABF0D1A0A009100AF2706 /* tools */,
 				01B97315FEAEA392516A2CEA /* Blocks */,
+				9E4ABED51A0A008400AF2706 /* lib */,
 				29B97315FDCFA39411CA2CEA /* Headers */,
 				080E96DDFE201D6D7F000001 /* Source */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				9E7F711B19EDDF23002DDCFF /* cinderjs copy-Info.plist */,
-				9E51343C19FFE6CF004CF6C5 /* cinderjs copy2-Info.plist */,
 			);
-			name = cinderjs;
+			name = Cinderjs;
 			sourceTree = "<group>";
 		};
 		29B97315FDCFA39411CA2CEA /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				9E9B3E3719F022B000291CDE /* modules */,
-				9E0BDE1119F915200036038F /* cinderjsApp.hpp */,
-				9E9B3E4119F0240C00291CDE /* CinderAppBase.hpp */,
-				9E9B3E3119F002C200291CDE /* AppConsole.h */,
-				9E9B3E3F19F0233C00291CDE /* PipeModule.hpp */,
-				BA220610E72E4B7FA515FBCC /* Resources.h */,
-				24A9E79E5BC84C47B0A6A38B /* cinderjs_Prefix.pch */,
-				9ECCE56919FD962800C37522 /* StaticFactory.hpp */,
+				9E4ABEA21A09FF6A00AF2706 /* modules */,
+				9E4ABE9C1A09FF6A00AF2706 /* AppConsole.h */,
+				9E4ABE9E1A09FF6A00AF2706 /* CinderAppBase.hpp */,
+				9E4ABEA01A09FF6A00AF2706 /* cinderjsApp.hpp */,
+				9E4ABEB71A09FF6A00AF2706 /* PipeModule.hpp */,
+				9E4ABEB91A09FF6A00AF2706 /* StaticFactory.hpp */,
+				9E4ABECE1A09FFBE00AF2706 /* Resources.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -336,9 +254,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				9EAF080819EDC4C600C02F65 /* README.md */,
-				A16F000F7FC04E0DA0360B7B /* CinderApp.icns */,
-				52FC3EB2615B476FB64B3AC3 /* Info.plist */,
+				9E4ABED31A0A007500AF2706 /* README.md */,
+				9E4ABED11A0A006900AF2706 /* Info.plist */,
+				9E4ABECF1A0A005400AF2706 /* CinderApp.icns */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -346,119 +264,119 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9E5B93E01A09AB6400B5BDF4 /* AVFoundation.framework */,
-				9E5B93E11A09AB6400B5BDF4 /* CoreMedia.framework */,
-				9E7F711C19EDE93B002DDCFF /* libc++.dylib */,
+				006D720619952D0A008149E2 /* AVFoundation.framework */,
+				006D720719952D0A008149E2 /* CoreMedia.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		9E0BDE1A19F9F8E70036038F /* lib */ = {
+		9E4ABEA21A09FF6A00AF2706 /* modules */ = {
 			isa = PBXGroup;
 			children = (
-				9E51343E1A0125E4004CF6C5 /* ray_picking.js */,
-				9E0BDE1B19F9F8F90036038F /* trig.js */,
-				9E0BDE1C19F9F8F90036038F /* vec2.js */,
-			);
-			name = lib;
-			sourceTree = "<group>";
-		};
-		9E9877F019F1EA06002DC7C8 /* examples */ = {
-			isa = PBXGroup;
-			children = (
-				9E0BDE1A19F9F8E70036038F /* lib */,
-				9ED123C819F72D4F007786A6 /* test.js */,
-				9ED123B719F61656007786A6 /* cubes.js */,
-				9EFB3A3A19F480BB00013216 /* lines.js */,
-				9E9877F119F1EA19002DC7C8 /* particle.js */,
-			);
-			name = examples;
-			sourceTree = "<group>";
-		};
-		9E9B3E3319F0121D00291CDE /* lib */ = {
-			isa = PBXGroup;
-			children = (
-				9E5B93EA1A09B8E500B5BDF4 /* shader.js */,
-				9E5B93CE1A089C5B00B5BDF4 /* gl.js */,
-				9E5B93CF1A089C5B00B5BDF4 /* text.js */,
-				9E5B93D01A089C5B00B5BDF4 /* console.js */,
-				9ECCE56E19FDC71F00C37522 /* camera.js */,
-				9ECCE56419FD837900C37522 /* ray.js */,
-				9EC32A6819FAF42400CECCC3 /* color.js */,
-				9E0BDE1819F9EFF70036038F /* app.js */,
-				9E0BDE1619F9EFA30036038F /* events.js */,
-				9E0BDE1419F9EEC80036038F /* default_main.js */,
-				9E0BDE1219F954530036038F /* timers.js */,
-				9ED123DA19F7DD02007786A6 /* assert.js */,
-				9ED123D819F7C86A007786A6 /* fs.js */,
-				9ED123D519F7C84D007786A6 /* vm.js */,
-				9ED123D219F7A6AE007786A6 /* util.js */,
-				9ED123D019F7A43C007786A6 /* module.js */,
-				9ED123CE19F78F85007786A6 /* path.js */,
-				9ED123C319F72B02007786A6 /* cinder.js */,
-			);
-			name = lib;
-			sourceTree = "<group>";
-		};
-		9E9B3E3619F022A800291CDE /* modules */ = {
-			isa = PBXGroup;
-			children = (
-				9E5B93E61A09B8D300B5BDF4 /* shader.cpp */,
-				9E5B93CC1A089AF400B5BDF4 /* text.cpp */,
-				9ECCE56B19FDB56100C37522 /* camera.cpp */,
-				9ECCE56119FD7B4500C37522 /* ray.cpp */,
-				9E0BDE0E19F803330036038F /* vm.cpp */,
-				9ED123DC19F7ED4E007786A6 /* fs.cpp */,
-				9E9B3E4219F0390000291CDE /* console.cpp */,
-				9E9B3E3819F022C000291CDE /* app.cpp */,
-				9E9B3E3A19F022C000291CDE /* gl.cpp */,
+				9E4ABEA41A09FF6A00AF2706 /* app.hpp */,
+				9E4ABEA61A09FF6A00AF2706 /* batch.hpp */,
+				9E4ABEA81A09FF6A00AF2706 /* camera.hpp */,
+				9E4ABEAA1A09FF6A00AF2706 /* console.hpp */,
+				9E4ABEAC1A09FF6A00AF2706 /* fs.hpp */,
+				9E4ABEAE1A09FF6A00AF2706 /* gl.hpp */,
+				9E4ABEB01A09FF6A00AF2706 /* ray.hpp */,
+				9E4ABEB21A09FF6A00AF2706 /* shader.hpp */,
+				9E4ABEB41A09FF6A00AF2706 /* text.hpp */,
+				9E4ABEB61A09FF6A00AF2706 /* vm.hpp */,
 			);
 			name = modules;
+			path = ../src/modules;
 			sourceTree = "<group>";
 		};
-		9E9B3E3719F022B000291CDE /* modules */ = {
+		9E4ABEBA1A09FF6A00AF2706 /* utils */ = {
 			isa = PBXGroup;
 			children = (
-				9E5B93E71A09B8D300B5BDF4 /* shader.hpp */,
-				9E5B93CB1A089AF400B5BDF4 /* text.hpp */,
-				9ECCE56C19FDB56100C37522 /* camera.hpp */,
-				9ECCE56219FD7B4500C37522 /* ray.hpp */,
-				9E0BDE0F19F803330036038F /* vm.hpp */,
-				9ED123DD19F7ED4E007786A6 /* fs.hpp */,
-				9E9B3E4319F0390000291CDE /* console.hpp */,
-				9E9B3E3919F022C000291CDE /* app.hpp */,
-				9E9B3E3B19F022C000291CDE /* gl.hpp */,
-			);
-			name = modules;
-			sourceTree = "<group>";
-		};
-		9ED123BC19F6AAC7007786A6 /* utils */ = {
-			isa = PBXGroup;
-			children = (
-				9ED123BD19F6EB23007786A6 /* TextHelpers.cpp */,
+				9E4ABEBB1A09FF6A00AF2706 /* TextHelpers.cpp */,
 			);
 			name = utils;
+			path = ../src/utils;
 			sourceTree = "<group>";
 		};
-		9ED123C519F72B08007786A6 /* tools */ = {
+		9E4ABECD1A09FF7200AF2706 /* modules */ = {
 			isa = PBXGroup;
 			children = (
-				9ED123CA19F7309A007786A6 /* prebuild.sh */,
-				9ED123C619F72B2B007786A6 /* js2c.py */,
+				9E4ABEA31A09FF6A00AF2706 /* app.cpp */,
+				9E4ABEA51A09FF6A00AF2706 /* batch.cpp */,
+				9E4ABEA71A09FF6A00AF2706 /* camera.cpp */,
+				9E4ABEA91A09FF6A00AF2706 /* console.cpp */,
+				9E4ABEAB1A09FF6A00AF2706 /* fs.cpp */,
+				9E4ABEAD1A09FF6A00AF2706 /* gl.cpp */,
+				9E4ABEAF1A09FF6A00AF2706 /* ray.cpp */,
+				9E4ABEB11A09FF6A00AF2706 /* shader.cpp */,
+				9E4ABEB31A09FF6A00AF2706 /* text.cpp */,
+				9E4ABEB51A09FF6A00AF2706 /* vm.cpp */,
+			);
+			name = modules;
+			sourceTree = "<group>";
+		};
+		9E4ABED51A0A008400AF2706 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				9E4ABED61A0A008400AF2706 /* app.js */,
+				9E4ABED71A0A008400AF2706 /* assert.js */,
+				9E4ABED81A0A008400AF2706 /* batch.js */,
+				9E4ABED91A0A008400AF2706 /* camera.js */,
+				9E4ABEDA1A0A008400AF2706 /* cinder.js */,
+				9E4ABEDB1A0A008400AF2706 /* color.js */,
+				9E4ABEDC1A0A008500AF2706 /* console.js */,
+				9E4ABEDD1A0A008500AF2706 /* default_main.js */,
+				9E4ABEDE1A0A008500AF2706 /* events.js */,
+				9E4ABEDF1A0A008500AF2706 /* fs.js */,
+				9E4ABEE01A0A008500AF2706 /* gl.js */,
+				9E4ABEE11A0A008500AF2706 /* module.js */,
+				9E4ABEE21A0A008500AF2706 /* path.js */,
+				9E4ABEE31A0A008500AF2706 /* ray.js */,
+				9E4ABEE41A0A008500AF2706 /* shader.js */,
+				9E4ABEE51A0A008500AF2706 /* text.js */,
+				9E4ABEE61A0A008500AF2706 /* timers.js */,
+				9E4ABEE71A0A008500AF2706 /* util.js */,
+				9E4ABEE81A0A008500AF2706 /* vm.js */,
+			);
+			name = lib;
+			path = ../lib;
+			sourceTree = "<group>";
+		};
+		9E4ABEFC1A0A009100AF2706 /* examples */ = {
+			isa = PBXGroup;
+			children = (
+				9E4ABF011A0A009100AF2706 /* cubes.js */,
+				9E4ABF061A0A009100AF2706 /* lines.js */,
+				9E4ABF071A0A009100AF2706 /* particle.js */,
+				9E4ABF081A0A009100AF2706 /* physics.js */,
+				9E4ABF091A0A009100AF2706 /* ray_cam.js */,
+				9E4ABF0A1A0A009100AF2706 /* ray_camera.js */,
+				9E4ABF0B1A0A009100AF2706 /* ray_picking.js */,
+				9E4ABF0C1A0A009100AF2706 /* test.js */,
+			);
+			name = examples;
+			path = ../examples;
+			sourceTree = "<group>";
+		};
+		9E4ABF0D1A0A009100AF2706 /* tools */ = {
+			isa = PBXGroup;
+			children = (
+				9E4ABF0E1A0A009100AF2706 /* js2c.py */,
+				9E4ABF0F1A0A009100AF2706 /* prebuild.sh */,
 			);
 			name = tools;
+			path = ../tools;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8D1107260486CEB800E47090 /* cinderjs x64 */ = {
+		8D1107260486CEB800E47090 /* Cinderjs */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "cinderjs x64" */;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Cinderjs" */;
 			buildPhases = (
-				9ED123C219F727C7007786A6 /* ShellScript */,
+				9E4ABF271A0A01F600AF2706 /* ShellScript */,
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
@@ -467,29 +385,10 @@
 			);
 			dependencies = (
 			);
-			name = "cinderjs x64";
+			name = Cinderjs;
 			productInstallPath = "$(HOME)/Applications";
-			productName = cinderjs;
-			productReference = 8D1107320486CEB800E47090 /* cinderjs.app */;
-			productType = "com.apple.product-type.application";
-		};
-		9E51340519FFE6CF004CF6C5 /* cinderjs ia32 */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9E51343819FFE6CF004CF6C5 /* Build configuration list for PBXNativeTarget "cinderjs ia32" */;
-			buildPhases = (
-				9E51340619FFE6CF004CF6C5 /* ShellScript */,
-				9E51340719FFE6CF004CF6C5 /* Resources */,
-				9E51341F19FFE6CF004CF6C5 /* Sources */,
-				9E51342F19FFE6CF004CF6C5 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "cinderjs ia32";
-			productInstallPath = "$(HOME)/Applications";
-			productName = cinderjs;
-			productReference = 9E51343B19FFE6CF004CF6C5 /* cinderjs copy.app */;
+			productName = Cinderjs;
+			productReference = 8D1107320486CEB800E47090 /* Cinderjs.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -498,7 +397,6 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "cinderjs" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -510,12 +408,11 @@
 				French,
 				German,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA /* cinderjs */;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* Cinderjs */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* cinderjs x64 */,
-				9E51340519FFE6CF004CF6C5 /* cinderjs ia32 */,
+				8D1107260486CEB800E47090 /* Cinderjs */,
 			);
 		};
 /* End PBXProject section */
@@ -525,79 +422,44 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E0BDE1919F9EFF70036038F /* app.js in Resources */,
-				9ED123D319F7A6AE007786A6 /* util.js in Resources */,
-				9EAF080919EDC4C600C02F65 /* README.md in Resources */,
-				9E5B93D11A089C5B00B5BDF4 /* gl.js in Resources */,
-				B6B86EEF243D496CAA6AC588 /* CinderApp.icns in Resources */,
-				9E0BDE1719F9EFA30036038F /* events.js in Resources */,
-				9E5B93D31A089C5B00B5BDF4 /* console.js in Resources */,
-				9ECCE56519FD837900C37522 /* ray.js in Resources */,
-				9E0BDE1E19F9F8F90036038F /* vec2.js in Resources */,
-				9ED123D719F7C84D007786A6 /* vm.js in Resources */,
-				9E51343F1A0125E4004CF6C5 /* ray_picking.js in Resources */,
-				9E5B93D21A089C5B00B5BDF4 /* text.js in Resources */,
-				9ED123CB19F7309A007786A6 /* prebuild.sh in Resources */,
-				9ED123D119F7A43C007786A6 /* module.js in Resources */,
-				9E0BDE1D19F9F8F90036038F /* trig.js in Resources */,
-				9E0BDE1519F9EEC80036038F /* default_main.js in Resources */,
-				9ED123DB19F7DD02007786A6 /* assert.js in Resources */,
-				9EC32A6919FAF42400CECCC3 /* color.js in Resources */,
-				9ED123CF19F78F85007786A6 /* path.js in Resources */,
-				9ECCE56F19FDC71F00C37522 /* camera.js in Resources */,
-				9E0BDE1319F954530036038F /* timers.js in Resources */,
-				9ED123C919F72D4F007786A6 /* test.js in Resources */,
-				9ED123C419F72B02007786A6 /* cinder.js in Resources */,
-				9ED123D919F7C86A007786A6 /* fs.js in Resources */,
-				9E5B93EB1A09B8E500B5BDF4 /* shader.js in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9E51340719FFE6CF004CF6C5 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9E51340819FFE6CF004CF6C5 /* app.js in Resources */,
-				9E51340919FFE6CF004CF6C5 /* util.js in Resources */,
-				9E51340A19FFE6CF004CF6C5 /* README.md in Resources */,
-				9E51340B19FFE6CF004CF6C5 /* CinderApp.icns in Resources */,
-				9E51340C19FFE6CF004CF6C5 /* events.js in Resources */,
-				9E51340D19FFE6CF004CF6C5 /* ray.js in Resources */,
-				9E51340E19FFE6CF004CF6C5 /* vec2.js in Resources */,
-				9E51340F19FFE6CF004CF6C5 /* vm.js in Resources */,
-				9E51341019FFE6CF004CF6C5 /* prebuild.sh in Resources */,
-				9E51341119FFE6CF004CF6C5 /* module.js in Resources */,
-				9E51341219FFE6CF004CF6C5 /* trig.js in Resources */,
-				9E51341419FFE6CF004CF6C5 /* default_main.js in Resources */,
-				9E51341719FFE6CF004CF6C5 /* assert.js in Resources */,
-				9E51341819FFE6CF004CF6C5 /* color.js in Resources */,
-				9E51341919FFE6CF004CF6C5 /* path.js in Resources */,
-				9E51341A19FFE6CF004CF6C5 /* camera.js in Resources */,
-				9E5B93EC1A09B8E500B5BDF4 /* shader.js in Resources */,
-				9E51341B19FFE6CF004CF6C5 /* timers.js in Resources */,
-				9E51341C19FFE6CF004CF6C5 /* test.js in Resources */,
-				9E51341D19FFE6CF004CF6C5 /* cinder.js in Resources */,
-				9E51341E19FFE6CF004CF6C5 /* fs.js in Resources */,
+				9E4ABF221A0A009100AF2706 /* js2c.py in Resources */,
+				9E4ABEFA1A0A008500AF2706 /* util.js in Resources */,
+				9E4ABEE91A0A008500AF2706 /* app.js in Resources */,
+				9E4ABEEC1A0A008500AF2706 /* camera.js in Resources */,
+				9E4ABF1D1A0A009100AF2706 /* physics.js in Resources */,
+				9E4ABF211A0A009100AF2706 /* test.js in Resources */,
+				9E4ABEEE1A0A008500AF2706 /* color.js in Resources */,
+				9E4ABF171A0A009100AF2706 /* cubes.js in Resources */,
+				9E4ABEF91A0A008500AF2706 /* timers.js in Resources */,
+				9E4ABED21A0A006900AF2706 /* Info.plist in Resources */,
+				9E4ABF231A0A009100AF2706 /* prebuild.sh in Resources */,
+				9E4ABF1B1A0A009100AF2706 /* lines.js in Resources */,
+				9E4ABEF31A0A008500AF2706 /* gl.js in Resources */,
+				9E4ABEEA1A0A008500AF2706 /* assert.js in Resources */,
+				9E4ABEF11A0A008500AF2706 /* events.js in Resources */,
+				9E4ABF201A0A009100AF2706 /* ray_picking.js in Resources */,
+				9E4ABF1C1A0A009100AF2706 /* particle.js in Resources */,
+				9E4ABF1F1A0A009100AF2706 /* ray_camera.js in Resources */,
+				9E4ABED01A0A005400AF2706 /* CinderApp.icns in Resources */,
+				9E4ABF1E1A0A009100AF2706 /* ray_cam.js in Resources */,
+				9E4ABEEF1A0A008500AF2706 /* console.js in Resources */,
+				9E4ABEF51A0A008500AF2706 /* path.js in Resources */,
+				9E4ABEF71A0A008500AF2706 /* shader.js in Resources */,
+				9E4ABEF01A0A008500AF2706 /* default_main.js in Resources */,
+				9E4ABEF41A0A008500AF2706 /* module.js in Resources */,
+				9E4ABEFB1A0A008500AF2706 /* vm.js in Resources */,
+				9E4ABEF21A0A008500AF2706 /* fs.js in Resources */,
+				9E4ABEF61A0A008500AF2706 /* ray.js in Resources */,
+				9E4ABEF81A0A008500AF2706 /* text.js in Resources */,
+				9E4ABEEB1A0A008500AF2706 /* batch.js in Resources */,
+				9E4ABEED1A0A008500AF2706 /* cinder.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		9E51340619FFE6CF004CF6C5 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = ../tools/prebuild.sh;
-		};
-		9ED123C219F727C7007786A6 /* ShellScript */ = {
+		9E4ABF271A0A01F600AF2706 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -617,150 +479,33 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E5B93E81A09B8D300B5BDF4 /* shader.cpp in Sources */,
-				9ECCE56A19FD962800C37522 /* StaticFactory.cpp in Sources */,
-				9E0BDE1019F803330036038F /* vm.cpp in Sources */,
-				9E9B3E4019F0233C00291CDE /* PipeModule.cpp in Sources */,
-				9E5B93CA1A088A7A00B5BDF4 /* CinderAppBase.cpp in Sources */,
-				9ECCE56D19FDB56100C37522 /* camera.cpp in Sources */,
-				9E9B3E3C19F022C000291CDE /* app.cpp in Sources */,
-				69CC5FFAB4E1488598E5D024 /* cinderjsApp.cpp in Sources */,
-				9ECCE56319FD7B4500C37522 /* ray.cpp in Sources */,
-				9E9B3E4419F0390000291CDE /* console.cpp in Sources */,
-				9ED123BE19F6EB23007786A6 /* TextHelpers.cpp in Sources */,
-				9ED123DE19F7ED4E007786A6 /* fs.cpp in Sources */,
-				9E9B3E3D19F022C000291CDE /* gl.cpp in Sources */,
-				9E5B93CD1A089AF400B5BDF4 /* text.cpp in Sources */,
-				9E9B3E3219F002C200291CDE /* AppConsole.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9E51341F19FFE6CF004CF6C5 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9E51342019FFE6CF004CF6C5 /* StaticFactory.cpp in Sources */,
-				9E51342119FFE6CF004CF6C5 /* vm.cpp in Sources */,
-				9E51342219FFE6CF004CF6C5 /* PipeModule.cpp in Sources */,
-				9E51342419FFE6CF004CF6C5 /* camera.cpp in Sources */,
-				9E51342519FFE6CF004CF6C5 /* app.cpp in Sources */,
-				9E51342719FFE6CF004CF6C5 /* cinderjsApp.cpp in Sources */,
-				9E51342819FFE6CF004CF6C5 /* ray.cpp in Sources */,
-				9E51342A19FFE6CF004CF6C5 /* console.cpp in Sources */,
-				9E51342B19FFE6CF004CF6C5 /* TextHelpers.cpp in Sources */,
-				9E51342C19FFE6CF004CF6C5 /* fs.cpp in Sources */,
-				9E5B93E91A09B8D300B5BDF4 /* shader.cpp in Sources */,
-				9E51342D19FFE6CF004CF6C5 /* gl.cpp in Sources */,
-				9E51342E19FFE6CF004CF6C5 /* AppConsole.cpp in Sources */,
+				9E4ABECA1A09FF6A00AF2706 /* StaticFactory.cpp in Sources */,
+				9E4ABEC91A09FF6A00AF2706 /* vm.cpp in Sources */,
+				9E4ABEC41A09FF6A00AF2706 /* fs.cpp in Sources */,
+				9E4ABECC1A09FF6A00AF2706 /* PipeModule.cpp in Sources */,
+				9E4ABEC71A09FF6A00AF2706 /* shader.cpp in Sources */,
+				9E4ABEC81A09FF6A00AF2706 /* text.cpp in Sources */,
+				9E4ABEBD1A09FF6A00AF2706 /* AppConsole.cpp in Sources */,
+				9E4ABEC01A09FF6A00AF2706 /* app.cpp in Sources */,
+				9E4ABEBE1A09FF6A00AF2706 /* CinderAppBase.cpp in Sources */,
+				9E4ABEC61A09FF6A00AF2706 /* ray.cpp in Sources */,
+				9E4ABEBF1A09FF6A00AF2706 /* cinderjsApp.cpp in Sources */,
+				9E4ABED41A0A007500AF2706 /* README.md in Sources */,
+				9E4ABEC21A09FF6A00AF2706 /* camera.cpp in Sources */,
+				9E4ABECB1A09FF6A00AF2706 /* TextHelpers.cpp in Sources */,
+				9E4ABEC31A09FF6A00AF2706 /* console.cpp in Sources */,
+				9E4ABEC11A09FF6A00AF2706 /* batch.cpp in Sources */,
+				9E4ABEC51A09FF6A00AF2706 /* gl.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		9E51343919FFE6CF004CF6C5 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CINDER_PATH = ../Cinder;
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = cinderjs_Prefix.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = (
-					"\"$(CINDER_PATH)/boost\"",
-					"\"$(V8_PATH)\"",
-				);
-				INFOPLIST_FILE = "cinderjs copy2-Info.plist";
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				OTHER_LDFLAGS = (
-					"\"$(CINDER_PATH)/lib/libcinder_d.a\"",
-					"\"$(V8_PATH_D)/libicudata.a\"",
-					"\"$(V8_PATH_D)/libicui18n.a\"",
-					"\"$(V8_PATH_D)/libicuuc.a\"",
-					"\"$(V8_PATH_D)/libv8_snapshot.a\"",
-					"\"$(V8_PATH_D)/libv8_libbase.a\"",
-					"\"$(V8_PATH_D)/libv8_base.a\"",
-					"\"$(V8_PATH_D)/libv8_libplatform.a\"",
-				);
-				PRODUCT_NAME = "cinderjs copy";
-				SYMROOT = ./build;
-				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include \"$(V8_PATH)/include\"";
-				V8_PATH = ../v8;
-				V8_PATH_D = ../v8/out/ia32.debug;
-				V8_PATH_R = ../v8/out/ia32.release;
-				WRAPPER_EXTENSION = app;
-			};
-			name = Debug;
-		};
-		9E51343A19FFE6CF004CF6C5 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CINDER_PATH = ../Cinder;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_FAST_MATH = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = cinderjs_Prefix.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"NDEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = (
-					"\"$(CINDER_PATH)/boost\"",
-					"\"$(V8_PATH)\"",
-				);
-				INFOPLIST_FILE = "cinderjs copy2-Info.plist";
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				OTHER_LDFLAGS = (
-					"\"$(CINDER_PATH)/lib/libcinder.a\"",
-					"\"$(V8_PATH_R)/libicudata.a\"",
-					"\"$(V8_PATH_R)/libicui18n.a\"",
-					"\"$(V8_PATH_R)/libicuuc.a\"",
-					"\"$(V8_PATH_R)/libv8_nosnapshot.a\"",
-					"\"$(V8_PATH_R)/libv8_libbase.a\"",
-					"\"$(V8_PATH_R)/libv8_base.a\"",
-					"\"$(V8_PATH_R)/libv8_libplatform.a\"",
-				);
-				PRODUCT_NAME = "cinderjs copy";
-				STRIP_INSTALLED_PRODUCT = YES;
-				SYMROOT = ./build;
-				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include \"$(V8_PATH)/include\"";
-				V8_PATH = ../v8;
-				V8_PATH_D = ../v8/out/ia32.debug;
-				V8_PATH_R = ../v8/out/ia32.release;
-				WRAPPER_EXTENSION = app;
-			};
-			name = Release;
-		};
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CINDER_PATH = ../Cinder;
-				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
-				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
-				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
@@ -774,19 +519,12 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				GCC_WARN_PEDANTIC = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_PARAMETER = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(CINDER_PATH)/boost\"",
 					"\"$(V8_PATH)\"",
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"\"$(CINDER_PATH)/lib/libcinder_d.a\"",
 					"\"$(V8_PATH_D)/libicudata.a\"",
@@ -797,8 +535,7 @@
 					"\"$(V8_PATH_D)/libv8_base.a\"",
 					"\"$(V8_PATH_D)/libv8_libplatform.a\"",
 				);
-				PRODUCT_NAME = cinderjs;
-				RUN_CLANG_STATIC_ANALYZER = YES;
+				PRODUCT_NAME = Cinderjs;
 				SYMROOT = ./build;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include \"$(V8_PATH)/include\"";
 				V8_PATH = ../v8;
@@ -812,15 +549,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CINDER_PATH = ../Cinder;
-				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
-				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
-				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -830,24 +558,13 @@
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = cinderjs_Prefix.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"NDEBUG=1",
-					"$(inherited)",
-				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				GCC_WARN_PEDANTIC = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_PARAMETER = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(CINDER_PATH)/boost\"",
 					"\"$(V8_PATH)\"",
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"\"$(CINDER_PATH)/lib/libcinder.a\"",
 					"\"$(V8_PATH_R)/libicudata.a\"",
@@ -858,8 +575,7 @@
 					"\"$(V8_PATH_R)/libv8_base.a\"",
 					"\"$(V8_PATH_R)/libv8_libplatform.a\"",
 				);
-				PRODUCT_NAME = cinderjs;
-				RUN_CLANG_STATIC_ANALYZER = YES;
+				PRODUCT_NAME = Cinderjs;
 				STRIP_INSTALLED_PRODUCT = YES;
 				SYMROOT = ./build;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include \"$(V8_PATH)/include\"";
@@ -874,14 +590,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CINDER_PATH = ../../../../../cinder;
+				ARCHS = x86_64;
+				CINDER_PATH = ../../../..;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				ONLY_ACTIVE_ARCH = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include";
 			};
@@ -891,13 +607,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CINDER_PATH = ../../../../../cinder;
+				ARCHS = x86_64;
+				CINDER_PATH = ../../../..;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include";
 			};
@@ -906,16 +623,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		9E51343819FFE6CF004CF6C5 /* Build configuration list for PBXNativeTarget "cinderjs ia32" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9E51343919FFE6CF004CF6C5 /* Debug */,
-				9E51343A19FFE6CF004CF6C5 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "cinderjs x64" */ = {
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Cinderjs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4B08A954540054247B /* Debug */,

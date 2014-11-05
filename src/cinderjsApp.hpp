@@ -211,6 +211,9 @@ class CinderjsApp : public CinderAppBase  {
   
   // Default key behaviour
   double mLastEscPressed;
+  
+  void v8Draw();
+  double lastFrameTime = 0;
 };
 
   

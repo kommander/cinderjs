@@ -91,6 +91,7 @@ void GLModule::drawSolidCircle(const v8::FunctionCallbackInfo<v8::Value>& args) 
  *
  */
 void GLModule::pushMatrices(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  std::cout << "push ms" << std::endl;
   gl::pushMatrices();
   return;
 }
@@ -142,16 +143,15 @@ void GLModule::disable(const v8::FunctionCallbackInfo<v8::Value>& args) {
  */
 void GLModule::translate(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(args.Length() == 2){
-    bufVec2f_1.x = args[0]->NumberValue();
-    bufVec2f_1.y = args[1]->NumberValue();
-    gl::translate(bufVec2f_1);
+    gl::translate(vec2(args[0]->NumberValue(), args[1]->NumberValue()));
     return;
   }
   
-  bufVec3f_1.x = args[0]->NumberValue();
-  bufVec3f_1.y = args[1]->NumberValue();
-  bufVec3f_1.z = args[2]->NumberValue();
-  gl::translate(bufVec3f_1);
+  gl::translate(vec3(
+    args[0]->NumberValue(),
+    args[1]->NumberValue(),
+    args[2]->NumberValue()
+  ));
   return;
 }
 
@@ -179,11 +179,12 @@ void GLModule::scale(const v8::FunctionCallbackInfo<v8::Value>& args) {
 void GLModule::rotate(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(args.Length() >= 3){
     
-    bufQuat_1.x = args[0]->NumberValue();
-    bufQuat_1.y = args[1]->NumberValue();
-    bufQuat_1.z = args[2]->NumberValue();
-    bufQuat_1.w = args[3]->NumberValue();
-    gl::rotate(bufQuat_1);
+    gl::rotate(quat(
+      args[0]->NumberValue(),
+      args[1]->NumberValue(),
+      args[2]->NumberValue(),
+      args[3]->NumberValue()
+    ));
     
     return;
   }
@@ -341,6 +342,8 @@ void GLModule::setMatrices(const v8::FunctionCallbackInfo<v8::Value>& args) {
       HandleScope scope(isolate);
       isolate->ThrowException(v8::Exception::TypeError(v8::String::NewFromUtf8(isolate, "Camera does not exist")));
     }
+    
+    gl::setMatrices(*cam);
     
     return;
   } else {

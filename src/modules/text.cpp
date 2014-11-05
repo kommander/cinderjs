@@ -29,6 +29,7 @@ using namespace v8;
 
 namespace cjs {
 
+// TODO: Use StaticFactory
 std::map<uint32_t, std::shared_ptr<SimpleText>> TextModule::sTextObjects;
 uint32_t TextModule::sTextObjectIds = 0;
 vec3 TextModule::bufVec3f_1;

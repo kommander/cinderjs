@@ -25,6 +25,7 @@
 #include "modules/ray.hpp"
 #include "modules/camera.hpp"
 #include "modules/shader.hpp"
+#include "modules/batch.hpp"
 
 #include <assert.h>
 
@@ -173,7 +174,8 @@ void CinderjsApp::setup()
   // Get cinder.js main native
   if(cinder_native && sizeof(cinder_native) > 0) {
     std::string mainJS(cinder_native);
-    mV8Thread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8Thread, this, mainJS ) );
+    //mV8Thread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8Thread, this, mainJS ) );
+    v8Thread(mainJS);
   } else {
     // FATAL: No main entry source
     quit();
@@ -212,7 +214,7 @@ v8::Local<v8::Value> CinderjsApp::executeScriptString( std::string scriptStr, Is
  * Setup V8
  */
 void CinderjsApp::v8Thread( std::string mainJS ){
-  ThreadSetup threadSetup;
+  //ThreadSetup threadSetup;
   
   // Initialize V8 (implicit initialization was removed in an earlier revision)
   v8::V8::InitializeICU();
@@ -272,6 +274,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   addModule(std::shared_ptr<RayModule>( new RayModule() ));
   addModule(std::shared_ptr<CameraModule>( new CameraModule() ));
   addModule(std::shared_ptr<ShaderModule>( new ShaderModule() ));
+  addModule(std::shared_ptr<BatchModule>( new BatchModule() ));
   
   
   // Create a new context.
@@ -300,7 +303,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/test.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js");
-  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
+  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/physics.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/ray.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/test/weak_callback.js");
@@ -319,10 +322,6 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   sEmptyObject.Reset(mIsolate, emptyObjInstance);
   
   // Grab GL context to execute the entry script and allow gl setup
-  CGLContextObj currCtx = glRenderer->getCglContext();
-  CGLSetCurrentContext( currCtx );
-  CGLEnable( currCtx, kCGLCEMPEngine );
-  CGLLockContext( currCtx );
   glRenderer->startDraw();
   
   // Execute entry script
@@ -350,8 +349,6 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   
   // Get rid of gl context again
   glRenderer->finishDraw();
-  CGLUnlockContext( currCtx );
-  CGLDisable( currCtx, kCGLCEMPEngine );
   
   // Start sub threads
   mV8RenderThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8RenderThread, this ) );
@@ -365,18 +362,6 @@ void CinderjsApp::v8Thread( std::string mainJS ){
 void CinderjsApp::v8RenderThread(){
   ThreadSetup threadSetup;
   
-  CGLContextObj currCtx = glRenderer->getCglContext();
-  
-  // Not having the following two in seems to work fine as well and resizing works also
-  //  CGLSetCurrentContext( currCtx );  //also important as it now sets newly created context for use in this thread
-  //  CGLEnable( currCtx, kCGLCEMPEngine ); //Apple's magic sauce that allows this OpenGL context  to run in a thread
-  
-  double now;
-  double lastFrame = getElapsedSeconds() * 1000;
-  double timePassed;
-  
-  v8::HeapStatistics stats;
-  
   //
   // Render Loop, do work if available
   while( !mShouldQuit ) {
@@ -389,100 +374,102 @@ void CinderjsApp::v8RenderThread(){
     
     if(!mShouldQuit){
       
-      // Gather some info...
-      now = getElapsedSeconds() * 1000;
-      timePassed = now - lastFrame;
-      lastFrame = now;
-      double elapsed = now - mLastUpdate;
-      if(elapsed > mUpdateInterval) {
-        v8FPS = v8Frames;
-        v8Frames = 0;
-        mLastUpdate = now;
-        if(sV8StatsActive) mIsolate->GetHeapStatistics(&stats);
-      }
-  
-      CGLLockContext( currCtx ); //not sure if this is necessary but Apple's docs seem to suggest it
       glRenderer->startDraw();
       
-      v8::Locker lock(mIsolate);
-      
-      // JS Draw callback
-      
-      // Isolate
-      v8::Isolate::Scope isolate_scope(mIsolate);
-      v8::HandleScope handleScope(mIsolate);
-      
-      // Callback
-      v8::Local<v8::Function> callback = v8::Local<v8::Function>::New(mIsolate, sDrawCallback);
-      
-      if( !callback.IsEmpty() ){
-        
-        v8::Handle<v8::Value> argv[3] = {
-          v8::Number::New(mIsolate, timePassed),
-          v8::Number::New(mIsolate, mousePosBuf.x),
-          v8::Number::New(mIsolate, mousePosBuf.y)
-        };
-
-        v8::TryCatch try_catch;
-        
-        callback->Call(callback->CreationContext()->Global(), 3, argv);
-        
-        // Check for errors
-        if(try_catch.HasCaught()){
-          handleV8TryCatch(try_catch);
-        }
-
-      }
-
-      // Draw modules
-//      for( std::vector<std::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
-//        it->get()->draw();
-//      }
-      
-      v8::Unlocker unlock(mIsolate);
-      
-      // FPS (TODO: if active)
-      cinder::TextLayout fpsText;
-      fpsText.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
-      fpsText.addLine( "Ci FPS: " + std::to_string( cinder::app::AppBasic::getAverageFps() ) );
-      fpsText.addLine( "V8 FPS: " + std::to_string( v8FPS ) );
-      
-      if(sV8StatsActive){
-        fpsText.addLine( "V8 Heap limit: " + std::to_string( stats.heap_size_limit() ) );
-        fpsText.addLine( "V8 Heap total: " + std::to_string( stats.total_heap_size() ) );
-        fpsText.addLine( "V8 Heap Used: " + std::to_string( stats.used_heap_size() ) );
-      }
-      
-      cinder::gl::draw( cinder::gl::Texture::create( fpsText.render() ) );
-
-      // Draw console (if active)
-      if(sConsoleActive){
-        vec2 cPos;
-        // TODO: this still fails sometimes on shutdown
-        try {
-          cPos.y = getWindowHeight();
-          AppConsole::draw( cPos );
-        } catch ( std::exception &e ){
-          // don't draw console if window is not available
-        }
-      }
-      
-      v8Frames++;
+      v8Draw();
       
       glRenderer->finishDraw();
-      CGLUnlockContext( currCtx );
+  
     }
     
     _v8Run = false;
-    _mainRun = true;
-    cvMainThread.notify_one();
   }
   
   // FIXME: sometimes the threads just end shortly after startup already...
   //        Don't know how to reproduce.
   std::cout << "V8 Render thread ending" << std::endl;
   
-  CGLDisable( currCtx, kCGLCEMPEngine );
+}
+  
+void CinderjsApp::v8Draw(){
+  v8::HeapStatistics stats;
+  
+  // Gather some info...
+  double now = getElapsedSeconds() * 1000;
+  double timePassed = now - lastFrameTime;
+  lastFrameTime = now;
+  double elapsed = now - mLastUpdate;
+  if(elapsed > mUpdateInterval) {
+    v8FPS = v8Frames;
+    v8Frames = 0;
+    mLastUpdate = now;
+    if(sV8StatsActive) mIsolate->GetHeapStatistics(&stats);
+  }
+
+  v8::Locker lock(mIsolate);
+  
+  // JS Draw callback
+  
+  // Isolate
+  v8::Isolate::Scope isolate_scope(mIsolate);
+  v8::HandleScope handleScope(mIsolate);
+  
+  // Callback
+  v8::Local<v8::Function> callback = v8::Local<v8::Function>::New(mIsolate, sDrawCallback);
+  
+  if( !callback.IsEmpty() ){
+    
+    v8::Handle<v8::Value> argv[3] = {
+      v8::Number::New(mIsolate, timePassed),
+      v8::Number::New(mIsolate, mousePosBuf.x),
+      v8::Number::New(mIsolate, mousePosBuf.y)
+    };
+
+    v8::TryCatch try_catch;
+    
+    callback->Call(callback->CreationContext()->Global(), 3, argv);
+    
+    // Check for errors
+    if(try_catch.HasCaught()){
+      handleV8TryCatch(try_catch);
+    }
+
+  }
+
+  // Draw modules
+  //      for( std::vector<std::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
+  //        it->get()->draw();
+  //      }
+  
+  v8::Unlocker unlock(mIsolate);
+  
+  // FPS (TODO: if active)
+  cinder::TextLayout fpsText;
+  fpsText.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
+  fpsText.addLine( "Ci FPS: " + std::to_string( cinder::app::AppBasic::getAverageFps() ) );
+  fpsText.addLine( "V8 FPS: " + std::to_string( v8FPS ) );
+  
+  if(sV8StatsActive){
+    fpsText.addLine( "V8 Heap limit: " + std::to_string( stats.heap_size_limit() ) );
+    fpsText.addLine( "V8 Heap total: " + std::to_string( stats.total_heap_size() ) );
+    fpsText.addLine( "V8 Heap Used: " + std::to_string( stats.used_heap_size() ) );
+  }
+  
+  cinder::gl::draw( cinder::gl::Texture::create( fpsText.render() ) );
+
+  // Draw console (if active)
+  if(sConsoleActive){
+    vec2 cPos;
+    // TODO: this still fails sometimes on shutdown
+    try {
+      cPos.y = getWindowHeight();
+      AppConsole::draw( cPos );
+    } catch ( std::exception &e ){
+      // don't draw console if window is not available
+    }
+  }
+  
+  v8Frames++;
   
 }
 
@@ -491,25 +478,6 @@ void CinderjsApp::v8RenderThread(){
  */
 void CinderjsApp::v8EventThread(){
   ThreadSetup threadSetup;
-  
-  // Create a separte GL context to be used event callbacks that are invoked here
-  CGLContextObj newCtx;
-  
-  CGDirectDisplayID display = CGMainDisplayID(); // 1
-  CGOpenGLDisplayMask myDisplayMask = CGDisplayIDToOpenGLDisplayMask( display ); // 2
-  
-  // Check capabilities of display represented by display mask
-  CGLPixelFormatAttribute attribs[] = { kCGLPFADisplayMask,
-    (CGLPixelFormatAttribute)myDisplayMask,
-    (CGLPixelFormatAttribute)0 }; // 3
-  
-  CGLPixelFormatObj pixelFormat = NULL;
-  GLint numPixelFormats = 0;
-  CGLChoosePixelFormat( attribs, &pixelFormat, &numPixelFormats );
-  CGLCreateContext( pixelFormat, glRenderer->getCglContext(), &newCtx );
-  CGLLockContext( newCtx );
-  CGLSetCurrentContext( newCtx );
-  CGLEnable( newCtx, kCGLCEMPEngine );
   
   // Thread loop
   while( !mShouldQuit ) {
@@ -521,6 +489,9 @@ void CinderjsApp::v8EventThread(){
     }
     
     if(!mShouldQuit && mEventQueue.isNotEmpty()){
+      
+      // Grab renderer...
+      glRenderer->startDraw();
       
       // TODO: If available, push mouse/key/resize events to v8
       v8::Locker lock(mIsolate);
@@ -614,16 +585,15 @@ void CinderjsApp::v8EventThread(){
         }
       }
       
+      // Release renderer...
+      glRenderer->finishDraw();
+      
       context->Exit();
       v8::Unlocker unlock(mIsolate);
     }
     
     _eventRun = false;
   }
-  
-  CGLUnlockContext( newCtx );
-  CGLDisable( newCtx, kCGLCEMPEngine );
-  CGLDestroyContext( newCtx );
   
   std::cout << "V8 Event thread ending" << std::endl;
 }
@@ -922,7 +892,6 @@ void CinderjsApp::update()
  * Cinder draw loop (tick)
  * - Triggers the v8 render thread
  * - Proxies nextFrame() 
- * - Triggers timer thread
  */
 void CinderjsApp::draw()
 {
@@ -960,7 +929,7 @@ void CinderjsApp::draw()
   }
   
 }
-
+	
 
 /**
  * Set the draw callback from javascript
