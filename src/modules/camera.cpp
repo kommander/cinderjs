@@ -20,9 +20,6 @@
  POSSIBILITY OF SUCH DAMAGE.
  */
 
-// Uncomment for debug output
-//#define DEBUG_RAY_MODULE
-
 #include "camera.hpp"
 #include "AppConsole.h"
 #include "../StaticFactory.hpp"

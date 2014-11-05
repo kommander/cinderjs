@@ -19,41 +19,43 @@
  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef _AppModule_hpp_
-#define _AppModule_hpp_
+#ifndef _ShaderModule_hpp_
+#define _ShaderModule_hpp_
 
 #pragma once
 
-#define APP_MOD_ID 0
+#define SHADER_MOD_ID 9
+
+#include <map>
 
 #include "../PipeModule.hpp"
 
-using namespace cinder;
-
 namespace cjs {
   
-class AppModule : public PipeModule {
+class ShaderModule : public PipeModule {
   public:
-    AppModule(){}
-    ~AppModule(){}
+    ShaderModule(){}
+    ~ShaderModule(){}
   
     inline int moduleId() {
-      return APP_MOD_ID;
+      return SHADER_MOD_ID;
     }
   
     inline std::string getName() {
-      //std::string name = "app";
-      return "app";
+      return "shader";
     }
+  
+    static void create(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void destroy(const v8::FunctionCallbackInfo<v8::Value>& args);
   
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
     void draw(){};
   
   //
   private:
-    static void getAspectRatio(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void addAssetDirectory(const v8::FunctionCallbackInfo<v8::Value>& args);
   
+    // Buffers
+    static cinder::vec3 sBufVec3f_1;
  };
   
 } // namespace cjs

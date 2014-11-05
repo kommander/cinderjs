@@ -17,4 +17,5 @@ python ../tools/js2c.py     \
   ../lib/gl.js              \
   ../lib/text.js            \
   ../lib/console.js         \
+  ../lib/shader.js          \
   ../lib/default_main.js    \

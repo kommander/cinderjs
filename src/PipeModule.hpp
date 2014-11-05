@@ -56,8 +56,12 @@ namespace cjs {
         ctx = context;
       }
     
-      inline void setApp( cinder::app::AppBasic *app ) {
+      static void setApp( cinder::app::AppBasic *app ) {
         sApp = app;
+      }
+    
+      static cinder::app::AppBasic* getApp() {
+        return sApp;
       }
     
       inline v8::Persistent<v8::Context>* getContext() {
@@ -73,8 +77,6 @@ namespace cjs {
     private:
       v8::Isolate* mIsolate;
       v8::Persistent<v8::Context>* ctx;
-    
-    protected:
       static cinder::app::AppBasic* sApp;
   };
 }

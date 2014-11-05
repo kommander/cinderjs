@@ -31,8 +31,6 @@
 #include "../PipeModule.hpp"
 #include "../utils/TextHelpers.cpp"
 
-using namespace cinder;
-
 namespace cjs {
   
 class TextModule : public PipeModule {
@@ -64,7 +62,7 @@ class TextModule : public PipeModule {
     static uint32_t sTextObjectIds;
   
     // Buffers
-    static vec3 bufVec3f_1;
+    static cinder::vec3 bufVec3f_1;
  };
   
 } // namespace cjs

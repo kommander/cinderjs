@@ -25,6 +25,7 @@
 #include "modules/vm.hpp"
 #include "modules/ray.hpp"
 #include "modules/camera.hpp"
+#include "modules/shader.hpp"
 
 #include <assert.h>
 
@@ -271,6 +272,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   addModule(boost::shared_ptr<VMModule>( new VMModule() ));
   addModule(boost::shared_ptr<RayModule>( new RayModule() ));
   addModule(boost::shared_ptr<CameraModule>( new CameraModule() ));
+  addModule(boost::shared_ptr<ShaderModule>( new ShaderModule() ));
   
   
   // Create a new context.
@@ -322,6 +324,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   CGLSetCurrentContext( currCtx );
   CGLEnable( currCtx, kCGLCEMPEngine );
   CGLLockContext( currCtx );
+  glRenderer->startDraw();
   
   // Execute entry script
   Local<Value> mainResult = executeScriptString( mainJS, mIsolate,
@@ -347,6 +350,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   }
   
   // Get rid of gl context again
+  glRenderer->finishDraw();
   CGLUnlockContext( currCtx );
   CGLDisable( currCtx, kCGLCEMPEngine );
   

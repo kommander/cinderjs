@@ -36,9 +36,24 @@ void AppModule::getAspectRatio(const v8::FunctionCallbackInfo<v8::Value>& args) 
   Isolate* isolate = args.GetIsolate();
   HandleScope scope(isolate);
   
-  float ratio = sApp->getWindowAspectRatio();
+  float ratio = getApp()->getWindowAspectRatio();
   
   args.GetReturnValue().Set(v8::Number::New(isolate, ratio));
+  return;
+}
+
+/**
+ *
+ */
+void AppModule::addAssetDirectory(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  Isolate* isolate = args.GetIsolate();
+  HandleScope scope(isolate);
+  
+  if(args[0]->IsString()){
+    v8::String::Utf8Value pathStr(args[0]->ToString());
+    getApp()->addAssetDirectory(fs::path(*pathStr));
+  }
+  
   return;
 }
 
@@ -52,6 +67,7 @@ std::cout << "App load global" << std::endl;
   Handle<ObjectTemplate> appTemplate = ObjectTemplate::New(getIsolate());
   
   appTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "getAspectRatio"), v8::FunctionTemplate::New(getIsolate(), getAspectRatio));
+  appTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "addAssetDirectory"), v8::FunctionTemplate::New(getIsolate(), addAssetDirectory));
   
   // Expose global app object
   global->Set(v8::String::NewFromUtf8(getIsolate(), "app"), appTemplate);
