@@ -91,7 +91,6 @@ void GLModule::drawSolidCircle(const v8::FunctionCallbackInfo<v8::Value>& args) 
  *
  */
 void GLModule::pushMatrices(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  std::cout << "push ms" << std::endl;
   gl::pushMatrices();
   return;
 }
