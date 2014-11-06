@@ -9,26 +9,34 @@ to start out with simple command line programs and standard input/output.
 Bringing basics of web development to beginners involves at least three languages: HTML, CSS, Javascript.
 Too much overhead to draw a line on the screen.
 So while maintainig a feature rich foundation for graphical scripting, 
-it is supposed to be the foundation for a simplified gfx programming abstraction, suitable for children and minors,
+it is supposed to be the base for a simplified gfx programming abstraction, suitable for children and minors,
 with abilities to exchange cross platform compatible scripts.
 
 # Run
 # OSX
 Drag a js file onto the application. If it is a cinder module, it will run it. If another script is already running,
-it is shut down and replaced.
-Simply specify a "*.js" file to run on startup:  
+it is shut down and replaced.  
+Or, simply specify a "*.js" file to run on startup:  
 ```
-$> open xcode/build/Debug/cinderjs.app --args /Users/sebastian/Dropbox/+Projects/cinderjs/lib/test.js
+$> open xcode/build/Debug/cinderjs.app --args /examples/cube/cubes.js
 ```
 
 # Build & Develop
+Checkout the git submodules with:
+```
+$> git submodule init
+$> git submodule update
+```
+Then build v8 (make native) and Cinder (./xcode/fullbuild.sh). 
+After that the xcode cinderjs project should build as alls paths are relative. 
+
 ## v8
 Using Version branch 3.30
 
 To be able to debug JIT code, build v8 with the compiler flag "gdbjit=on".
 For detailed build instructions have a look at [the Google V8 build docs](https://developers.google.com/v8/build).
 
-To be able to link against lib++, build on OSX with:  
+To be able to link against libc++, build on OSX with:  
 ```
 export CXX="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -std=c++11 -stdlib=libc++"
 export CC=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
