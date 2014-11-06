@@ -124,6 +124,27 @@ void ShaderModule::destroy(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return;
 }
 
+void ShaderModule::bind(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  
+  if(!args[0].IsEmpty()){
+    uint32_t id = args[0]->ToUint32()->Value();
+    
+    GlslProgRef shader = StaticFactory::get<GlslProg>(id);
+    
+    if(!shader){
+      v8::Isolate* isolate = args.GetIsolate();
+      v8::HandleScope scope(isolate);
+      isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Shader does not exist")));
+      return;
+    }
+    
+    shader->bind();
+  }
+  
+  return;
+}
+
+
 void ShaderModule::uniformInt(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
@@ -144,7 +165,6 @@ void ShaderModule::uniformInt(const v8::FunctionCallbackInfo<v8::Value>& args) {
     
     int value = args[2]->ToUint32()->Value();
     
-    std::cout << "uniform int " << loc << "/" << to_string(value) << std::endl;
     shader->uniform(loc, value);
   }
   
@@ -171,7 +191,6 @@ void ShaderModule::uniformFloat(const v8::FunctionCallbackInfo<v8::Value>& args)
     
     float value = args[2]->ToNumber()->Value();
     
-    std::cout << "uniform float " << loc << "/" << to_string(value) << std::endl;
     shader->uniform(loc, value);
   }
   
@@ -289,6 +308,7 @@ void ShaderModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "create"), v8::FunctionTemplate::New(getIsolate(), create));
   shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "createFromFormat"), v8::FunctionTemplate::New(getIsolate(), createFromFormat));
   shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "destroy"), v8::FunctionTemplate::New(getIsolate(), destroy));
+  shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "bind"), v8::FunctionTemplate::New(getIsolate(), bind));
   
   shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "uniformInt"), v8::FunctionTemplate::New(getIsolate(), uniformInt));
   shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "uniformFloat"), v8::FunctionTemplate::New(getIsolate(), uniformFloat));

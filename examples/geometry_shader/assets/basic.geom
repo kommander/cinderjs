@@ -6,10 +6,8 @@ layout(line_strip, max_vertices = 64) out;
 in vec3 vColor[]; // Output from vertex shader for each vertex
 out vec3 gColor; // Output to fragment shader
 
-//uniform int uNumSides;
-//uniform float uRadius;
-const int uNumSides = 4;
-const float uRadius = 100;
+uniform int uNumSides;
+uniform float uRadius;
 
 uniform mat4 ciProjectionMatrix;
 

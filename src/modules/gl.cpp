@@ -32,6 +32,8 @@ using namespace std;
 using namespace cinder;
 using namespace v8;
 
+// NOTE: Scoped features won't work currently, using non-scoped versions
+
 namespace cjs {
 
 vec2 GLModule::bufVec2f_1;
@@ -367,31 +369,6 @@ void GLModule::setMatricesWindow(const v8::FunctionCallbackInfo<v8::Value>& args
 /**
  *
  */
-void GLModule::scopedShader(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  if(args[0]->IsUint32()){
-    uint32_t id = args[0]->ToUint32()->Value();
-    cinder::gl::GlslProgRef shader = StaticFactory::get<cinder::gl::GlslProg>(id);
-    
-    if(!shader){
-      Isolate* isolate = args.GetIsolate();
-      HandleScope scope(isolate);
-      isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Shader (GlslProg) does not exist")));
-      return;
-    }
-    std::cout << "scoped shader" << std::endl;
-    gl::ScopedGlslProg glslProg(shader);
-
-    return;
-  } else {
-    Isolate* isolate = args.GetIsolate();
-    HandleScope scope(isolate);
-    isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Need a shader (GlslProg) id (uint32)")));
-  }
-}
-
-/**
- *
- */
 void GLModule::clear(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(args.Length() >= 3) {
     sBufColor_1.r = args[0]->ToNumber()->Value();
@@ -459,7 +436,6 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "isVerticalSyncEnabled"), v8::FunctionTemplate::New(getIsolate(), isVerticalSyncEnabled));
   
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "multModelMatrix"), v8::FunctionTemplate::New(getIsolate(), multModelMatrix));
-  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "scopedShader"), v8::FunctionTemplate::New(getIsolate(), scopedShader));
   
   // Primitives
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawCube"), v8::FunctionTemplate::New(getIsolate(), drawCube));

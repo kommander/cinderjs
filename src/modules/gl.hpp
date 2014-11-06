@@ -81,8 +81,7 @@ class GLModule : public PipeModule {
     static void isVerticalSyncEnabled(const v8::FunctionCallbackInfo<v8::Value>& args);
   
     static void multModelMatrix(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void scopedShader(const v8::FunctionCallbackInfo<v8::Value>& args);
-  
+    
   private:
     //
     static ColorA sBufColorA_1;

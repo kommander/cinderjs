@@ -48,6 +48,7 @@ class ShaderModule : public PipeModule {
     static void create(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void createFromFormat(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void destroy(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void bind(const v8::FunctionCallbackInfo<v8::Value>& args);
   
     static void uniformInt(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void uniformFloat(const v8::FunctionCallbackInfo<v8::Value>& args);
