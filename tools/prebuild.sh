@@ -1,4 +1,5 @@
 #!/bin/sh
+rm ../src/js_natives.h  
 python ../tools/js2c.py     \
   ../src/js_natives.h       \
   ../lib/cinder.js          \

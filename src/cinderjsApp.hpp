@@ -190,7 +190,7 @@ class CinderjsApp : public CinderAppBase  {
   static volatile bool sV8StatsActive;
   
   // Error Handling
-  static void handleV8TryCatch( v8::TryCatch &tryCatch );
+  static void handleV8TryCatch( v8::TryCatch &tryCatch, std::string info );
   
   // Timers
   static cinder::ConcurrentCircularBuffer<TimerFn> sTimerQueue;

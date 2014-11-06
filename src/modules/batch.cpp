@@ -39,8 +39,11 @@ void BatchModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
   
+  BatchRef batch;
+  
   if (args.Length() > 2) {
     
+    // TODO:
     //uint32_t meshOrGeomId = args[1]->ToUint32()->Value();
     
     uint32_t shaderId = args[2]->ToUint32()->Value();
@@ -52,10 +55,15 @@ void BatchModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
       return;
     }
     
-    BatchRef batch = Batch::create(geom::Cube(), shader);
+    batch = Batch::create(geom::Cube(), shader);
     
-    StaticFactory::put<Batch>( isolate, batch, args[0]->ToObject() );
+    
+  } else {
+    return;
   }
+  
+  StaticFactory::put<Batch>( isolate, batch, args[0]->ToObject() );
+  
   // TODO: throw isolate error on wrong arguments
   return;
 }
@@ -67,7 +75,7 @@ void BatchModule::destroy(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(!args[0].IsEmpty()){
     uint32_t id = args[0]->ToUint32()->Value();
     
-    StaticFactory::remove<GlslProgRef>(isolate, id);
+    StaticFactory::remove<Batch>(isolate, id);
   }
   
   return;
@@ -81,11 +89,138 @@ void BatchModule::draw(const v8::FunctionCallbackInfo<v8::Value>& args) {
     uint32_t id = args[0]->ToUint32()->Value();
     
     BatchRef batch = StaticFactory::get<Batch>(id);
+    
+    if(!batch){
+      isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Batch does not exist")));
+      return;
+    }
+    
     batch->draw();
   }
   
   return;
 }
+
+//
+// VertBatch
+
+void BatchModule::createVert(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+  
+  VertBatchRef batch = VertBatch::create();
+  StaticFactory::put<VertBatch>( isolate, batch, args[0]->ToObject() );
+  
+  return;
+}
+
+void BatchModule::destroyVert(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  if(!args[0].IsEmpty()){
+    uint32_t id = args[0]->ToUint32()->Value();
+    
+    StaticFactory::remove<VertBatch>(isolate, id);
+  }
+  
+  return;
+}
+
+void BatchModule::drawVert(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  if(!args[0].IsEmpty()){
+    uint32_t id = args[0]->ToUint32()->Value();
+    
+    VertBatchRef batch = StaticFactory::get<VertBatch>(id);
+    
+    if(!batch){
+      isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "VertBatch does not exist")));
+      return;
+    }
+    
+    batch->draw();
+  }
+  
+  return;
+}
+
+void BatchModule::colorVert(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  if(!args[0].IsEmpty()){
+    uint32_t id = args[0]->ToUint32()->Value();
+    
+    VertBatchRef batch = StaticFactory::get<VertBatch>(id);
+    
+    if(!batch){
+      isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "VertBatch does not exist")));
+      return;
+    }
+    
+    batch->color(
+      args[1]->ToNumber()->Value(),
+      args[2]->ToNumber()->Value(),
+      args[3]->ToNumber()->Value(),
+      args[4]->ToNumber()->Value()
+    );
+  }
+  
+  return;
+}
+
+void BatchModule::vertexVert(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  if(!args[0].IsEmpty()){
+    uint32_t id = args[0]->ToUint32()->Value();
+    
+    VertBatchRef batch = StaticFactory::get<VertBatch>(id);
+    
+    if(!batch){
+      isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "VertBatch does not exist")));
+      return;
+    }
+    
+    if(args.Length() > 3) {
+      batch->vertex(
+        args[1]->ToNumber()->Value(),
+        args[2]->ToNumber()->Value(),
+        args[3]->ToNumber()->Value()
+      );
+    } else {
+      batch->vertex(
+        args[1]->ToNumber()->Value(),
+        args[2]->ToNumber()->Value()
+      );
+    }
+  }
+  
+  return;
+}
+
+
+// TODO:
+//void	setType( GLenum type );
+//GLenum	getType() const { return mPrimType; }
+//
+//void	normal( float x, float y, float z ) { normal( vec3( x, y, z ) ); }
+//void	normal( const vec3 &n );
+//
+//void	texCoord( float s, float t, float r = 0, float q = 1 ) { texCoord( vec4( s, t, r, q ) ); }
+//void	texCoord( const vec2 &t ) { texCoord( vec4( t.x, t.y, 0, 1 ) ); }
+//void	texCoord( const vec3 &t ) { texCoord( vec4( t.x, t.y, t.z, 1 ) ); }
+//void	texCoord( const vec4 &t );
+//
+//void	begin( GLenum type );
+//void	end();
+//void	clear();
+//
+//bool	empty() const { return mVertices.empty(); }
 
 
 /**
@@ -99,6 +234,11 @@ void BatchModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   batchTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "destroy"), v8::FunctionTemplate::New(getIsolate(), destroy));
   batchTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "draw"), v8::FunctionTemplate::New(getIsolate(), draw));
   
+  batchTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "createVert"), v8::FunctionTemplate::New(getIsolate(), createVert));
+  batchTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "destroyVert"), v8::FunctionTemplate::New(getIsolate(), destroyVert));
+  batchTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawVert"), v8::FunctionTemplate::New(getIsolate(), drawVert));
+  batchTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "colorVert"), v8::FunctionTemplate::New(getIsolate(), colorVert));
+  batchTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "vertexVert"), v8::FunctionTemplate::New(getIsolate(), vertexVert));
   
   // Expose global batch object
   global->Set(v8::String::NewFromUtf8(getIsolate(), "batch"), batchTemplate);

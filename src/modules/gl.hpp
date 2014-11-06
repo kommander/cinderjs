@@ -70,6 +70,7 @@ class GLModule : public PipeModule {
     static void drawCube(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void drawSphere(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void setMatrices(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void setMatricesWindow(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void clear(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void enableDepthRead(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void disableDepthRead(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -80,6 +81,7 @@ class GLModule : public PipeModule {
     static void isVerticalSyncEnabled(const v8::FunctionCallbackInfo<v8::Value>& args);
   
     static void multModelMatrix(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void scopedShader(const v8::FunctionCallbackInfo<v8::Value>& args);
   
   private:
     //

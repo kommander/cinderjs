@@ -46,16 +46,21 @@ class ShaderModule : public PipeModule {
     }
   
     static void create(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void createFromFormat(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void destroy(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
+    static void uniformInt(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void uniformFloat(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
+    static void createFormat(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void destroyFormat(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void formatVertex(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void formatFragment(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void formatGeometry(const v8::FunctionCallbackInfo<v8::Value>& args);
   
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
     void draw(){};
   
-  //
-  private:
-  
-    // Buffers
-    static cinder::vec3 sBufVec3f_1;
  };
   
 } // namespace cjs

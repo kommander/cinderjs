@@ -78,7 +78,7 @@ void CinderjsApp::gcPrologueCb(Isolate *isolate, GCType type, GCCallbackFlags fl
  * Handling v8 errors in native land
  * TODO: can be vastly improved
  */
-void CinderjsApp::handleV8TryCatch( v8::TryCatch &tryCatch ) {
+void CinderjsApp::handleV8TryCatch( v8::TryCatch &tryCatch, std::string info ) {
   std::string msg;
   if(tryCatch.StackTrace().IsEmpty()){
     v8::String::Utf8Value except(tryCatch.Exception());
@@ -87,7 +87,8 @@ void CinderjsApp::handleV8TryCatch( v8::TryCatch &tryCatch ) {
     v8::String::Utf8Value trace(tryCatch.StackTrace());
     msg = *trace;
   }
-  std::string ex = "Uncaught Exception: ";
+  std::string ex = "Uncaught Exception";
+  ex.append(" (" + info + "):");
   ex.append(msg);
   #ifdef DEBUG
   std::cout << ex << std::endl;
@@ -208,7 +209,8 @@ v8::Local<v8::Value> CinderjsApp::executeScriptString( std::string scriptStr, Is
   
   // Check for script errors
   if(try_catch.HasCaught()){
-    handleV8TryCatch(try_catch);
+    String::Utf8Value str(filename);
+    handleV8TryCatch(try_catch, "executeScriptString/" + std::string(*str));
   }
   
   return scope.Escape(result);
@@ -309,7 +311,8 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/test.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js");
-  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cubes.js");
+  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cube/cubes.js");
+  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/geometry_shader/index.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/physics.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/ray.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/test/weak_callback.js");
@@ -343,7 +346,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
     mainFn->Call(mMainContext->Global(), 1, &processObjInstance);
     
     if(tryCatch.HasCaught()){
-      handleV8TryCatch(tryCatch);
+      handleV8TryCatch(tryCatch, "mainFn");
     }
     
     // TODO: Get Global()->global object and use in new context for external js modules
@@ -440,7 +443,7 @@ void CinderjsApp::v8Draw(){
     
     // Check for errors
     if(try_catch.HasCaught()){
-      handleV8TryCatch(try_catch);
+      handleV8TryCatch(try_catch, "v8Draw");
     }
 
   }
@@ -624,7 +627,7 @@ void CinderjsApp::executeTimer(TimerFn timer, Isolate* isolate) {
   fn->Call(fn->CreationContext()->Global(), 0, argv);
   
   if(try_catch.HasCaught()){
-    handleV8TryCatch(try_catch);
+    handleV8TryCatch(try_catch, "executeTimer");
   }
   
   //context->Exit();
@@ -1214,7 +1217,8 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
     modFn->Call(modObj, 3, argv);
     
     if(tryCatch.HasCaught()){
-      handleV8TryCatch(tryCatch);
+      isolate->ThrowException( tryCatch.Exception() );
+      //handleV8TryCatch(tryCatch);
       // TODO: remove from module list again
       return;
     }

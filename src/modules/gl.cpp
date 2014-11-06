@@ -339,7 +339,8 @@ void GLModule::setMatrices(const v8::FunctionCallbackInfo<v8::Value>& args) {
     if(!cam){
       Isolate* isolate = args.GetIsolate();
       HandleScope scope(isolate);
-      isolate->ThrowException(v8::Exception::TypeError(v8::String::NewFromUtf8(isolate, "Camera does not exist")));
+      isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Camera does not exist")));
+      return;
     }
     
     gl::setMatrices(*cam);
@@ -349,7 +350,42 @@ void GLModule::setMatrices(const v8::FunctionCallbackInfo<v8::Value>& args) {
     // Error, need a camera id
     Isolate* isolate = args.GetIsolate();
     HandleScope scope(isolate);
-    isolate->ThrowException(v8::Exception::TypeError(v8::String::NewFromUtf8(isolate, "Need a camera id (uint32)")));
+    isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Need a camera id (uint32)")));
+  }
+}
+
+/**
+ *
+ */
+void GLModule::setMatricesWindow(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  if(args.Length() == 2) {
+    gl::setMatricesWindow(args[0]->ToUint32()->Value(), args[1]->ToUint32()->Value());
+  }
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::scopedShader(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  if(args[0]->IsUint32()){
+    uint32_t id = args[0]->ToUint32()->Value();
+    cinder::gl::GlslProgRef shader = StaticFactory::get<cinder::gl::GlslProg>(id);
+    
+    if(!shader){
+      Isolate* isolate = args.GetIsolate();
+      HandleScope scope(isolate);
+      isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Shader (GlslProg) does not exist")));
+      return;
+    }
+    std::cout << "scoped shader" << std::endl;
+    gl::ScopedGlslProg glslProg(shader);
+
+    return;
+  } else {
+    Isolate* isolate = args.GetIsolate();
+    HandleScope scope(isolate);
+    isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Need a shader (GlslProg) id (uint32)")));
   }
 }
 
@@ -385,7 +421,6 @@ void GLModule::multModelMatrix(const v8::FunctionCallbackInfo<v8::Value>& args) 
 }
 
 // TODO
-//void setMatrices( const Camera &cam );
 //void setModelView( const Camera &cam );
 //void setProjection( const Camera &cam );
 
@@ -395,6 +430,7 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   
   // gl methods
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setMatrices"), v8::FunctionTemplate::New(getIsolate(), setMatrices));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setMatricesWindow"), v8::FunctionTemplate::New(getIsolate(), setMatricesWindow));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "clear"), v8::FunctionTemplate::New(getIsolate(), clear));
   
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawLine"), v8::FunctionTemplate::New(getIsolate(), drawLine));
@@ -423,6 +459,7 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "isVerticalSyncEnabled"), v8::FunctionTemplate::New(getIsolate(), isVerticalSyncEnabled));
   
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "multModelMatrix"), v8::FunctionTemplate::New(getIsolate(), multModelMatrix));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "scopedShader"), v8::FunctionTemplate::New(getIsolate(), scopedShader));
   
   // Primitives
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawCube"), v8::FunctionTemplate::New(getIsolate(), drawCube));

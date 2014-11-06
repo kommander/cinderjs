@@ -55,14 +55,6 @@
 		9E4ABEF91A0A008500AF2706 /* timers.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABEE61A0A008500AF2706 /* timers.js */; };
 		9E4ABEFA1A0A008500AF2706 /* util.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABEE71A0A008500AF2706 /* util.js */; };
 		9E4ABEFB1A0A008500AF2706 /* vm.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABEE81A0A008500AF2706 /* vm.js */; };
-		9E4ABF171A0A009100AF2706 /* cubes.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF011A0A009100AF2706 /* cubes.js */; };
-		9E4ABF1B1A0A009100AF2706 /* lines.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF061A0A009100AF2706 /* lines.js */; };
-		9E4ABF1C1A0A009100AF2706 /* particle.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF071A0A009100AF2706 /* particle.js */; };
-		9E4ABF1D1A0A009100AF2706 /* physics.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF081A0A009100AF2706 /* physics.js */; };
-		9E4ABF1E1A0A009100AF2706 /* ray_cam.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF091A0A009100AF2706 /* ray_cam.js */; };
-		9E4ABF1F1A0A009100AF2706 /* ray_camera.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF0A1A0A009100AF2706 /* ray_camera.js */; };
-		9E4ABF201A0A009100AF2706 /* ray_picking.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF0B1A0A009100AF2706 /* ray_picking.js */; };
-		9E4ABF211A0A009100AF2706 /* test.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF0C1A0A009100AF2706 /* test.js */; };
 		9E4ABF221A0A009100AF2706 /* js2c.py in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF0E1A0A009100AF2706 /* js2c.py */; };
 		9E4ABF231A0A009100AF2706 /* prebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF0F1A0A009100AF2706 /* prebuild.sh */; };
 		9E5ACA3E1A0AA4F400FB75E8 /* glm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E5ACA3C1A0AA4F400FB75E8 /* glm.cpp */; };
@@ -139,14 +131,6 @@
 		9E4ABEE61A0A008500AF2706 /* timers.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = timers.js; sourceTree = "<group>"; };
 		9E4ABEE71A0A008500AF2706 /* util.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = util.js; sourceTree = "<group>"; };
 		9E4ABEE81A0A008500AF2706 /* vm.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = vm.js; sourceTree = "<group>"; };
-		9E4ABF011A0A009100AF2706 /* cubes.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = cubes.js; sourceTree = "<group>"; };
-		9E4ABF061A0A009100AF2706 /* lines.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = lines.js; sourceTree = "<group>"; };
-		9E4ABF071A0A009100AF2706 /* particle.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = particle.js; sourceTree = "<group>"; };
-		9E4ABF081A0A009100AF2706 /* physics.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = physics.js; sourceTree = "<group>"; };
-		9E4ABF091A0A009100AF2706 /* ray_cam.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ray_cam.js; sourceTree = "<group>"; };
-		9E4ABF0A1A0A009100AF2706 /* ray_camera.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ray_camera.js; sourceTree = "<group>"; };
-		9E4ABF0B1A0A009100AF2706 /* ray_picking.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ray_picking.js; sourceTree = "<group>"; };
-		9E4ABF0C1A0A009100AF2706 /* test.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test.js; sourceTree = "<group>"; };
 		9E4ABF0E1A0A009100AF2706 /* js2c.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = js2c.py; sourceTree = "<group>"; };
 		9E4ABF0F1A0A009100AF2706 /* prebuild.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = prebuild.sh; sourceTree = "<group>"; };
 		9E5ACA3C1A0AA4F400FB75E8 /* glm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glm.cpp; path = ../src/modules/glm.cpp; sourceTree = "<group>"; };
@@ -234,7 +218,6 @@
 		29B97314FDCFA39411CA2CEA /* Cinderjs */ = {
 			isa = PBXGroup;
 			children = (
-				9E4ABEFC1A0A009100AF2706 /* examples */,
 				9E4ABF0D1A0A009100AF2706 /* tools */,
 				01B97315FEAEA392516A2CEA /* Blocks */,
 				9E4ABED51A0A008400AF2706 /* lib */,
@@ -359,22 +342,6 @@
 			path = ../lib;
 			sourceTree = "<group>";
 		};
-		9E4ABEFC1A0A009100AF2706 /* examples */ = {
-			isa = PBXGroup;
-			children = (
-				9E4ABF011A0A009100AF2706 /* cubes.js */,
-				9E4ABF061A0A009100AF2706 /* lines.js */,
-				9E4ABF071A0A009100AF2706 /* particle.js */,
-				9E4ABF081A0A009100AF2706 /* physics.js */,
-				9E4ABF091A0A009100AF2706 /* ray_cam.js */,
-				9E4ABF0A1A0A009100AF2706 /* ray_camera.js */,
-				9E4ABF0B1A0A009100AF2706 /* ray_picking.js */,
-				9E4ABF0C1A0A009100AF2706 /* test.js */,
-			);
-			name = examples;
-			path = ../examples;
-			sourceTree = "<group>";
-		};
 		9E4ABF0D1A0A009100AF2706 /* tools */ = {
 			isa = PBXGroup;
 			children = (
@@ -442,23 +409,15 @@
 				9E4ABEFA1A0A008500AF2706 /* util.js in Resources */,
 				9E4ABEE91A0A008500AF2706 /* app.js in Resources */,
 				9E4ABEEC1A0A008500AF2706 /* camera.js in Resources */,
-				9E4ABF1D1A0A009100AF2706 /* physics.js in Resources */,
-				9E4ABF211A0A009100AF2706 /* test.js in Resources */,
 				9ED25AC91A0A7918009CEDC4 /* texture.js in Resources */,
 				9E4ABEEE1A0A008500AF2706 /* color.js in Resources */,
-				9E4ABF171A0A009100AF2706 /* cubes.js in Resources */,
 				9E4ABEF91A0A008500AF2706 /* timers.js in Resources */,
 				9E4ABED21A0A006900AF2706 /* Info.plist in Resources */,
 				9E4ABF231A0A009100AF2706 /* prebuild.sh in Resources */,
-				9E4ABF1B1A0A009100AF2706 /* lines.js in Resources */,
 				9E4ABEF31A0A008500AF2706 /* gl.js in Resources */,
 				9E4ABEEA1A0A008500AF2706 /* assert.js in Resources */,
 				9E4ABEF11A0A008500AF2706 /* events.js in Resources */,
-				9E4ABF201A0A009100AF2706 /* ray_picking.js in Resources */,
-				9E4ABF1C1A0A009100AF2706 /* particle.js in Resources */,
-				9E4ABF1F1A0A009100AF2706 /* ray_camera.js in Resources */,
 				9E4ABED01A0A005400AF2706 /* CinderApp.icns in Resources */,
-				9E4ABF1E1A0A009100AF2706 /* ray_cam.js in Resources */,
 				9E4ABEEF1A0A008500AF2706 /* console.js in Resources */,
 				9E4ABEF51A0A008500AF2706 /* path.js in Resources */,
 				9E4ABEF71A0A008500AF2706 /* shader.js in Resources */,

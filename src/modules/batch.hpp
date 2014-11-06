@@ -47,6 +47,12 @@ class BatchModule : public PipeModule {
     static void destroy(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void draw(const v8::FunctionCallbackInfo<v8::Value>& args);
   
+    static void createVert(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void destroyVert(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void drawVert(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void colorVert(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void vertexVert(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
     void draw(){};
   

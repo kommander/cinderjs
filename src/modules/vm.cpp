@@ -49,17 +49,18 @@ void runInThisContext(const v8::FunctionCallbackInfo<v8::Value>& args) {
   //String::Utf8Value str(source);
   //std::cout << "runInThisContext: " << std::endl << *str << std::endl;
   
+  TryCatch try_catch;
+  
   // Compile the source code.
   Local<Script> script = Script::Compile( source, filename );
   
   // Run the script to get the result.
-  TryCatch try_catch;
   
   Local<Value> result = script->Run();
   
   // Check native module validity
-  if(result.IsEmpty() || !result->IsFunction()){
-    std::string except = "External module not a function, in ";
+  if(result.IsEmpty() || !result->IsFunction() || try_catch.HasCaught()){
+    std::string except = "External module error, in ";
     v8::String::Utf8Value fname(filename);
     except.append(*fname);
     
