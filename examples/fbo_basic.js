@@ -83,9 +83,8 @@ app.draw(function(timePassed, mx, my){
   gl.setMatricesWindow( screenSize.w, screenSize.h );
   gl.drawTexture( fbo.getColorTexture(), 0, 0, 128, 128 );
 
-  // TODO:
   // and draw the depth texture adjacent
-  //gl::draw( mFbo->getDepthTexture(), Rectf( 128, 0, 256, 128 ) );
+  gl.drawTexture( fbo.getDepthTexture(), 128, 0, 256, 128 );
 
   gl.disableDepth();
 });

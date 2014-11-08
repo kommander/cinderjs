@@ -305,6 +305,28 @@ void FBOModule::getColorTexture(const v8::FunctionCallbackInfo<v8::Value>& args)
   return;
 }
 
+void FBOModule::getDepthTexture(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+  
+  if(!args[0].IsEmpty()){
+    uint32_t id = args[0]->ToUint32()->Value();
+    
+    FboRef fbo = StaticFactory::get<Fbo>(id);
+    
+    if(!fbo){
+      isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Fbo does not exist")));
+      return;
+    }
+    
+    TextureRef texture = fbo->getDepthTexture();
+    StaticFactory::put(isolate, texture, args[1]->ToObject());
+  }
+  
+  return;
+}
+
+
 
 /**
  * Add JS bindings
@@ -322,6 +344,7 @@ void FBOModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   fboTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "unbindTexture"), v8::FunctionTemplate::New(getIsolate(), unbindTexture));
   
   fboTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "getColorTexture"), v8::FunctionTemplate::New(getIsolate(), getColorTexture));
+  fboTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "getDepthTexture"), v8::FunctionTemplate::New(getIsolate(), getDepthTexture));
   
   fboTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "createFormat"), v8::FunctionTemplate::New(getIsolate(), createFormat));
   fboTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "destroyFormat"), v8::FunctionTemplate::New(getIsolate(), destroyFormat));
