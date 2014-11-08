@@ -1,5 +1,5 @@
 //
-// Geometry Shader Example
+// FBO Basic Example
 var gl = require('gl');
 var Shader = require('shader');
 var Camera = require('camera');
