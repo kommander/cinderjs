@@ -46,10 +46,6 @@ class ConsoleModule : public PipeModule {
     }
   
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
-    void draw(){}
-  
-  //
-  private:
     
  };
   

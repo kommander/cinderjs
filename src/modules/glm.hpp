@@ -49,8 +49,7 @@ class GlmModule : public PipeModule {
     static void multMat4(const v8::FunctionCallbackInfo<v8::Value>& args);
   
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
-    void draw(){};
-  
+    
  };
   
 } // namespace cjs

@@ -54,8 +54,7 @@ class BatchModule : public PipeModule {
     static void vertexVert(const v8::FunctionCallbackInfo<v8::Value>& args);
   
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
-    void draw(){};
-  
+    
   //
   private:
   

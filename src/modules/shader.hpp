@@ -59,9 +59,11 @@ class ShaderModule : public PipeModule {
     static void formatFragment(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void formatGeometry(const v8::FunctionCallbackInfo<v8::Value>& args);
   
-    void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
-    void draw(){};
+    static void getStockColor(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void getStockTexture(const v8::FunctionCallbackInfo<v8::Value>& args);
   
+    void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
+    
  };
   
 } // namespace cjs

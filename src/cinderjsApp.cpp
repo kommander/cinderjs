@@ -28,6 +28,7 @@
 #include "modules/batch.hpp"
 #include "modules/texture.hpp"
 #include "modules/glm.hpp"
+#include "modules/fbo.hpp"
 
 #include <assert.h>
 
@@ -283,6 +284,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   addModule(std::shared_ptr<BatchModule>( new BatchModule() ));
   addModule(std::shared_ptr<TextureModule>( new TextureModule() ));
   addModule(std::shared_ptr<GlmModule>( new GlmModule() ));
+  addModule(std::shared_ptr<FBOModule>( new FBOModule() ));
   
   
   // Create a new context.
@@ -315,6 +317,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/geometry_shader/index.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/physics.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/ray.js");
+  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/fbo_basic.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/test/weak_callback.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/test/lib/jasmine/runner.js");
   #endif
@@ -448,11 +451,6 @@ void CinderjsApp::v8Draw(){
 
   }
 
-  // Draw modules
-  //      for( std::vector<std::shared_ptr<PipeModule>>::iterator it = MODULES.begin(); it < MODULES.end(); ++it ) {
-  //        it->get()->draw();
-  //      }
-  
   v8::Unlocker unlock(mIsolate);
   
   // FPS (TODO: if active)

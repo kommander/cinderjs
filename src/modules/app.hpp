@@ -47,8 +47,7 @@ class AppModule : public PipeModule {
     }
   
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
-    void draw(){};
-  
+    
   //
   private:
     static void getAspectRatio(const v8::FunctionCallbackInfo<v8::Value>& args);

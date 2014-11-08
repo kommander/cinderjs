@@ -297,6 +297,26 @@ void ShaderModule::formatGeometry(const v8::FunctionCallbackInfo<v8::Value>& arg
   return;
 }
 
+void ShaderModule::getStockColor(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  gl::GlslProgRef shader = gl::getStockShader(ShaderDef().color());
+  StaticFactory::put<gl::GlslProg>( isolate, shader, args[0]->ToObject());
+  
+  return;
+}
+
+void ShaderModule::getStockTexture(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+  
+  // TODO: optionally take texture target
+  gl::GlslProgRef shader = gl::getStockShader(ShaderDef().texture());
+  StaticFactory::put<gl::GlslProg>( isolate, shader, args[0]->ToObject());
+  return;
+}
+
 
 /**
  * Add JS bindings
@@ -319,6 +339,9 @@ void ShaderModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "formatFragment"), v8::FunctionTemplate::New(getIsolate(), formatFragment));
   shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "formatGeometry"), v8::FunctionTemplate::New(getIsolate(), formatGeometry));
   
+  shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "getStockColor"), v8::FunctionTemplate::New(getIsolate(), getStockColor));
+  shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "getStockTexture"), v8::FunctionTemplate::New(getIsolate(), getStockTexture));
+
   // Expose global shader object
   global->Set(v8::String::NewFromUtf8(getIsolate(), "shader"), shaderTemplate);
 }

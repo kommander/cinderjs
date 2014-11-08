@@ -43,9 +43,19 @@ void _handleNoCameraError(Isolate* isolate){
 void CameraModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
-
-  StaticFactory::create<CameraPersp>( isolate, args[0]->ToObject() );
   
+  if (args.Length() == 1) {
+    StaticFactory::create<CameraPersp>( isolate, args[0]->ToObject() );
+  } else if(args.Length() == 4){
+    // constructs screen-aligned camera
+    std::shared_ptr<CameraPersp> camera( new CameraPersp(
+      args[1]->ToUint32()->Value(), // pixelWidth
+      args[2]->ToUint32()->Value(), // pixelHeight
+      args[3]->ToNumber()->Value()  // fov
+    ));
+    StaticFactory::put<CameraPersp>( isolate, camera, args[0]->ToObject() );
+  }
+
   return;
 }
 

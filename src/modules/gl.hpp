@@ -49,13 +49,16 @@ class GLModule : public PipeModule {
     }
   
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
-    void draw(){}
-  
+    
     // Exposed
     static void drawLine(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void drawSolidCircle(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
     static void pushMatrices(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void popMatrices(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void pushViewport(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void popViewport(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
     static void translate(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void scale(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void rotate(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -68,20 +71,28 @@ class GLModule : public PipeModule {
     static void enableWireframe(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void disableWireframe(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void drawCube(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void drawColorCube(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void drawSphere(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
     static void setMatrices(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void setMatricesWindow(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void setModelMatrix(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
     static void clear(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
     static void enableDepthRead(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void disableDepthRead(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void enableDepthWrite(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void disableDepthWrite(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void enableDepth(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void disableDepth(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
     static void enableVerticalSync(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void disableVerticalSync(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void isVerticalSyncEnabled(const v8::FunctionCallbackInfo<v8::Value>& args);
   
     static void multModelMatrix(const v8::FunctionCallbackInfo<v8::Value>& args);
-    
+  
   private:
     //
     static ColorA sBufColorA_1;

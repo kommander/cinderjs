@@ -61,6 +61,8 @@
 		9E5ACA401A0AA50400FB75E8 /* glm.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E5ACA3F1A0AA50400FB75E8 /* glm.js */; };
 		9ED25AC71A0A790A009CEDC4 /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED25AC51A0A790A009CEDC4 /* texture.cpp */; };
 		9ED25AC91A0A7918009CEDC4 /* texture.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED25AC81A0A7918009CEDC4 /* texture.js */; };
+		9EEC71671A0CB6A200975D03 /* fbo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9EEC71651A0CB6A200975D03 /* fbo.cpp */; };
+		9EEC71691A0CB6B700975D03 /* fbo.js in Resources */ = {isa = PBXBuildFile; fileRef = 9EEC71681A0CB6B700975D03 /* fbo.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -139,6 +141,9 @@
 		9ED25AC51A0A790A009CEDC4 /* texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = texture.cpp; path = ../src/modules/texture.cpp; sourceTree = "<group>"; };
 		9ED25AC61A0A790A009CEDC4 /* texture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = texture.hpp; sourceTree = "<group>"; };
 		9ED25AC81A0A7918009CEDC4 /* texture.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = texture.js; sourceTree = "<group>"; };
+		9EEC71651A0CB6A200975D03 /* fbo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fbo.cpp; path = ../src/modules/fbo.cpp; sourceTree = "<group>"; };
+		9EEC71661A0CB6A200975D03 /* fbo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fbo.hpp; sourceTree = "<group>"; };
+		9EEC71681A0CB6B700975D03 /* fbo.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = fbo.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -268,6 +273,7 @@
 		9E4ABEA21A09FF6A00AF2706 /* modules */ = {
 			isa = PBXGroup;
 			children = (
+				9EEC71661A0CB6A200975D03 /* fbo.hpp */,
 				9E4ABEA41A09FF6A00AF2706 /* app.hpp */,
 				9E4ABEA61A09FF6A00AF2706 /* batch.hpp */,
 				9E4ABEA81A09FF6A00AF2706 /* camera.hpp */,
@@ -297,6 +303,7 @@
 		9E4ABECD1A09FF7200AF2706 /* modules */ = {
 			isa = PBXGroup;
 			children = (
+				9EEC71651A0CB6A200975D03 /* fbo.cpp */,
 				9E4ABEA31A09FF6A00AF2706 /* app.cpp */,
 				9E4ABEA51A09FF6A00AF2706 /* batch.cpp */,
 				9E4ABEA71A09FF6A00AF2706 /* camera.cpp */,
@@ -316,6 +323,7 @@
 		9E4ABED51A0A008400AF2706 /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				9EEC71681A0CB6B700975D03 /* fbo.js */,
 				9E4ABED61A0A008400AF2706 /* app.js */,
 				9E4ABED71A0A008400AF2706 /* assert.js */,
 				9E4ABED81A0A008400AF2706 /* batch.js */,
@@ -405,6 +413,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9EEC71691A0CB6B700975D03 /* fbo.js in Resources */,
 				9E4ABF221A0A009100AF2706 /* js2c.py in Resources */,
 				9E4ABEFA1A0A008500AF2706 /* util.js in Resources */,
 				9E4ABEE91A0A008500AF2706 /* app.js in Resources */,
@@ -471,6 +480,7 @@
 				9E4ABED41A0A007500AF2706 /* README.md in Sources */,
 				9E4ABEC21A09FF6A00AF2706 /* camera.cpp in Sources */,
 				9E4ABECB1A09FF6A00AF2706 /* TextHelpers.cpp in Sources */,
+				9EEC71671A0CB6A200975D03 /* fbo.cpp in Sources */,
 				9E5ACA3E1A0AA4F400FB75E8 /* glm.cpp in Sources */,
 				9E4ABEC31A09FF6A00AF2706 /* console.cpp in Sources */,
 				9E4ABEC11A09FF6A00AF2706 /* batch.cpp in Sources */,

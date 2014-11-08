@@ -277,6 +277,25 @@ void GLModule::disableDepthWrite(const v8::FunctionCallbackInfo<v8::Value>& args
 /**
  *
  */
+void GLModule::enableDepth(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::enableDepthRead();
+  gl::enableDepthWrite();
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::disableDepth(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::disableDepthRead();
+  gl::disableDepthWrite();
+  return;
+}
+
+
+/**
+ *
+ */
 void GLModule::enableVerticalSync(const v8::FunctionCallbackInfo<v8::Value>& args) {
   gl::enableVerticalSync();
   return;
@@ -312,6 +331,24 @@ void GLModule::drawCube(const v8::FunctionCallbackInfo<v8::Value>& args) {
   bufVec3f_2.z = args[5]->NumberValue();
   
   gl::drawCube(bufVec3f_1, bufVec3f_2);
+  
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::drawColorCube(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  
+  bufVec3f_1.x = args[0]->NumberValue();
+  bufVec3f_1.y = args[1]->NumberValue();
+  bufVec3f_1.z = args[2]->NumberValue();
+  
+  bufVec3f_2.x = args[3]->NumberValue();
+  bufVec3f_2.y = args[4]->NumberValue();
+  bufVec3f_2.z = args[5]->NumberValue();
+  
+  gl::drawColorCube(bufVec3f_1, bufVec3f_2);
   
   return;
 }
@@ -369,6 +406,33 @@ void GLModule::setMatricesWindow(const v8::FunctionCallbackInfo<v8::Value>& args
 /**
  *
  */
+void GLModule::setModelMatrix(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  if(args[0]->IsUint32()){
+    uint32_t id = args[0]->ToUint32()->Value();
+    std::shared_ptr<mat4> mat = StaticFactory::get<mat4>(id);
+    
+    if(!mat){
+      Isolate* isolate = args.GetIsolate();
+      HandleScope scope(isolate);
+      isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Matrix does not exist")));
+      return;
+    }
+    
+    gl::setModelMatrix(*mat);
+    
+    return;
+  } else {
+    // Error
+    Isolate* isolate = args.GetIsolate();
+    HandleScope scope(isolate);
+    isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Need a Matrix id (uint32)")));
+  }
+}
+
+
+/**
+ *
+ */
 void GLModule::clear(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(args.Length() >= 3) {
     sBufColor_1.r = args[0]->ToNumber()->Value();
@@ -390,6 +454,9 @@ void GLModule::multModelMatrix(const v8::FunctionCallbackInfo<v8::Value>& args) 
   std::shared_ptr<mat4> matrix = StaticFactory::get<mat4>(id);
   
   if(!matrix){
+    v8::Isolate* isolate = args.GetIsolate();
+    v8::HandleScope scope(isolate);
+    isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Matrix does not exist")));
     return;
   }
   
@@ -397,7 +464,38 @@ void GLModule::multModelMatrix(const v8::FunctionCallbackInfo<v8::Value>& args) 
   return;
 }
 
+/**
+ *
+ */
+void GLModule::pushViewport(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  if(args.Length() > 3) {
+    return gl::pushViewport(
+      vec2(
+        args[0]->ToNumber()->Value(),
+        args[1]->ToNumber()->Value()
+      ),
+      vec2(
+        args[2]->ToNumber()->Value(),
+        args[3]->ToNumber()->Value()
+      )
+    );
+  }
+  
+  gl::pushViewport();
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::popViewport(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::popViewport();
+  return;
+}
+
 // TODO
+//inline void pushViewport( const ivec2 &position, const ivec2 &size ) { pushViewport( std::pair<ivec2, ivec2>( position, size ) ); }
+//void popViewport();
 //void setModelView( const Camera &cam );
 //void setProjection( const Camera &cam );
 
@@ -408,12 +506,18 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   // gl methods
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setMatrices"), v8::FunctionTemplate::New(getIsolate(), setMatrices));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setMatricesWindow"), v8::FunctionTemplate::New(getIsolate(), setMatricesWindow));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setModelMatrix"), v8::FunctionTemplate::New(getIsolate(), setModelMatrix));
+  
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "clear"), v8::FunctionTemplate::New(getIsolate(), clear));
   
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawLine"), v8::FunctionTemplate::New(getIsolate(), drawLine));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawSolidCircle"), v8::FunctionTemplate::New(getIsolate(), drawSolidCircle));
+  
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "pushMatrices"), v8::FunctionTemplate::New(getIsolate(), pushMatrices));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "popMatrices"), v8::FunctionTemplate::New(getIsolate(), popMatrices));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "pushViewport"), v8::FunctionTemplate::New(getIsolate(), pushViewport));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "popViewport"), v8::FunctionTemplate::New(getIsolate(), popViewport));
+  
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "translate"), v8::FunctionTemplate::New(getIsolate(), translate));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "scale"), v8::FunctionTemplate::New(getIsolate(), scale));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "rotate"), v8::FunctionTemplate::New(getIsolate(), rotate));
@@ -430,6 +534,8 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "disableDepthRead"), v8::FunctionTemplate::New(getIsolate(), disableDepthRead));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "enableDepthWrite"), v8::FunctionTemplate::New(getIsolate(), enableDepthWrite));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "disableDepthWrite"), v8::FunctionTemplate::New(getIsolate(), disableDepthWrite));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "enableDepth"), v8::FunctionTemplate::New(getIsolate(), enableDepth));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "disableDepth"), v8::FunctionTemplate::New(getIsolate(), disableDepth));
   
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "enableVerticalSync"), v8::FunctionTemplate::New(getIsolate(), enableVerticalSync));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "disableVerticalSync"), v8::FunctionTemplate::New(getIsolate(), disableVerticalSync));
@@ -439,6 +545,7 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   
   // Primitives
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawCube"), v8::FunctionTemplate::New(getIsolate(), drawCube));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawColorCube"), v8::FunctionTemplate::New(getIsolate(), drawColorCube));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawSphere"), v8::FunctionTemplate::New(getIsolate(), drawSphere));
   
   // Some GL Constants

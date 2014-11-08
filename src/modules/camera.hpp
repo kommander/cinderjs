@@ -57,8 +57,7 @@ class CameraModule : public PipeModule {
     static void setPerspective(const v8::FunctionCallbackInfo<v8::Value>& args);
   
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
-    void draw(){}
-  
+    
   //
   private:
     static cinder::vec3 sBufVec3f_1;

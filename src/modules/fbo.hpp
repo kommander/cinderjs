@@ -19,36 +19,45 @@
  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef _TextureModule_hpp_
-#define _TextureModule_hpp_
+#ifndef _FBOModule_hpp_
+#define _FBOModule_hpp_
 
 #pragma once
 
-#define TEXTURE_MOD_ID 11
+#define FBO_MOD_ID 13
 
 #include "../PipeModule.hpp"
 
 namespace cjs {
   
-class TextureModule : public PipeModule {
+class FBOModule : public PipeModule {
   public:
-    TextureModule(){}
-    ~TextureModule(){}
+    FBOModule(){}
+    ~FBOModule(){}
   
     inline int moduleId() {
-      return TEXTURE_MOD_ID;
+      return FBO_MOD_ID;
     }
   
     inline std::string getName() {
-      return "texture";
+      return "fbo";
     }
   
     static void create(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void createFromFormat(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void destroy(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void bind(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void bindBuffer(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void unbindBuffer(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void bindTexture(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void unbindTexture(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
+    static void createFormat(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void destroyFormat(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void formatSetSamples(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void formatDepthTexture(const v8::FunctionCallbackInfo<v8::Value>& args);
   
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
-  
+    
  };
   
 } // namespace cjs

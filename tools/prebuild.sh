@@ -22,4 +22,5 @@ python ../tools/js2c.py     \
   ../lib/batch.js           \
   ../lib/texture.js         \
   ../lib/glm.js             \
+  ../lib/fbo.js             \
   ../lib/default_main.js    \
