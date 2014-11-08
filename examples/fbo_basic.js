@@ -48,7 +48,7 @@ function renderSceneToFbo(){
 
   // set the modelview matrix to reflect our current rotation
   cubeRotation.mult( rotationMatrix );
-  gl.setModelMatrix( cubeRotation.id );
+  gl.setModelMatrix( cubeRotation );
   
   // render the color cube
   fboShader.bind();

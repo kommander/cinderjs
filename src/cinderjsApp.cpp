@@ -448,7 +448,10 @@ void CinderjsApp::v8Draw(){
     if(try_catch.HasCaught()){
       handleV8TryCatch(try_catch, "v8Draw");
     }
-
+    
+    // TODO: Check if an FBO buffer was bound and not unbound.
+    //       -> Unbind it to show console correctly and show eventual errors.
+    //       -> Same goes for pushed matrices which were not popped after an error
   }
 
   v8::Unlocker unlock(mIsolate);

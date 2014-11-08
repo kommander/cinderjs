@@ -43,11 +43,11 @@ var loop = function(timePassed, mx, my){
   gl.clear( 0.1, 0.1, 0.11 );
   
   // Update rotation
-  cubeRotation.mult(rotationMatrix);
+  cubeRotation.mult( rotationMatrix );
   
   gl.setMatrices(cam.id);
   gl.pushMatrices();
-    gl.multModelMatrix(cubeRotation.id); // TODO: missing a wrapper for multModelMatrix to take Mat4 objects directly
+    gl.multModelMatrix( cubeRotation ); 
 
     texture.bind();
     batch.draw();
