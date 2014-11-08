@@ -51,6 +51,8 @@ class FBOModule : public PipeModule {
     static void bindTexture(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void unbindTexture(const v8::FunctionCallbackInfo<v8::Value>& args);
   
+    static void getColorTexture(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
     static void createFormat(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void destroyFormat(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void formatSetSamples(const v8::FunctionCallbackInfo<v8::Value>& args);

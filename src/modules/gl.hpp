@@ -80,6 +80,8 @@ class GLModule : public PipeModule {
   
     static void clear(const v8::FunctionCallbackInfo<v8::Value>& args);
   
+    static void drawTexture(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
     static void enableDepthRead(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void disableDepthRead(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void enableDepthWrite(const v8::FunctionCallbackInfo<v8::Value>& args);

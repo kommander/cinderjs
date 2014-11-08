@@ -493,9 +493,39 @@ void GLModule::popViewport(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return;
 }
 
+/**
+ *
+ */
+void GLModule::drawTexture(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  
+  // gl::draw(const Texture2dRef &texture, const Rectf &dstRect)
+  if(args.Length() == 5){
+    uint32_t id = args[0]->ToUint32()->Value();
+    
+    gl::TextureRef texture = StaticFactory::get<gl::Texture>(id);
+    
+    if(!texture){
+      v8::Isolate* isolate = args.GetIsolate();
+      v8::HandleScope scope(isolate);
+      isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Texture does not exist")));
+      return;
+    }
+    
+    gl::draw(texture, Rectf(
+      args[1]->ToNumber()->Value(),
+      args[2]->ToNumber()->Value(),
+      args[3]->ToNumber()->Value(),
+      args[4]->ToNumber()->Value()
+    ));
+  }
+  
+  // TODO: Implement gl::draw(const Texture2dRef &texture, const cinder::Area &srcArea, const Rectf &dstRect)
+  
+  return;
+}
+
+
 // TODO
-//inline void pushViewport( const ivec2 &position, const ivec2 &size ) { pushViewport( std::pair<ivec2, ivec2>( position, size ) ); }
-//void popViewport();
 //void setModelView( const Camera &cam );
 //void setProjection( const Camera &cam );
 
@@ -509,6 +539,8 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setModelMatrix"), v8::FunctionTemplate::New(getIsolate(), setModelMatrix));
   
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "clear"), v8::FunctionTemplate::New(getIsolate(), clear));
+  
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawTexture"), v8::FunctionTemplate::New(getIsolate(), drawTexture));
   
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawLine"), v8::FunctionTemplate::New(getIsolate(), drawLine));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawSolidCircle"), v8::FunctionTemplate::New(getIsolate(), drawSolidCircle));

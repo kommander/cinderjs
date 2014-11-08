@@ -79,12 +79,13 @@ app.draw(function(timePassed, mx, my){
   texShader.bind();
   gl.drawCube( 0, 0, 0, 2.2, 2.2, 2.2 );
   
-  // TODO
-  // // show the FBO color texture in the upper left corner
-  // gl::setMatricesWindow( toPixels( getWindowSize() ) );
-  // gl::draw( mFbo->getColorTexture(), Rectf( 0, 0, 128, 128 ) );
-  // // and draw the depth texture adjacent
-  // gl::draw( mFbo->getDepthTexture(), Rectf( 128, 0, 256, 128 ) );
+  // show the FBO color texture in the upper left corner
+  gl.setMatricesWindow( screenSize.w, screenSize.h );
+  gl.drawTexture( fbo.getColorTexture(), 0, 0, 128, 128 );
+
+  // TODO:
+  // and draw the depth texture adjacent
+  //gl::draw( mFbo->getDepthTexture(), Rectf( 128, 0, 256, 128 ) );
 
   gl.disableDepth();
 });
