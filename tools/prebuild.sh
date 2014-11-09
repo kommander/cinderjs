@@ -23,4 +23,7 @@ python ../tools/js2c.py     \
   ../lib/texture.js         \
   ../lib/glm.js             \
   ../lib/fbo.js             \
+  ../lib/vbo.js             \
+  ../lib/vao.js             \
+  ../lib/math.js            \
   ../lib/default_main.js    \

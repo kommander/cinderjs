@@ -76,11 +76,15 @@ class GLModule : public PipeModule {
   
     static void setMatrices(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void setMatricesWindow(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void setMatricesWindowPersp(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void setModelMatrix(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
+    static void setDefaultShaderVars(const v8::FunctionCallbackInfo<v8::Value>& args);
   
     static void clear(const v8::FunctionCallbackInfo<v8::Value>& args);
   
     static void drawTexture(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void drawArrays(const v8::FunctionCallbackInfo<v8::Value>& args);
   
     static void enableDepthRead(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void disableDepthRead(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -89,11 +93,21 @@ class GLModule : public PipeModule {
     static void enableDepth(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void disableDepth(const v8::FunctionCallbackInfo<v8::Value>& args);
   
+    static void enableVertexAttribArray(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void vertexAttribPointer(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
     static void enableVerticalSync(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void disableVerticalSync(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void isVerticalSyncEnabled(const v8::FunctionCallbackInfo<v8::Value>& args);
   
     static void multModelMatrix(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void bindBufferBase(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void beginTransformFeedback(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void endTransformFeedback(const v8::FunctionCallbackInfo<v8::Value>& args);
+  
+    // TODO: Move to Context binding when implemented
+    static void pushBoolState(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void popBoolState(const v8::FunctionCallbackInfo<v8::Value>& args);
   
   private:
     //

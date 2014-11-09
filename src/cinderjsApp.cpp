@@ -29,6 +29,9 @@
 #include "modules/texture.hpp"
 #include "modules/glm.hpp"
 #include "modules/fbo.hpp"
+#include "modules/vbo.hpp"
+#include "modules/vao.hpp"
+#include "modules/color.hpp"
 
 #include <assert.h>
 
@@ -224,6 +227,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   //ThreadSetup threadSetup;
   
   // Initialize V8 (implicit initialization was removed in an earlier revision)
+  v8::V8::SetArrayBufferAllocator(&ArrayBufferAllocator::the_singleton);
   v8::V8::InitializeICU();
   v8::Platform* platform = v8::platform::CreateDefaultPlatform(4);
   v8::V8::InitializePlatform(platform);
@@ -285,6 +289,9 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   addModule(std::shared_ptr<TextureModule>( new TextureModule() ));
   addModule(std::shared_ptr<GlmModule>( new GlmModule() ));
   addModule(std::shared_ptr<FBOModule>( new FBOModule() ));
+  addModule(std::shared_ptr<VBOModule>( new VBOModule() ));
+  addModule(std::shared_ptr<VAOModule>( new VAOModule() ));
+  addModule(std::shared_ptr<ColorModule>( new ColorModule() ));
   
   
   // Create a new context.
@@ -315,6 +322,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cube/cubes.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/geometry_shader/index.js");
+  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/ParticleSphereGPU/index.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/physics.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/ray.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/fbo_basic.js");
@@ -547,6 +555,24 @@ void CinderjsApp::v8EventThread(){
             v8::Number::New(mIsolate, getWindowHeight())
           };
           callback->Call(context->Global(), 3, argv);
+        }
+        
+        // Mouse down
+        else if(evt->type == CJS_MOUSE_DOWN){
+          v8::Handle<v8::Value> argv[1] = {
+            v8::Number::New(mIsolate, CJS_MOUSE_DOWN)
+            // ... TODO: Push more event info
+          };
+          callback->Call(context->Global(), 1, argv);
+        }
+        
+        // Mouse up
+        else if(evt->type == CJS_MOUSE_UP){
+          v8::Handle<v8::Value> argv[1] = {
+            v8::Number::New(mIsolate, CJS_MOUSE_UP)
+            // ... TODO: Push more event info
+          };
+          callback->Call(context->Global(), 1, argv);
         }
         
         // Key down
@@ -847,9 +873,25 @@ void CinderjsApp::mouseMove( MouseEvent event )
  */
 void CinderjsApp::mouseDown( MouseEvent event )
 {
-  // TODO: Use event thread to push event to v8
-  //  _eventRun = true;
-  //  cvEventThread.notify_one();
+  BufferedEvent evt(new BufferedEventHolder());
+  evt->type = CJS_MOUSE_DOWN;
+  evt->mEvt = event;
+  mEventQueue.pushFront(evt);
+  _eventRun = true;
+  cvEventThread.notify_one();
+}
+
+/**
+ *
+ */
+void CinderjsApp::mouseUp( MouseEvent event )
+{
+  BufferedEvent evt(new BufferedEventHolder());
+  evt->type = CJS_MOUSE_UP;
+  evt->mEvt = event;
+  mEventQueue.pushFront(evt);
+  _eventRun = true;
+  cvEventThread.notify_one();
 }
 
 /**

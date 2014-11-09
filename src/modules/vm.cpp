@@ -38,7 +38,6 @@ void runInThisContext(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::HandleScope handle_scope(isolate);
   
   // Enter the context for compiling and running
-  // TODO: Use separate module context
   Context::Scope context_scope(isolate->GetCallingContext());
   
   // Create a string containing the JavaScript source code.
@@ -54,13 +53,36 @@ void runInThisContext(const v8::FunctionCallbackInfo<v8::Value>& args) {
   // Compile the source code.
   Local<Script> script = Script::Compile( source, filename );
   
-  // Run the script to get the result.
+  if(try_catch.HasCaught()){
+    std::string except = "External module compile error, in ";
+    v8::String::Utf8Value fname(filename);
+    except.append(*fname);
+    
+    if(!try_catch.Message().IsEmpty()){
+      v8::String::Utf8Value msg(try_catch.Message()->Get());
+      except.append(*msg);
+      except.append(" at line " + std::to_string(try_catch.Message()->GetLineNumber()));
+    }
+    else if(!try_catch.StackTrace().IsEmpty()){
+      v8::String::Utf8Value stack(try_catch.StackTrace());
+      except.append(*stack);
+    }
+    else {
+      v8::String::Utf8Value msg(try_catch.Exception());
+      except.append(*msg);
+    }
+    
+    AppConsole::log(except);
+    isolate->ThrowException(v8::Exception::Error(String::NewFromUtf8(isolate, except.c_str())));
+    return;
+  }
   
+  // Run the script to get the result.
   Local<Value> result = script->Run();
   
   // Check native module validity
   if(result.IsEmpty() || !result->IsFunction() || try_catch.HasCaught()){
-    std::string except = "External module error, in ";
+    std::string except = "External module run error, in ";
     v8::String::Utf8Value fname(filename);
     except.append(*fname);
     
@@ -69,7 +91,8 @@ void runInThisContext(const v8::FunctionCallbackInfo<v8::Value>& args) {
       except.append(*msg);
     }
     
-    isolate->ThrowException(String::NewFromUtf8(isolate, except.c_str()));
+    AppConsole::log(except);
+    isolate->ThrowException(v8::Exception::Error(String::NewFromUtf8(isolate, except.c_str())));
     // TODO: remove from module list again
     return;
   }

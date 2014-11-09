@@ -61,6 +61,12 @@
 		9E5ACA401A0AA50400FB75E8 /* glm.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E5ACA3F1A0AA50400FB75E8 /* glm.js */; };
 		9ED25AC71A0A790A009CEDC4 /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED25AC51A0A790A009CEDC4 /* texture.cpp */; };
 		9ED25AC91A0A7918009CEDC4 /* texture.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED25AC81A0A7918009CEDC4 /* texture.js */; };
+		9ED435AA1A0E86F9004AA3E9 /* vbo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED435A81A0E86F9004AA3E9 /* vbo.cpp */; };
+		9ED435AC1A0E8706004AA3E9 /* vbo.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED435AB1A0E8706004AA3E9 /* vbo.js */; };
+		9ED435AE1A0ED92A004AA3E9 /* math.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED435AD1A0ED92A004AA3E9 /* math.js */; };
+		9ED435B11A0ED936004AA3E9 /* color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED435AF1A0ED936004AA3E9 /* color.cpp */; };
+		9ED435B31A0EE128004AA3E9 /* vao.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED435B21A0EE128004AA3E9 /* vao.js */; };
+		9ED435B61A0EE139004AA3E9 /* vao.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED435B41A0EE139004AA3E9 /* vao.cpp */; };
 		9EEC71671A0CB6A200975D03 /* fbo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9EEC71651A0CB6A200975D03 /* fbo.cpp */; };
 		9EEC71691A0CB6B700975D03 /* fbo.js in Resources */ = {isa = PBXBuildFile; fileRef = 9EEC71681A0CB6B700975D03 /* fbo.js */; };
 /* End PBXBuildFile section */
@@ -141,6 +147,15 @@
 		9ED25AC51A0A790A009CEDC4 /* texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = texture.cpp; path = ../src/modules/texture.cpp; sourceTree = "<group>"; };
 		9ED25AC61A0A790A009CEDC4 /* texture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = texture.hpp; sourceTree = "<group>"; };
 		9ED25AC81A0A7918009CEDC4 /* texture.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = texture.js; sourceTree = "<group>"; };
+		9ED435A81A0E86F9004AA3E9 /* vbo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = vbo.cpp; path = ../src/modules/vbo.cpp; sourceTree = "<group>"; };
+		9ED435A91A0E86F9004AA3E9 /* vbo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = vbo.hpp; sourceTree = "<group>"; };
+		9ED435AB1A0E8706004AA3E9 /* vbo.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = vbo.js; sourceTree = "<group>"; };
+		9ED435AD1A0ED92A004AA3E9 /* math.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = math.js; sourceTree = "<group>"; };
+		9ED435AF1A0ED936004AA3E9 /* color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = color.cpp; path = ../src/modules/color.cpp; sourceTree = "<group>"; };
+		9ED435B01A0ED936004AA3E9 /* color.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = color.hpp; sourceTree = "<group>"; };
+		9ED435B21A0EE128004AA3E9 /* vao.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = vao.js; sourceTree = "<group>"; };
+		9ED435B41A0EE139004AA3E9 /* vao.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = vao.cpp; path = ../src/modules/vao.cpp; sourceTree = "<group>"; };
+		9ED435B51A0EE139004AA3E9 /* vao.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = vao.hpp; sourceTree = "<group>"; };
 		9EEC71651A0CB6A200975D03 /* fbo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fbo.cpp; path = ../src/modules/fbo.cpp; sourceTree = "<group>"; };
 		9EEC71661A0CB6A200975D03 /* fbo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = fbo.hpp; sourceTree = "<group>"; };
 		9EEC71681A0CB6B700975D03 /* fbo.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = fbo.js; sourceTree = "<group>"; };
@@ -273,6 +288,9 @@
 		9E4ABEA21A09FF6A00AF2706 /* modules */ = {
 			isa = PBXGroup;
 			children = (
+				9ED435B01A0ED936004AA3E9 /* color.hpp */,
+				9ED435B51A0EE139004AA3E9 /* vao.hpp */,
+				9ED435A91A0E86F9004AA3E9 /* vbo.hpp */,
 				9EEC71661A0CB6A200975D03 /* fbo.hpp */,
 				9E4ABEA41A09FF6A00AF2706 /* app.hpp */,
 				9E4ABEA61A09FF6A00AF2706 /* batch.hpp */,
@@ -303,6 +321,9 @@
 		9E4ABECD1A09FF7200AF2706 /* modules */ = {
 			isa = PBXGroup;
 			children = (
+				9ED435AF1A0ED936004AA3E9 /* color.cpp */,
+				9ED435B41A0EE139004AA3E9 /* vao.cpp */,
+				9ED435A81A0E86F9004AA3E9 /* vbo.cpp */,
 				9EEC71651A0CB6A200975D03 /* fbo.cpp */,
 				9E4ABEA31A09FF6A00AF2706 /* app.cpp */,
 				9E4ABEA51A09FF6A00AF2706 /* batch.cpp */,
@@ -323,6 +344,9 @@
 		9E4ABED51A0A008400AF2706 /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				9ED435B21A0EE128004AA3E9 /* vao.js */,
+				9ED435AD1A0ED92A004AA3E9 /* math.js */,
+				9ED435AB1A0E8706004AA3E9 /* vbo.js */,
 				9EEC71681A0CB6B700975D03 /* fbo.js */,
 				9E4ABED61A0A008400AF2706 /* app.js */,
 				9E4ABED71A0A008400AF2706 /* assert.js */,
@@ -417,9 +441,11 @@
 				9E4ABF221A0A009100AF2706 /* js2c.py in Resources */,
 				9E4ABEFA1A0A008500AF2706 /* util.js in Resources */,
 				9E4ABEE91A0A008500AF2706 /* app.js in Resources */,
+				9ED435AE1A0ED92A004AA3E9 /* math.js in Resources */,
 				9E4ABEEC1A0A008500AF2706 /* camera.js in Resources */,
 				9ED25AC91A0A7918009CEDC4 /* texture.js in Resources */,
 				9E4ABEEE1A0A008500AF2706 /* color.js in Resources */,
+				9ED435B31A0EE128004AA3E9 /* vao.js in Resources */,
 				9E4ABEF91A0A008500AF2706 /* timers.js in Resources */,
 				9E4ABED21A0A006900AF2706 /* Info.plist in Resources */,
 				9E4ABF231A0A009100AF2706 /* prebuild.sh in Resources */,
@@ -429,6 +455,7 @@
 				9E4ABED01A0A005400AF2706 /* CinderApp.icns in Resources */,
 				9E4ABEEF1A0A008500AF2706 /* console.js in Resources */,
 				9E4ABEF51A0A008500AF2706 /* path.js in Resources */,
+				9ED435AC1A0E8706004AA3E9 /* vbo.js in Resources */,
 				9E4ABEF71A0A008500AF2706 /* shader.js in Resources */,
 				9E4ABEF01A0A008500AF2706 /* default_main.js in Resources */,
 				9E4ABEF41A0A008500AF2706 /* module.js in Resources */,
@@ -468,6 +495,7 @@
 				9E4ABECA1A09FF6A00AF2706 /* StaticFactory.cpp in Sources */,
 				9E4ABEC91A09FF6A00AF2706 /* vm.cpp in Sources */,
 				9E4ABEC41A09FF6A00AF2706 /* fs.cpp in Sources */,
+				9ED435B11A0ED936004AA3E9 /* color.cpp in Sources */,
 				9ED25AC71A0A790A009CEDC4 /* texture.cpp in Sources */,
 				9E4ABECC1A09FF6A00AF2706 /* PipeModule.cpp in Sources */,
 				9E4ABEC71A09FF6A00AF2706 /* shader.cpp in Sources */,
@@ -477,7 +505,9 @@
 				9E4ABEBE1A09FF6A00AF2706 /* CinderAppBase.cpp in Sources */,
 				9E4ABEC61A09FF6A00AF2706 /* ray.cpp in Sources */,
 				9E4ABEBF1A09FF6A00AF2706 /* cinderjsApp.cpp in Sources */,
+				9ED435AA1A0E86F9004AA3E9 /* vbo.cpp in Sources */,
 				9E4ABED41A0A007500AF2706 /* README.md in Sources */,
+				9ED435B61A0EE139004AA3E9 /* vao.cpp in Sources */,
 				9E4ABEC21A09FF6A00AF2706 /* camera.cpp in Sources */,
 				9E4ABECB1A09FF6A00AF2706 /* TextHelpers.cpp in Sources */,
 				9EEC71671A0CB6A200975D03 /* fbo.cpp in Sources */,

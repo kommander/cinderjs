@@ -19,52 +19,34 @@
  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef _ShaderModule_hpp_
-#define _ShaderModule_hpp_
+#ifndef _VBOModule_hpp_
+#define _VBOModule_hpp_
 
 #pragma once
 
-#define SHADER_MOD_ID 9
-
-#include <map>
+#define VBO_MOD_ID 14
 
 #include "../PipeModule.hpp"
 
 namespace cjs {
   
-class ShaderModule : public PipeModule {
+class VBOModule : public PipeModule {
   public:
-    ShaderModule(){}
-    ~ShaderModule(){}
+    VBOModule(){}
+    ~VBOModule(){}
   
     inline int moduleId() {
-      return SHADER_MOD_ID;
+      return VBO_MOD_ID;
     }
   
     inline std::string getName() {
-      return "shader";
+      return "vbo";
     }
   
     static void create(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void createFromFormat(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void destroy(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void bind(const v8::FunctionCallbackInfo<v8::Value>& args);
-  
-    static void uniformInt(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void uniformFloat(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void uniformVec3(const v8::FunctionCallbackInfo<v8::Value>& args);
-  
-    static void createFormat(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void destroyFormat(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void formatVertex(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void formatFragment(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void formatGeometry(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void formatFeedbackFormat(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void formatFeedbackVaryings(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void formatAttribLocation(const v8::FunctionCallbackInfo<v8::Value>& args);
-  
-    static void getStockColor(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void getStockTexture(const v8::FunctionCallbackInfo<v8::Value>& args);
+    static void unbind(const v8::FunctionCallbackInfo<v8::Value>& args);
   
     void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
     

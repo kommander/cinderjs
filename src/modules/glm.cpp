@@ -118,6 +118,91 @@ void GlmModule::multMat4(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return;
 }
 
+//
+// Vec3
+void GlmModule::createVec3(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+  
+  if (args.Length() > 0) {
+    
+    if(args.Length() == 4){
+      std::shared_ptr<vec3> vector( new vec3(
+        args[1]->ToNumber()->Value(),
+        args[2]->ToNumber()->Value(),
+        args[3]->ToNumber()->Value()
+      ));
+      StaticFactory::put<vec3>( isolate, vector, args[0]->ToObject() );
+    } else {
+      std::shared_ptr<vec3> vector( new vec3() );
+      StaticFactory::put<vec3>( isolate, vector, args[0]->ToObject() );
+    }
+    
+    return;
+  }
+  // TODO: throw isolate error on wrong arguments
+}
+
+void GlmModule::destroyVec3(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+  
+  if(!args[0].IsEmpty()){
+    uint32_t id = args[0]->ToUint32()->Value();
+    
+    StaticFactory::remove<vec3>(isolate, id);
+  }
+  
+  return;
+}
+
+void GlmModule::addVec3(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+  
+  uint32_t id1 = args[0]->ToUint32()->Value();
+  std::shared_ptr<vec3> vector1 = StaticFactory::get<vec3>(id1);
+  
+  if(args.Length() == 2){
+    uint32_t id2 = args[1]->ToUint32()->Value();
+    
+    std::shared_ptr<vec3> vector2 = StaticFactory::get<vec3>(id2);
+    
+    vector1->operator+=(*vector2);
+  }
+  else if(args.Length() == 4){
+    vector1->operator+=(vec3(
+      args[1]->ToNumber()->Value(),
+      args[2]->ToNumber()->Value(),
+      args[3]->ToNumber()->Value()
+    ));
+  }
+  
+  Local<Array> v8Arr = Array::New(isolate);
+  v8Arr->Set(0, Number::New(isolate, vector1->x));
+  v8Arr->Set(1, Number::New(isolate, vector1->y));
+  v8Arr->Set(2, Number::New(isolate, vector1->z));
+  
+  args.GetReturnValue().Set(v8Arr);
+
+  return;
+}
+
+void GlmModule::setVec3(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+  
+  uint32_t id1 = args[0]->ToUint32()->Value();
+  std::shared_ptr<vec3> vector1 = StaticFactory::get<vec3>(id1);
+  
+  vector1->x = args[1]->NumberValue();
+  vector1->y = args[2]->NumberValue();
+  vector1->z = args[3]->NumberValue();
+  
+  return;
+}
+
+
 
 /**
  * Add JS bindings
@@ -128,9 +213,14 @@ void GlmModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   
   glmTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "createMat4"), v8::FunctionTemplate::New(getIsolate(), createMat4));
   glmTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "destroyMat4"), v8::FunctionTemplate::New(getIsolate(), destroyMat4));
-  glmTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "rotate"), v8::FunctionTemplate::New(getIsolate(), rotate));
   glmTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "multMat4"), v8::FunctionTemplate::New(getIsolate(), multMat4));
   
+  glmTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "rotate"), v8::FunctionTemplate::New(getIsolate(), rotate));
+  
+  glmTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "createVec3"), v8::FunctionTemplate::New(getIsolate(), createVec3));
+  glmTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "addVec3"), v8::FunctionTemplate::New(getIsolate(), addVec3));
+  glmTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setVec3"), v8::FunctionTemplate::New(getIsolate(), setVec3));
+  glmTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "destroyVec3"), v8::FunctionTemplate::New(getIsolate(), destroyVec3));
   
   // Expose global glm object
   global->Set(v8::String::NewFromUtf8(getIsolate(), "glm"), glmTemplate);

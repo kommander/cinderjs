@@ -23,6 +23,11 @@
 #include "cinder/gl/gl.h"
 #include "cinder/Vector.h"
 #include "cinder/gl/GlslProg.h"
+#include "cinder/gl/Context.h"
+#include "cinder/gl/BufferObj.h"
+#include "cinder/gl/Vbo.h"
+#include "cinder/gl/Vao.h"
+#include "cinder/gl/Fbo.h"
 
 #include "../StaticFactory.hpp"
 
@@ -398,7 +403,17 @@ void GLModule::setMatrices(const v8::FunctionCallbackInfo<v8::Value>& args) {
  */
 void GLModule::setMatricesWindow(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(args.Length() == 2) {
-    gl::setMatricesWindow(args[0]->ToUint32()->Value(), args[1]->ToUint32()->Value());
+    gl::setMatricesWindow(args[0]->IntegerValue(), args[1]->IntegerValue());
+  }
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::setMatricesWindowPersp(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  if(args.Length() == 2) {
+    gl::setMatricesWindowPersp(args[0]->IntegerValue(), args[1]->IntegerValue());
   }
   return;
 }
@@ -524,6 +539,115 @@ void GLModule::drawTexture(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return;
 }
 
+/**
+ *
+ */
+void GLModule::enableVertexAttribArray(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::enableVertexAttribArray( args[0]->ToInt32()->Value() );
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::vertexAttribPointer(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::vertexAttribPointer(
+    args[0]->ToUint32()->Value(),
+    args[1]->ToUint32()->Value(),
+    args[2]->ToUint32()->Value(),
+    args[3]->ToUint32()->Value(),
+    args[4]->ToUint32()->Value(),
+    (const GLvoid*)args[5]->IntegerValue()
+  );
+  return;
+}
+
+/**
+ * TODO: Move to Context binding when implemented
+ */
+void GLModule::pushBoolState(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::context()->pushBoolState(
+    args[0]->IntegerValue(),
+    args[1]->BooleanValue()
+  );
+  return;
+}
+
+/**
+ * TODO: Move to Context binding when implemented
+ */
+void GLModule::popBoolState(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::context()->popBoolState(
+    args[0]->IntegerValue()
+  );
+  return;
+}
+
+/**
+ * TODO: Move to Context binding when implemented
+ */
+void GLModule::setDefaultShaderVars(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::context()->setDefaultShaderVars();
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::bindBufferBase(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  
+  uint32_t id = args[2]->IntegerValue();
+  
+  // 2 = VBO
+  uint32_t type = args[3]->IntegerValue();
+  
+  gl::BufferObjRef buf;
+  
+  if(type == 2){
+    buf = StaticFactory::get<gl::Vbo>(id);
+  }
+  
+  if(!buf){
+    v8::Isolate* isolate = args.GetIsolate();
+    v8::HandleScope scope(isolate);
+    isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Buffer does not exist")));
+    return;
+  }
+  
+  gl::bindBufferBase( args[0]->IntegerValue(), args[1]->IntegerValue(), buf );
+  
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::beginTransformFeedback(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::beginTransformFeedback( args[0]->IntegerValue() );
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::endTransformFeedback(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::endTransformFeedback();
+  return;
+}
+
+/**
+ *
+ */
+void GLModule::drawArrays(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  gl::drawArrays(
+    args[0]->IntegerValue(),
+    args[1]->IntegerValue(),
+    args[2]->IntegerValue()
+  );
+  return;
+}
+
+
 
 // TODO
 //void setModelView( const Camera &cam );
@@ -536,11 +660,18 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   // gl methods
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setMatrices"), v8::FunctionTemplate::New(getIsolate(), setMatrices));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setMatricesWindow"), v8::FunctionTemplate::New(getIsolate(), setMatricesWindow));
+  glTemplate->Set(
+    v8::String::NewFromUtf8(getIsolate(), "setMatricesWindowPersp"),
+    v8::FunctionTemplate::New(getIsolate(), setMatricesWindowPersp)
+  );
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setModelMatrix"), v8::FunctionTemplate::New(getIsolate(), setModelMatrix));
+  
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "setDefaultShaderVars"), v8::FunctionTemplate::New(getIsolate(), setDefaultShaderVars));
   
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "clear"), v8::FunctionTemplate::New(getIsolate(), clear));
   
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawTexture"), v8::FunctionTemplate::New(getIsolate(), drawTexture));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawArrays"), v8::FunctionTemplate::New(getIsolate(), drawArrays));
   
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawLine"), v8::FunctionTemplate::New(getIsolate(), drawLine));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawSolidCircle"), v8::FunctionTemplate::New(getIsolate(), drawSolidCircle));
@@ -573,7 +704,17 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "disableVerticalSync"), v8::FunctionTemplate::New(getIsolate(), disableVerticalSync));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "isVerticalSyncEnabled"), v8::FunctionTemplate::New(getIsolate(), isVerticalSyncEnabled));
   
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "enableVertexAttribArray"), v8::FunctionTemplate::New(getIsolate(), enableVertexAttribArray));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "vertexAttribPointer"), v8::FunctionTemplate::New(getIsolate(), vertexAttribPointer));
+  
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "multModelMatrix"), v8::FunctionTemplate::New(getIsolate(), multModelMatrix));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "bindBufferBase"), v8::FunctionTemplate::New(getIsolate(), bindBufferBase));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "beginTransformFeedback"), v8::FunctionTemplate::New(getIsolate(), beginTransformFeedback));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "endTransformFeedback"), v8::FunctionTemplate::New(getIsolate(), endTransformFeedback));
+  
+  // TODO: Move to Context binding when implemented
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "pushBoolState"), v8::FunctionTemplate::New(getIsolate(), pushBoolState));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "popBoolState"), v8::FunctionTemplate::New(getIsolate(), popBoolState));
   
   // Primitives
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "drawCube"), v8::FunctionTemplate::New(getIsolate(), drawCube));
@@ -583,7 +724,6 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   // Some GL Constants
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "CULL_FACE"), v8::Uint32::New(getIsolate(), GL_CULL_FACE));
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "CULL_FACE_MODE"), v8::Uint32::New(getIsolate(), GL_CULL_FACE_MODE));
-  
   
   // Primitive Types
   glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "POINTS"), v8::Uint32::New(getIsolate(), GL_POINTS));
@@ -598,6 +738,27 @@ void GLModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
 //	QUADS						= 0x0007
 //	QUAD_STRIP					= 0x0008
 	
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "STATIC_DRAW"), v8::Uint32::New(getIsolate(), GL_STATIC_DRAW));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "STATIC_READ"), v8::Uint32::New(getIsolate(), GL_STATIC_READ));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "STATIC_COPY"), v8::Uint32::New(getIsolate(), GL_STATIC_COPY));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "DYNAMIC_DRAW"), v8::Uint32::New(getIsolate(), GL_DYNAMIC_DRAW));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "DYNAMIC_READ"), v8::Uint32::New(getIsolate(), GL_DYNAMIC_READ));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "DYNAMIC_COPY"), v8::Uint32::New(getIsolate(), GL_DYNAMIC_COPY));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "STREAM_DRAW"), v8::Uint32::New(getIsolate(), GL_STREAM_DRAW));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "STREAM_READ"), v8::Uint32::New(getIsolate(), GL_STREAM_READ));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "STREAM_COPY"), v8::Uint32::New(getIsolate(), GL_STREAM_COPY));
+  
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "ARRAY_BUFFER"), v8::Uint32::New(getIsolate(), GL_ARRAY_BUFFER));
+  
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "FLOAT"), v8::Uint32::New(getIsolate(), GL_FLOAT));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "FALSE"), v8::Uint32::New(getIsolate(), GL_FALSE));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "TRUE"), v8::Uint32::New(getIsolate(), GL_TRUE));
+  
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "INTERLEAVED_ATTRIBS"), v8::Uint32::New(getIsolate(), GL_INTERLEAVED_ATTRIBS));
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "RASTERIZER_DISCARD"), v8::Uint32::New(getIsolate(), GL_RASTERIZER_DISCARD));
+  
+  glTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "TRANSFORM_FEEDBACK_BUFFER"), v8::Uint32::New(getIsolate(), GL_TRANSFORM_FEEDBACK_BUFFER));
+  
   // Expose global gl object
   global->Set(v8::String::NewFromUtf8(getIsolate(), "gl"), glTemplate);
 }

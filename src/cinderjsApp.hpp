@@ -79,13 +79,16 @@ enum EventType {
   CJS_RESIZE = 10,
   CJS_KEY_DOWN = 20,
   CJS_KEY_UP = 30,
+  CJS_MOUSE_DOWN = 40,
+  CJS_MOUSE_UP = 50,
   CJS_FILE_DROP = 100
 };
 
 // TODO
 // - Expose Env info like OS etc.
 // - Expose versions object (cinder, v8, cinderjs)
-// - uncaughtException handler
+// - uncaughtException handler (process "uncaughtException" event)
+// - Bind Lambdas in modules instead of static class methods
 
 // Design Notes:
 // - The implementation and native/js communication is trying to avoid object instantiation
@@ -102,6 +105,7 @@ class CinderjsApp : public CinderAppBase  {
 	void setup();
   void shutdown();
   void mouseDown( cinder::app::MouseEvent event );
+	void mouseUp( cinder::app::MouseEvent event );
 	void mouseMove( cinder::app::MouseEvent event );
   void keyDown( cinder::app::KeyEvent event );
   void keyUp( cinder::app::KeyEvent event );
@@ -211,6 +215,43 @@ class CinderjsApp : public CinderAppBase  {
   v8::HeapStatistics _mHeapStats;
 };
 
+//
+//
+class ArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
+ public:
+  // Impose an upper limit to avoid out of memory errors that bring down
+  // the process.
+  static const size_t kMaxLength = 0x3fffffff;
+  static ArrayBufferAllocator the_singleton;
+  virtual ~ArrayBufferAllocator() {}
+  virtual void* Allocate(size_t length);
+  virtual void* AllocateUninitialized(size_t length);
+  virtual void Free(void* data, size_t length);
+ private:
+  ArrayBufferAllocator() {}
+  ArrayBufferAllocator(const ArrayBufferAllocator&);
+  void operator=(const ArrayBufferAllocator&);
+};
+
+ArrayBufferAllocator ArrayBufferAllocator::the_singleton;
+
+void* ArrayBufferAllocator::Allocate(size_t length) {
+  if (length > kMaxLength)
+    return NULL;
+  char* data = new char[length];
+  memset(data, 0, length);
+  return data;
+}
+
+void* ArrayBufferAllocator::AllocateUninitialized(size_t length) {
+  if (length > kMaxLength)
+    return NULL;
+  return new char[length];
+}
+
+void ArrayBufferAllocator::Free(void* data, size_t length) {
+  delete[] static_cast<char*>(data);
+}
   
 } // namespace cjs
 

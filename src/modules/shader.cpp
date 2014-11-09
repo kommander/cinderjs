@@ -197,6 +197,38 @@ void ShaderModule::uniformFloat(const v8::FunctionCallbackInfo<v8::Value>& args)
   return;
 }
 
+void ShaderModule::uniformVec3(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  if(!args[0].IsEmpty()){
+    uint32_t id = args[0]->ToUint32()->Value();
+    
+    GlslProgRef shader = StaticFactory::get<GlslProg>(id);
+    
+    if(!shader){
+      isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Shader does not exist")));
+      return;
+    }
+    
+    Local<String> locationStr = args[1]->ToString();
+    v8::String::Utf8Value location(locationStr);
+    const std::string loc(*location);
+    
+    uint32_t vectorId = args[2]->ToUint32()->Value();
+    std::shared_ptr<vec3> vector = StaticFactory::get<vec3>(vectorId);
+    
+    if(!vector){
+      isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Vector does not exist")));
+      return;
+    }
+    
+    shader->uniform(loc, *vector);
+  }
+  
+  return;
+}
+
 
 //
 // Format
@@ -297,6 +329,77 @@ void ShaderModule::formatGeometry(const v8::FunctionCallbackInfo<v8::Value>& arg
   return;
 }
 
+void ShaderModule::formatFeedbackFormat(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  if(args[0]->IsUint32()){
+    uint32_t id = args[0]->ToUint32()->Value();
+    
+    std::shared_ptr<GlslProg::Format> format = StaticFactory::get<GlslProg::Format>(id);
+    
+    if(!format){
+      isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Format does not exist")));
+      return;
+    }
+    
+    format->feedbackFormat( args[1]->ToUint32()->Value() );
+  }
+  
+  return;
+}
+
+void ShaderModule::formatFeedbackVaryings(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  if(args[0]->IsUint32()){
+    uint32_t id = args[0]->ToUint32()->Value();
+    
+    std::shared_ptr<GlslProg::Format> format = StaticFactory::get<GlslProg::Format>(id);
+    
+    if(!format){
+      isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Format does not exist")));
+      return;
+    }
+    
+    Local<Array> strArr = args[1].As<Array>();
+    std::vector<std::string> strVec(strArr->Length());
+    for(int i = 0; i < strArr->Length(); ++i){
+      v8::String::Utf8Value v8Str( strArr->Get(i)->ToString() );
+      strVec[i] = std::string(*v8Str);
+    }
+    
+    format->feedbackVaryings(strVec);
+  }
+  
+  return;
+}
+
+void ShaderModule::formatAttribLocation(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = args.GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  if(args[0]->IsUint32()){
+    uint32_t id = args[0]->ToUint32()->Value();
+    
+    std::shared_ptr<GlslProg::Format> format = StaticFactory::get<GlslProg::Format>(id);
+    
+    if(!format){
+      isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "Format does not exist")));
+      return;
+    }
+    
+    v8::String::Utf8Value v8Str( args[1]->ToString() );
+    
+    format->attribLocation(std::string(*v8Str), args[2]->IntegerValue());
+  }
+  
+  return;
+}
+
+
+
 void ShaderModule::getStockColor(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope scope(isolate);
@@ -332,12 +435,25 @@ void ShaderModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
   
   shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "uniformInt"), v8::FunctionTemplate::New(getIsolate(), uniformInt));
   shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "uniformFloat"), v8::FunctionTemplate::New(getIsolate(), uniformFloat));
+  shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "uniformVec3"), v8::FunctionTemplate::New(getIsolate(), uniformVec3));
   
   shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "createFormat"), v8::FunctionTemplate::New(getIsolate(), createFormat));
   shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "destroyFormat"), v8::FunctionTemplate::New(getIsolate(), destroyFormat));
   shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "formatVertex"), v8::FunctionTemplate::New(getIsolate(), formatVertex));
   shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "formatFragment"), v8::FunctionTemplate::New(getIsolate(), formatFragment));
   shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "formatGeometry"), v8::FunctionTemplate::New(getIsolate(), formatGeometry));
+  shaderTemplate->Set(
+    v8::String::NewFromUtf8(getIsolate(), "formatFeedbackFormat"),
+    v8::FunctionTemplate::New(getIsolate(), formatFeedbackFormat)
+  );
+  shaderTemplate->Set(
+    v8::String::NewFromUtf8(getIsolate(), "formatFeedbackVaryings"),
+    v8::FunctionTemplate::New(getIsolate(), formatFeedbackVaryings)
+  );
+  shaderTemplate->Set(
+    v8::String::NewFromUtf8(getIsolate(), "formatAttribLocation"),
+    v8::FunctionTemplate::New(getIsolate(), formatAttribLocation)
+  );
   
   shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "getStockColor"), v8::FunctionTemplate::New(getIsolate(), getStockColor));
   shaderTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "getStockTexture"), v8::FunctionTemplate::New(getIsolate(), getStockTexture));

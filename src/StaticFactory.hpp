@@ -36,7 +36,9 @@
 // The factory manages the references between C and js.
 // Modules request objects from the factory and the factory takes care of cleanup
 
-// TODO: store per isolate/context (removable when module is unloaded)
+// TODO:
+//  - store per isolate/context (removable when module is unloaded)
+//  - Allow named "scope" creation to destroy everything within a scope after a run
 
 namespace cjs {
   
@@ -151,6 +153,7 @@ namespace cjs {
         } else {
           // If conversion fails, the ids are probably mixed up
           // and the map returns the wrong object so it cannot be converted to T
+          // (Or the type requested just doesn't match the type stored...)
           std::shared_ptr<Wrapper<T>> proxy = boost::any_cast<std::shared_ptr<Wrapper<T>>>(wrap);
           return proxy->value;
         }

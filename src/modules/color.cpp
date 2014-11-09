@@ -19,45 +19,33 @@
  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef _GlmModule_hpp_
-#define _GlmModule_hpp_
 
-#pragma once
+#include "color.hpp"
+#include "AppConsole.h"
+#include "../StaticFactory.hpp"
 
-#define GLM_MOD_ID 12
-
-#include "../PipeModule.hpp"
+using namespace std;
+using namespace cinder;
+using namespace cinder::gl;
+using namespace v8;
 
 namespace cjs {
-  
-class GlmModule : public PipeModule {
-  public:
-    GlmModule(){}
-    ~GlmModule(){}
-  
-    inline int moduleId() {
-      return GLM_MOD_ID;
-    }
-  
-    inline std::string getName() {
-      return "glm";
-    }
-  
-    static void createMat4(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void destroyMat4(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void multMat4(const v8::FunctionCallbackInfo<v8::Value>& args);
-  
-    static void rotate(const v8::FunctionCallbackInfo<v8::Value>& args);
-  
-    static void createVec3(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void addVec3(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void setVec3(const v8::FunctionCallbackInfo<v8::Value>& args);
-    static void destroyVec3(const v8::FunctionCallbackInfo<v8::Value>& args);
-  
-    void loadGlobalJS( v8::Local<v8::ObjectTemplate> &global );
-    
- };
-  
-} // namespace cjs
 
-#endif
+/**
+ * Add JS bindings
+ */
+void ColorModule::loadGlobalJS( v8::Local<v8::ObjectTemplate> &global ) {
+  // Create global object
+  Handle<ObjectTemplate> objTemplate = ObjectTemplate::New(getIsolate());
+  
+//  objTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "create"), v8::FunctionTemplate::New(getIsolate(), create));
+//  objTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "destroy"), v8::FunctionTemplate::New(getIsolate(), destroy));
+  
+  objTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "HSV"), v8::Uint32::New(getIsolate(), CM_HSV));
+  objTemplate->Set(v8::String::NewFromUtf8(getIsolate(), "RGB"), v8::Uint32::New(getIsolate(), CM_RGB));
+  
+  // Expose global object
+  global->Set(v8::String::NewFromUtf8(getIsolate(), "color"), objTemplate);
+}
+ 
+} // namespace cjs
