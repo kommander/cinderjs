@@ -36,7 +36,7 @@ Using Version branch 3.30
 To be able to debug JIT code, build v8 with the compiler flag "gdbjit=on".
 For detailed build instructions have a look at [the Google V8 build docs](https://developers.google.com/v8/build).
 
-To be able to link against libc++, build on OSX with:  
+To be able to link against libc++ with clang, build on OSX with:  
 ```
 export CXX="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -std=c++11 -stdlib=libc++"
 export CC=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
@@ -47,6 +47,19 @@ export CC_host=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefaul
 export CPP_host="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -E"
 export LINK_host=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
 export GYP_DEFINES="clang=1 mac_deployment_target=10.8"
+```
+
+With GNU compilers and libc++:
+```
+export CXX="/Applications/Xcode.app/Contents/Developer/usr/bin/g++ -std=c++11 -stdlib=libc++"
+export CC=/Applications/Xcode.app/Contents/Developer/usr/bin/gcc
+export CPP="/Applications/Xcode.app/Contents/Developer/usr/bin/gcc -E"
+export LINK="/Applications/Xcode.app/Contents/Developer/usr/bin/g++ -std=c++11 -stdlib=libc++"
+export CXX_host=/Applications/Xcode.app/Contents/Developer/usr/bin/g++
+export CC_host=/Applications/Xcode.app/Contents/Developer/usr/bin/gcc
+export CPP_host="/Applications/Xcode.app/Contents/Developer/usr/bin/gcc -E"
+export LINK_host=/Applications/Xcode.app/Contents/Developer/usr/bin/g++
+export GYP_DEFINES="clang=1 mac_deployment_target=10.10"
 ```
 
 
