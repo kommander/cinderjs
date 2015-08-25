@@ -15,7 +15,6 @@
 		00B784B50FF439BC000DE1D7 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B10FF439BC000DE1D7 /* AudioUnit.framework */; };
 		00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
-		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		9E4ABEBD1A09FF6A00AF2706 /* AppConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABE9B1A09FF6A00AF2706 /* AppConsole.cpp */; };
 		9E4ABEBE1A09FF6A00AF2706 /* CinderAppBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABE9D1A09FF6A00AF2706 /* CinderAppBase.cpp */; };
@@ -34,7 +33,6 @@
 		9E4ABECB1A09FF6A00AF2706 /* TextHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABEBB1A09FF6A00AF2706 /* TextHelpers.cpp */; };
 		9E4ABECC1A09FF6A00AF2706 /* PipeModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABEBC1A09FF6A00AF2706 /* PipeModule.cpp */; };
 		9E4ABED01A0A005400AF2706 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABECF1A0A005400AF2706 /* CinderApp.icns */; };
-		9E4ABED21A0A006900AF2706 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABED11A0A006900AF2706 /* Info.plist */; };
 		9E4ABED41A0A007500AF2706 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 9E4ABED31A0A007500AF2706 /* README.md */; };
 		9E4ABEE91A0A008500AF2706 /* app.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABED61A0A008400AF2706 /* app.js */; };
 		9E4ABEEA1A0A008500AF2706 /* assert.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABED71A0A008400AF2706 /* assert.js */; };
@@ -59,6 +57,8 @@
 		9E4ABF231A0A009100AF2706 /* prebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 9E4ABF0F1A0A009100AF2706 /* prebuild.sh */; };
 		9E5ACA3E1A0AA4F400FB75E8 /* glm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E5ACA3C1A0AA4F400FB75E8 /* glm.cpp */; };
 		9E5ACA401A0AA50400FB75E8 /* glm.js in Resources */ = {isa = PBXBuildFile; fileRef = 9E5ACA3F1A0AA50400FB75E8 /* glm.js */; };
+		9E9BE8141B8CEA0D00FD56FA /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E9BE8131B8CEA0D00FD56FA /* IOSurface.framework */; };
+		9E9BE8161B8CEA1B00FD56FA /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E9BE8151B8CEA1B00FD56FA /* IOKit.framework */; };
 		9ED25AC71A0A790A009CEDC4 /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED25AC51A0A790A009CEDC4 /* texture.cpp */; };
 		9ED25AC91A0A7918009CEDC4 /* texture.js in Resources */ = {isa = PBXBuildFile; fileRef = 9ED25AC81A0A7918009CEDC4 /* texture.js */; };
 		9ED435AA1A0E86F9004AA3E9 /* vbo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ED435A81A0E86F9004AA3E9 /* vbo.cpp */; };
@@ -144,6 +144,8 @@
 		9E5ACA3C1A0AA4F400FB75E8 /* glm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glm.cpp; path = ../src/modules/glm.cpp; sourceTree = "<group>"; };
 		9E5ACA3D1A0AA4F400FB75E8 /* glm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = glm.hpp; sourceTree = "<group>"; };
 		9E5ACA3F1A0AA50400FB75E8 /* glm.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = glm.js; sourceTree = "<group>"; };
+		9E9BE8131B8CEA0D00FD56FA /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
+		9E9BE8151B8CEA1B00FD56FA /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		9ED25AC51A0A790A009CEDC4 /* texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = texture.cpp; path = ../src/modules/texture.cpp; sourceTree = "<group>"; };
 		9ED25AC61A0A790A009CEDC4 /* texture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = texture.hpp; sourceTree = "<group>"; };
 		9ED25AC81A0A7918009CEDC4 /* texture.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = texture.js; sourceTree = "<group>"; };
@@ -166,12 +168,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E9BE8161B8CEA1B00FD56FA /* IOKit.framework in Frameworks */,
+				9E9BE8141B8CEA0D00FD56FA /* IOSurface.framework in Frameworks */,
 				006D720819952D0A008149E2 /* AVFoundation.framework in Frameworks */,
 				006D720919952D0A008149E2 /* CoreMedia.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				0091D8F90E81B9330029341E /* OpenGL.framework in Frameworks */,
 				5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */,
-				5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */,
 				00B784B30FF439BC000DE1D7 /* Accelerate.framework in Frameworks */,
 				00B784B40FF439BC000DE1D7 /* AudioToolbox.framework in Frameworks */,
 				00B784B50FF439BC000DE1D7 /* AudioUnit.framework in Frameworks */,
@@ -206,6 +209,10 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9E9BE8151B8CEA1B00FD56FA /* IOKit.framework */,
+				9E9BE8131B8CEA0D00FD56FA /* IOSurface.framework */,
+				006D720719952D0A008149E2 /* CoreMedia.framework */,
+				006D720619952D0A008149E2 /* AVFoundation.framework */,
 				00B784AF0FF439BC000DE1D7 /* Accelerate.framework */,
 				00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */,
 				00B784B10FF439BC000DE1D7 /* AudioUnit.framework */,
@@ -277,8 +284,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				006D720619952D0A008149E2 /* AVFoundation.framework */,
-				006D720719952D0A008149E2 /* CoreMedia.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
@@ -412,6 +417,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0630;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "cinderjs" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -447,7 +453,6 @@
 				9E4ABEEE1A0A008500AF2706 /* color.js in Resources */,
 				9ED435B31A0EE128004AA3E9 /* vao.js in Resources */,
 				9E4ABEF91A0A008500AF2706 /* timers.js in Resources */,
-				9E4ABED21A0A006900AF2706 /* Info.plist in Resources */,
 				9E4ABF231A0A009100AF2706 /* prebuild.sh in Resources */,
 				9E4ABEF31A0A008500AF2706 /* gl.js in Resources */,
 				9E4ABEEA1A0A008500AF2706 /* assert.js in Resources */,
@@ -524,10 +529,15 @@
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CINDER_PATH = ../Cinder;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -539,17 +549,19 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
-					"\"$(CINDER_PATH)/boost\"",
+					"\"$(CINDER_PATH)/include\"",
 					"\"$(V8_PATH)\"",
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"\"$(CINDER_PATH)/lib/libcinder_d.a\"",
 					"\"$(V8_PATH_D)/libicudata.a\"",
 					"\"$(V8_PATH_D)/libicui18n.a\"",
 					"\"$(V8_PATH_D)/libicuuc.a\"",
-					"\"$(V8_PATH_D)/libv8_snapshot.a\"",
+					"\"$(V8_PATH_D)/libv8_nosnapshot.a\"",
 					"\"$(V8_PATH_D)/libv8_libbase.a\"",
 					"\"$(V8_PATH_D)/libv8_base.a\"",
 					"\"$(V8_PATH_D)/libv8_libplatform.a\"",
@@ -560,6 +572,7 @@
 				V8_PATH = ../v8;
 				V8_PATH_D = ../v8/out/x64.debug;
 				V8_PATH_R = ../v8/out/x64.release;
+				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -567,10 +580,15 @@
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CINDER_PATH = ../Cinder;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_FAST_MATH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
@@ -579,11 +597,12 @@
 				GCC_PREFIX_HEADER = cinderjs_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
-					"\"$(CINDER_PATH)/boost\"",
+					"\"$(CINDER_PATH)/include\"",
 					"\"$(V8_PATH)\"",
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_LDFLAGS = (
 					"\"$(CINDER_PATH)/lib/libcinder.a\"",
 					"\"$(V8_PATH_R)/libicudata.a\"",
@@ -601,6 +620,7 @@
 				V8_PATH = ../v8;
 				V8_PATH_D = ../v8/out/x64.debug;
 				V8_PATH_R = ../v8/out/x64.release;
+				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -609,7 +629,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = x86_64;
 				CINDER_PATH = ../../../..;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -617,6 +636,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include";
 			};
@@ -626,7 +646,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = x86_64;
 				CINDER_PATH = ../../../..;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";

@@ -11,3 +11,5 @@ xcode/build
 testV8Standalone
 .git_bak
 CinderProject
+depot_tools
+.gclient*

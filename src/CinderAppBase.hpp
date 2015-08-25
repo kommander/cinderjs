@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "cinder/app/AppNative.h"
+#include "cinder/app/App.h"
 #include <stdexcept>
 
 #include "v8.h"
@@ -32,7 +32,7 @@
 
 namespace cjs {
 
-  class CinderAppBase : public cinder::app::AppNative {
+  class CinderAppBase : public cinder::app::App {
     public:
       CinderAppBase(){}
       ~CinderAppBase(){}

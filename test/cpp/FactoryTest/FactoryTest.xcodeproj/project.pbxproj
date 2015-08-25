@@ -164,7 +164,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -199,7 +199,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 			};
@@ -223,7 +223,7 @@
 					"\"$(V8_PATH_D)/libicudata.a\"",
 					"\"$(V8_PATH_D)/libicui18n.a\"",
 					"\"$(V8_PATH_D)/libicuuc.a\"",
-					"\"$(V8_PATH_D)/libv8_snapshot.a\"",
+					"\"$(V8_PATH_D)/libv8_nosnapshot.a\"",
 					"\"$(V8_PATH_D)/libv8_libbase.a\"",
 					"\"$(V8_PATH_D)/libv8_base.a\"",
 					"\"$(V8_PATH_D)/libv8_libplatform.a\"",
@@ -253,7 +253,7 @@
 					"\"$(V8_PATH_D)/libicudata.a\"",
 					"\"$(V8_PATH_D)/libicui18n.a\"",
 					"\"$(V8_PATH_D)/libicuuc.a\"",
-					"\"$(V8_PATH_D)/libv8_snapshot.a\"",
+					"\"$(V8_PATH_D)/libv8_nosnapshot.a\"",
 					"\"$(V8_PATH_D)/libv8_libbase.a\"",
 					"\"$(V8_PATH_D)/libv8_base.a\"",
 					"\"$(V8_PATH_D)/libv8_libplatform.a\"",
@@ -284,6 +284,7 @@
 				9E5B93B11A033B6400B5BDF4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

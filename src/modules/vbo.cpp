@@ -59,7 +59,7 @@ void VBOModule::create(const v8::FunctionCallbackInfo<v8::Value>& args) {
       vbo = Vbo::create(
         args[1]->ToUint32()->Value(),
         data->ByteLength(),
-        data->GetIndexedPropertiesExternalArrayData(),
+        *data,
         args[3]->ToUint32()->Value()
       );
     }

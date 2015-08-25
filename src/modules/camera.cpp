@@ -214,7 +214,8 @@ void CameraModule::setCenterOfInterestPoint(const v8::FunctionCallbackInfo<v8::V
     sBufVec3f_1.y = args[2]->ToNumber()->Value();
     sBufVec3f_1.z = args[3]->ToNumber()->Value();
     
-    cam->setCenterOfInterestPoint(sBufVec3f_1);
+    //cam->setCenterOfInterestPoint(sBufVec3f_1);
+    isolate->ThrowException(v8::Exception::ReferenceError(v8::String::NewFromUtf8(isolate, "setCenterOfInterestPoint is deprecated")));
   }
   
   return;

@@ -27,41 +27,45 @@ Checkout the git submodules with:
 $> git submodule init
 $> git submodule update
 ```
-Then build v8 (make native) and Cinder (./xcode/fullbuild.sh). 
+Then build v8 (make x64.debug || x64.release) and Cinder (./xcode/fullbuild.sh). 
 After that the xcode cinderjs project should build as alls paths are relative. 
 
 ## v8
-Using Version branch 3.30
+Using Version 4.7.3
+
+Get [depot_tools](http://www.chromium.org/developers/how-tos/install-depot-tools) and add to your PATH:
+```
+git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+export PATH=`pwd`/depot_tools:"$PATH"
+```
+Then run
+```
+fetch v8
+cd v8
+git checkout 4.7.3
+gclient sync
+make x64.debug
+```
+
 
 To be able to debug JIT code, build v8 with the compiler flag "gdbjit=on".
 For detailed build instructions have a look at [the Google V8 build docs](https://developers.google.com/v8/build).
 
 To be able to link against libc++ with clang, build on OSX with:  
 ```
-export CXX="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -std=c++11 -stdlib=libc++"
-export CC=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
-export CPP="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -E"
-export LINK="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -std=c++11 -stdlib=libc++"
-export CXX_host=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
-export CC_host=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
-export CPP_host="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -E"
-export LINK_host=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
-export GYP_DEFINES="clang=1 mac_deployment_target=10.8"
+export GYP_DEFINES="clang=1 host_clang=1 use_custom_libcxx=1 mac_deployment_target=10.10 clang_dir=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr"
 ```
 
-With GNU compilers and libc++:
+Make example using 8 parallel build processes:
 ```
-export CXX="/Applications/Xcode.app/Contents/Developer/usr/bin/g++ -std=c++11 -stdlib=libc++"
-export CC=/Applications/Xcode.app/Contents/Developer/usr/bin/gcc
-export CPP="/Applications/Xcode.app/Contents/Developer/usr/bin/gcc -E"
-export LINK="/Applications/Xcode.app/Contents/Developer/usr/bin/g++ -std=c++11 -stdlib=libc++"
-export CXX_host=/Applications/Xcode.app/Contents/Developer/usr/bin/g++
-export CC_host=/Applications/Xcode.app/Contents/Developer/usr/bin/gcc
-export CPP_host="/Applications/Xcode.app/Contents/Developer/usr/bin/gcc -E"
-export LINK_host=/Applications/Xcode.app/Contents/Developer/usr/bin/g++
-export GYP_DEFINES="clang=1 mac_deployment_target=10.10"
+make -j8 -e x64.debug
 ```
 
+## Cinder
+To avoid building all the libs within "fullbuild.sh":
+```
+xcrun xcodebuild -project Cinder/xcode/cinder.xcodeproj -target cinder -configuration Debug
+```
 
 ### License
 

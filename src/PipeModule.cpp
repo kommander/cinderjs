@@ -24,6 +24,6 @@
 
 namespace cjs {
 
-cinder::app::AppBasic* PipeModule::sApp = nullptr;
+cinder::app::App* PipeModule::sApp = nullptr;
 
 }

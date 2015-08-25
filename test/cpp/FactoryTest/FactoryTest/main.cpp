@@ -40,7 +40,7 @@ void addMaterial(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   v8::HandleScope handle_scope(isolate);
   
-  StaticFactory::put<Material>(isolate, boost::shared_ptr<Material>(new Material()), args[0]->ToObject());
+  StaticFactory::put<Material>(isolate, std::shared_ptr<Material>(new Material()), args[0]->ToObject());
   
   return;
 }
@@ -86,6 +86,43 @@ void runScript(Isolate* isolate, Handle<Context> ctx, std::string scriptStr){
   script->Run();
 }
 
+class ArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
+ public:
+  // Impose an upper limit to avoid out of memory errors that bring down
+  // the process.
+  static const size_t kMaxLength = 0x3fffffff;
+  static ArrayBufferAllocator the_singleton;
+  virtual ~ArrayBufferAllocator() {}
+  virtual void* Allocate(size_t length);
+  virtual void* AllocateUninitialized(size_t length);
+  virtual void Free(void* data, size_t length);
+ private:
+  ArrayBufferAllocator() {}
+  ArrayBufferAllocator(const ArrayBufferAllocator&);
+  void operator=(const ArrayBufferAllocator&);
+};
+
+ArrayBufferAllocator ArrayBufferAllocator::the_singleton;
+
+void* ArrayBufferAllocator::Allocate(size_t length) {
+  if (length > kMaxLength)
+    return NULL;
+  char* data = new char[length];
+  memset(data, 0, length);
+  return data;
+}
+
+void* ArrayBufferAllocator::AllocateUninitialized(size_t length) {
+  if (length > kMaxLength)
+    return NULL;
+  return new char[length];
+}
+
+void ArrayBufferAllocator::Free(void* data, size_t length) {
+  delete[] static_cast<char*>(data);
+}
+
+
 int main(int argc, const char * argv[]) {
   v8::V8::InitializeICU();
   v8::Platform* platform = v8::platform::CreateDefaultPlatform(4);
@@ -93,10 +130,12 @@ int main(int argc, const char * argv[]) {
   V8::Initialize();
   
   // Create a new Isolate and make it the current one.
-  Isolate* isolate = Isolate::New();
+  v8::Isolate::CreateParams create_params;
+  create_params.array_buffer_allocator = &ArrayBufferAllocator::the_singleton;
+  Isolate* isolate = Isolate::New(create_params);
   Isolate::Scope isolate_scope(isolate);
   
-  StaticFactory::initialize();
+  StaticFactory::initialize( cjs::FactorySettings() );
   
   // Create a stack-allocated handle scope.
   HandleScope handle_scope(isolate);
@@ -156,7 +195,7 @@ int main(int argc, const char * argv[]) {
   std::cout << std::to_string(StaticFactory::getStats().puts) << " puts / "
     << std::to_string(StaticFactory::getStats().removes) << " removes" << std::endl;
   
-  std::cin.get();
+  //std::cin.get();
   
   return 0;
 }

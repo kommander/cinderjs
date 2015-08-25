@@ -103,7 +103,7 @@ class CinderjsApp : public CinderAppBase  {
   
   // Cinder App
 	void setup();
-  void shutdown();
+  void cleanup();
   void mouseDown( cinder::app::MouseEvent event );
 	void mouseUp( cinder::app::MouseEvent event );
 	void mouseMove( cinder::app::MouseEvent event );

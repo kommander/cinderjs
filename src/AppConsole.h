@@ -9,7 +9,7 @@
 #ifndef cinderjs_Console_h
 #define cinderjs_Console_h
 
-#include "cinder/app/AppNative.h"
+#include "cinder/app/App.h"
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Texture.h"
 #include "cinder/Text.h"

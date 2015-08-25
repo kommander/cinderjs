@@ -102,9 +102,9 @@ void CinderjsApp::handleV8TryCatch( v8::TryCatch &tryCatch, std::string info ) {
 
 
 /**
- * Shutdown
+ * Cleanup
  */
-void CinderjsApp::shutdown()
+void CinderjsApp::cleanup()
 {
   shutdownInProgress = true;
   sConsoleActive = false;
@@ -130,10 +130,10 @@ void CinderjsApp::shutdown()
   }
   
   // Shutdown v8RenderThread
-  if( mV8RenderThread ) {
-    mV8RenderThread->join();
-    mV8RenderThread.reset();
-  }
+//  if( mV8RenderThread ) {
+//    mV8RenderThread->join();
+//    mV8RenderThread.reset();
+//  }
 
   // Shutdown v8EventThread
   if( mV8EventThread ) {
@@ -162,7 +162,8 @@ void CinderjsApp::setup()
   mLastEscPressed = getElapsedSeconds();
   
   // Command line arguments
-  vector<std::string> args = getArgs();
+  vector<std::string> args = getCommandLineArgs();
+  
 
   mCwd = boost::filesystem::current_path();
   AppConsole::log("Current Path: " + mCwd.string());
@@ -227,14 +228,15 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   //ThreadSetup threadSetup;
   
   // Initialize V8 (implicit initialization was removed in an earlier revision)
-  v8::V8::SetArrayBufferAllocator(&ArrayBufferAllocator::the_singleton);
   v8::V8::InitializeICU();
   v8::Platform* platform = v8::platform::CreateDefaultPlatform(4);
   v8::V8::InitializePlatform(platform);
   V8::Initialize();
   
   // Create a new Isolate and make it the current one.
-  mIsolate = Isolate::New();
+  v8::Isolate::CreateParams create_params;
+  create_params.array_buffer_allocator = &ArrayBufferAllocator::the_singleton;
+  mIsolate = Isolate::New(create_params);
   v8::Locker lock(mIsolate);
   Isolate::Scope isolate_scope(mIsolate);
   
@@ -266,6 +268,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   // TODO: export process.pid
   // TODO: export process.env (environment vars etc.)
   //       -> Empty object for now (placeholer)
+  // TODO:
   processObj->Set(v8::String::NewFromUtf8(mIsolate, "env"), ObjectTemplate::New());
   //process.execPath
   processObj->Set(v8::String::NewFromUtf8(mIsolate, "execPath"), v8::String::NewFromUtf8(mIsolate, getAppPath().c_str()));
@@ -313,7 +316,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   processObjInstance.As<Object>()->Set(v8::String::NewFromUtf8(mIsolate, "_moduleCache"), obj);
   
   // add process.argv
-  vector<std::string> argv = getArgs();
+  vector<std::string> argv = getCommandLineArgs();
   
   #ifdef DEBUG
   // For development loading...
@@ -322,7 +325,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cube/cubes.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/geometry_shader/index.js");
-  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/ParticleSphereGPU/index.js");
+  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/ParticleSphereGPU/index.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/physics.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/ray.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/fbo_basic.js");
@@ -330,6 +333,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/test/lib/jasmine/runner.js");
   #endif
   
+  // Forward command line arguments to process object, available from js context
   Local<Array> argvArr = Array::New(mIsolate);
   for (int i = 0; i < argv.size(); ++i) {
     argvArr->Set(i, String::NewFromUtf8(mIsolate, argv[i].c_str()));
@@ -371,7 +375,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   glRenderer->finishDraw();
   
   // Start sub threads
-  mV8RenderThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8RenderThread, this ) );
+  //mV8RenderThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8RenderThread, this ) );
   mV8EventThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8EventThread, this ) );
   mV8TimerThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8TimerThread, this, mIsolate ) );
 }
@@ -379,37 +383,37 @@ void CinderjsApp::v8Thread( std::string mainJS ){
 /**
  *
  */
-void CinderjsApp::v8RenderThread(){
-  ThreadSetup threadSetup;
-  
-  //
-  // Render Loop, do work if available
-  while( !mShouldQuit ) {
-    
-    // Wait for data to be processed...
-    {
-        std::unique_lock<std::mutex> lck( mMainMutex );
-        cvJSThread.wait(lck, [this]{ return _v8Run; });
-    }
-    
-    if(!mShouldQuit){
-      
-      glRenderer->startDraw();
-      
-      v8Draw();
-      
-      glRenderer->finishDraw();
-  
-    }
-    
-    _v8Run = false;
-  }
-  
-  // FIXME: sometimes the threads just end shortly after startup already...
-  //        Don't know how to reproduce.
-  std::cout << "V8 Render thread ending" << std::endl;
-  
-}
+//void CinderjsApp::v8RenderThread(){
+//  ThreadSetup threadSetup;
+//  
+//  //
+//  // Render Loop, do work if available
+//  while( !mShouldQuit ) {
+//    
+//    // Wait for data to be processed...
+//    {
+//        std::unique_lock<std::mutex> lck( mMainMutex );
+//        cvJSThread.wait(lck, [this]{ return _v8Run; });
+//    }
+//    
+//    if(!mShouldQuit){
+//      
+//      //glRenderer->startDraw();
+//      
+//      v8Draw();
+//      
+//      //glRenderer->finishDraw();
+//  
+//    }
+//    
+//    _v8Run = false;
+//  }
+//  
+//  // FIXME: sometimes the threads just end shortly after startup already...
+//  //        Don't know how to reproduce.
+//  std::cout << "V8 Render thread ending" << std::endl;
+//  
+//}
   
 void CinderjsApp::v8Draw(){
   
@@ -446,11 +450,11 @@ void CinderjsApp::v8Draw(){
 
     v8::TryCatch try_catch;
     
-    gl::pushMatrices();
+    //gl::pushMatrices();
     
     callback->Call(callback->CreationContext()->Global(), 3, argv);
     
-    gl::popMatrices();
+    //gl::popMatrices();
     
     // Check for errors
     if(try_catch.HasCaught()){
@@ -467,7 +471,7 @@ void CinderjsApp::v8Draw(){
   // FPS (TODO: if active)
   cinder::TextLayout fpsText;
   fpsText.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
-  fpsText.addLine( "Ci FPS: " + std::to_string( cinder::app::AppBasic::getAverageFps() ) );
+  fpsText.addLine( "Ci FPS: " + std::to_string( cinder::app::App::getAverageFps() ) );
   fpsText.addLine( "V8 FPS: " + std::to_string( v8FPS ) );
   
   if(sV8StatsActive){
@@ -512,7 +516,7 @@ void CinderjsApp::v8EventThread(){
     if(!mShouldQuit && mEventQueue.isNotEmpty()){
       
       // Grab renderer...
-      glRenderer->startDraw();
+      //glRenderer->startDraw();
       
       // TODO: If available, push mouse/key/resize events to v8
       v8::Locker lock(mIsolate);
@@ -625,7 +629,7 @@ void CinderjsApp::v8EventThread(){
       }
       
       // Release renderer...
-      glRenderer->finishDraw();
+      //glRenderer->finishDraw();
       
       context->Exit();
       v8::Unlocker unlock(mIsolate);
@@ -960,8 +964,9 @@ void CinderjsApp::draw()
       mEventQueue.pushFront(evt);
       return;
     }
-    _v8Run = true;
-    cvJSThread.notify_one();
+    //_v8Run = true;
+    //cvJSThread.notify_one();
+    v8Draw();
   }
   
   // Handle execution queue
@@ -1287,4 +1292,4 @@ void CinderjsApp::NativeBinding(const FunctionCallbackInfo<Value>& args) {
   
 } // namespace cjs
 
-CINDER_APP_NATIVE( cjs::CinderjsApp, RendererGl )
+CINDER_APP( cjs::CinderjsApp, RendererGl )
