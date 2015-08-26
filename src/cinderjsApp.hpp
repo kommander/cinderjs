@@ -175,6 +175,7 @@ class CinderjsApp : public CinderAppBase  {
   static void setEventCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toggleAppConsole(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void toggleV8Stats(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void toggleFPS(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void requestQuit(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void nextFrameJS(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void setTimer(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -184,14 +185,16 @@ class CinderjsApp : public CinderAppBase  {
 
   // Default Callbacks
   static v8::Persistent<v8::Function> sDrawCallback;
+  static v8::Local<v8::Function> _fnDrawCallback;
   static v8::Persistent<v8::Function> sEventCallback; // TODO: only push events that were subscribed to in v8
   
   //
   static v8::Persistent<v8::Object> sEmptyObject;
   
   // Console
-  static volatile bool sConsoleActive;
-  static volatile bool sV8StatsActive;
+  static volatile bool _consoleActive;
+  static volatile bool _v8StatsActive;
+  static volatile bool _fpsActive;
   
   // Error Handling
   static void handleV8TryCatch( v8::TryCatch &tryCatch, std::string info );

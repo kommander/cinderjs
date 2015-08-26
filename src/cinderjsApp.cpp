@@ -43,11 +43,13 @@ using namespace v8;
 namespace cjs {
 
 #ifdef DEBUG
-volatile bool CinderjsApp::sConsoleActive = true;
-volatile bool CinderjsApp::sV8StatsActive = true;
+volatile bool CinderjsApp::_consoleActive = true;
+volatile bool CinderjsApp::_v8StatsActive = true;
+volatile bool CinderjsApp::_fpsActive = true;
 #else
-volatile bool CinderjsApp::sConsoleActive = false;
-volatile bool CinderjsApp::sV8StatsActive = false;
+volatile bool CinderjsApp::_consoleActive = false;
+volatile bool CinderjsApp::_v8StatsActive = false;
+volatile bool CinderjsApp::_fpsActive = true;
 #endif
 
 bool CinderjsApp::sQuitRequested = false;
@@ -57,6 +59,7 @@ v8::Persistent<v8::Object> CinderjsApp::sModuleCache;
 v8::Persistent<v8::Array> CinderjsApp::sModuleList;
   
 v8::Persistent<v8::Function> CinderjsApp::sDrawCallback;
+v8::Local<v8::Function> CinderjsApp::_fnDrawCallback;
 v8::Persistent<v8::Function> CinderjsApp::sEventCallback;
 
 v8::Persistent<v8::Object> CinderjsApp::sEmptyObject;
@@ -107,7 +110,7 @@ void CinderjsApp::handleV8TryCatch( v8::TryCatch &tryCatch, std::string info ) {
 void CinderjsApp::cleanup()
 {
   shutdownInProgress = true;
-  sConsoleActive = false;
+  _consoleActive = false;
   mShouldQuit = true;
   
   std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -414,7 +417,6 @@ void CinderjsApp::v8Thread( std::string mainJS ){
 //  std::cout << "V8 Render thread ending" << std::endl;
 //  
 //}
-  
 void CinderjsApp::v8Draw(){
   
   // Gather some info...
@@ -426,7 +428,7 @@ void CinderjsApp::v8Draw(){
     v8FPS = v8Frames;
     v8Frames = 0;
     mLastUpdate = now;
-    if(sV8StatsActive) mIsolate->GetHeapStatistics(&_mHeapStats);
+    if(_v8StatsActive) mIsolate->GetHeapStatistics(&_mHeapStats);
   }
 
   v8::Locker lock(mIsolate);
@@ -438,9 +440,9 @@ void CinderjsApp::v8Draw(){
   v8::HandleScope handleScope(mIsolate);
   
   // Callback
-  v8::Local<v8::Function> callback = v8::Local<v8::Function>::New(mIsolate, sDrawCallback);
+  _fnDrawCallback = v8::Local<v8::Function>::New(mIsolate, sDrawCallback);
   
-  if( !callback.IsEmpty() ){
+  if( !_fnDrawCallback.IsEmpty() ){
     
     v8::Handle<v8::Value> argv[3] = {
       v8::Number::New(mIsolate, timePassed),
@@ -450,11 +452,11 @@ void CinderjsApp::v8Draw(){
 
     v8::TryCatch try_catch;
     
-    //gl::pushMatrices();
+    gl::pushMatrices();
     
-    callback->Call(callback->CreationContext()->Global(), 3, argv);
+    _fnDrawCallback->Call(_fnDrawCallback->CreationContext()->Global(), 3, argv);
     
-    //gl::popMatrices();
+    gl::popMatrices();
     
     // Check for errors
     if(try_catch.HasCaught()){
@@ -471,19 +473,24 @@ void CinderjsApp::v8Draw(){
   // FPS (TODO: if active)
   cinder::TextLayout fpsText;
   fpsText.setColor( cinder::ColorA( 1, 1, 1, 1 ) );
-  fpsText.addLine( "Ci FPS: " + std::to_string( cinder::app::App::getAverageFps() ) );
-  fpsText.addLine( "V8 FPS: " + std::to_string( v8FPS ) );
   
-  if(sV8StatsActive){
+  if(_fpsActive){
+    fpsText.addLine( "Ci FPS: " + std::to_string( cinder::app::App::getAverageFps() ) );
+    fpsText.addLine( "V8 FPS: " + std::to_string( v8FPS ) );
+  }
+  
+  if(_v8StatsActive){
     fpsText.addLine( "V8 Heap limit: " + std::to_string( _mHeapStats.heap_size_limit() ) );
     fpsText.addLine( "V8 Heap total: " + std::to_string( _mHeapStats.total_heap_size() ) );
     fpsText.addLine( "V8 Heap Used: " + std::to_string( _mHeapStats.used_heap_size() ) );
   }
   
-  cinder::gl::draw( cinder::gl::Texture::create( fpsText.render() ) );
-
+  if(_fpsActive || _v8StatsActive) {
+    cinder::gl::draw( cinder::gl::Texture::create( fpsText.render() ) );
+  }
+  
   // Draw console (if active)
-  if(sConsoleActive){
+  if(_consoleActive){
     vec2 cPos;
     // TODO: this still fails sometimes on shutdown
     try {
@@ -516,7 +523,7 @@ void CinderjsApp::v8EventThread(){
     if(!mShouldQuit && mEventQueue.isNotEmpty()){
       
       // Grab renderer...
-      //glRenderer->startDraw();
+      glRenderer->startDraw();
       
       // TODO: If available, push mouse/key/resize events to v8
       v8::Locker lock(mIsolate);
@@ -629,7 +636,7 @@ void CinderjsApp::v8EventThread(){
       }
       
       // Release renderer...
-      //glRenderer->finishDraw();
+      glRenderer->finishDraw();
       
       context->Exit();
       v8::Unlocker unlock(mIsolate);
@@ -638,7 +645,8 @@ void CinderjsApp::v8EventThread(){
     _eventRun = false;
   }
   
-  std::cout << "V8 Event thread ending" << std::endl;
+  //@debug
+  //std::cout << "V8 Event thread ending" << std::endl;
 }
 
 void CinderjsApp::executeTimer(TimerFn timer, Isolate* isolate) {
@@ -832,7 +840,8 @@ void CinderjsApp::v8TimerThread( Isolate* isolate ){
     waitThread.reset();
   }
   
-  std::cout << "V8 Timer thread ending" << std::endl;
+  //@debug
+  //std::cout << "V8 Timer thread ending" << std::endl;
 }
 
 /**
@@ -912,8 +921,22 @@ void CinderjsApp::keyDown( KeyEvent event )
     }
     return;
   }
+  
+  // Default Hotkeys
   if(event.getCode() == 27){
     mLastEscPressed = getElapsedSeconds();
+  }
+  // F1 - toggle fps text
+  else if(event.getCode() == 282){
+    _fpsActive = !_fpsActive;
+  }
+  // F2 - toggle v8 stats text
+  else if(event.getCode() == 283){
+    _v8StatsActive = !_v8StatsActive;
+  }
+  // F3 - toggle Console
+  else if(event.getCode() == 284){
+    _consoleActive = !_consoleActive;
   }
   
   
@@ -948,7 +971,7 @@ void CinderjsApp::update()
 
 /**
  * Cinder draw loop (tick)
- * - Triggers the v8 render thread
+ * - Triggers v8 rendering
  * - Proxies nextFrame() 
  */
 void CinderjsApp::draw()
@@ -1036,11 +1059,11 @@ void CinderjsApp::setEventCallback(const v8::FunctionCallbackInfo<v8::Value>& ar
 void CinderjsApp::toggleAppConsole(const v8::FunctionCallbackInfo<v8::Value>& args) {
   if(args.Length() > 0) {
     bool active = args[0]->ToBoolean()->Value();
-    sConsoleActive = active;
+    _consoleActive = active;
     return;
   }
 
-  sConsoleActive = !sConsoleActive;
+  _consoleActive = !_consoleActive;
   return;
 }
 
@@ -1048,7 +1071,15 @@ void CinderjsApp::toggleAppConsole(const v8::FunctionCallbackInfo<v8::Value>& ar
  * Toggle v8 stats on/off
  */
 void CinderjsApp::toggleV8Stats(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  sV8StatsActive = !sV8StatsActive;
+  _v8StatsActive = !_v8StatsActive;
+  return;
+}
+
+/**
+ * Toggle fps on/off
+ */
+void CinderjsApp::toggleFPS(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  _fpsActive = !_fpsActive;
   return;
 }
 

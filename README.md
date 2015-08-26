@@ -26,6 +26,15 @@ $> open xcode/build/Debug/cinderjs.app --args /examples/cube/cubes.js
 Hitting _ESC_ two times fast will first exit fullscreen mode and if not in fullscreen mode,
 it will quit and terminate the application completely.
 
+## F1
+Toggle FPS text, showing the current Cinder & v8 frame rate.
+
+## F2
+Toggle v8 heap statistics.
+
+## F3
+Toggle textual console overlay.
+
 # Build & Develop
 Checkout the git submodules with:
 ```
