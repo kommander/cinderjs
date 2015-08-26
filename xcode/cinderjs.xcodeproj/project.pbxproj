@@ -146,6 +146,7 @@
 		9E5ACA3F1A0AA50400FB75E8 /* glm.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = glm.js; sourceTree = "<group>"; };
 		9E9BE8131B8CEA0D00FD56FA /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
 		9E9BE8151B8CEA1B00FD56FA /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		9E9BE8171B8DE8A200FD56FA /* ArrayBufferAllocator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ArrayBufferAllocator.h; path = ../src/ArrayBufferAllocator.h; sourceTree = "<group>"; };
 		9ED25AC51A0A790A009CEDC4 /* texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = texture.cpp; path = ../src/modules/texture.cpp; sourceTree = "<group>"; };
 		9ED25AC61A0A790A009CEDC4 /* texture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = texture.hpp; sourceTree = "<group>"; };
 		9ED25AC81A0A7918009CEDC4 /* texture.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = texture.js; sourceTree = "<group>"; };
@@ -267,6 +268,7 @@
 				9E4ABEB71A09FF6A00AF2706 /* PipeModule.hpp */,
 				9E4ABEB91A09FF6A00AF2706 /* StaticFactory.hpp */,
 				9E4ABECE1A09FFBE00AF2706 /* Resources.h */,
+				9E9BE8171B8DE8A200FD56FA /* ArrayBufferAllocator.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";

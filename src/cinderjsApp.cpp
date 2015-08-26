@@ -1,4 +1,5 @@
 #include "cinderjsApp.hpp"
+#include "ArrayBufferAllocator.h"
 #include "cinder/app/RendererGl.h"
 
 #include <boost/bind.hpp>
