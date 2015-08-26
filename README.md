@@ -21,6 +21,11 @@ Or, simply specify a "*.js" file to run on startup:
 $> open xcode/build/Debug/cinderjs.app --args /examples/cube/cubes.js
 ```
 
+# Hotkeys
+## ESC 2x
+Hitting _ESC_ two times fast will first exit fullscreen mode and if not in fullscreen mode,
+it will quit and terminate the application completely.
+
 # Build & Develop
 Checkout the git submodules with:
 ```
