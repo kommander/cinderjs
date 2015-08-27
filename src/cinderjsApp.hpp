@@ -26,15 +26,17 @@
 
 #include "cinder/gl/gl.h"
 #include "cinder/Filesystem.h"
-#include "cinder/Timer.h"
 #include "cinder/ConcurrentCircularBuffer.h"
 
 #include <map>
+#include <functional>
+#include <boost/any.hpp>
 
 #include "js_natives.h"
 #include "AppConsole.h"
 #include "CinderAppBase.hpp"
 #include "StaticFactory.hpp"
+#include "Timer.h"
 
 #include "v8.h"
 #include "libplatform/libplatform.h"
@@ -59,23 +61,13 @@ typedef std::shared_ptr<BufferedEventHolder> BufferedEvent;
 class NextFrameFnHolder {
   public:
   v8::Persistent<v8::Function> v8Fn;
+  bool repeat = false;
 };
 typedef std::shared_ptr<NextFrameFnHolder> NextFrameFn;
 
-class TimerFnHolder {
-  public:
-  uint32_t id;
-  double after;
-  double scheduledAt;
-  v8::Persistent<v8::Function> v8Fn;
-  bool _repeat = false;
-  bool _remove = false;
-};
-typedef std::shared_ptr<TimerFnHolder> TimerFn;
-
 enum EventType {
   CJS_SHUTDOWN_REQUEST = 0,
-  CJS_NEXT_FRAME = 1,
+  //CJS_NEXT_FRAME = 1,
   CJS_RESIZE = 10,
   CJS_KEY_DOWN = 20,
   CJS_KEY_UP = 30,
@@ -118,7 +110,6 @@ class CinderjsApp : public CinderAppBase  {
   void v8Thread( std::string jsFileContents );
   void v8RenderThread();
   void v8EventThread();
-  void v8TimerThread( v8::Isolate* isolate );
   
   // V8 Setup
   static v8::Local<v8::Value> executeScriptString( std::string scriptStr, v8::Isolate* isolate,
@@ -136,15 +127,15 @@ class CinderjsApp : public CinderAppBase  {
   // Threading
   volatile bool mShouldQuit;
   std::mutex mMainMutex;
-  std::condition_variable cvJSThread;
-  volatile bool _v8Run = false;
+  
+  //deprecated?
+  //std::condition_variable cvJSThread;
+  //volatile bool _v8Run = false;
+  
   std::condition_variable cvMainThread;
   volatile bool _mainRun = false;
   std::condition_variable cvEventThread;
   volatile bool _eventRun = false;
-  
-  static std::condition_variable cvTimerThread;
-  static volatile bool _timerRun;
   
   cinder::app::RendererRef glRenderer;
   
@@ -160,7 +151,6 @@ class CinderjsApp : public CinderAppBase  {
   std::shared_ptr<std::thread> mV8Thread;
   std::shared_ptr<std::thread> mV8RenderThread;
   std::shared_ptr<std::thread> mV8EventThread;
-  std::shared_ptr<std::thread> mV8TimerThread;
   
   // Modules
   static v8::Persistent<v8::Object> sModuleCache;
@@ -200,13 +190,9 @@ class CinderjsApp : public CinderAppBase  {
   static void handleV8TryCatch( v8::TryCatch &tryCatch, std::string info );
   
   // Timers
-  static cinder::ConcurrentCircularBuffer<TimerFn> sTimerQueue;
-  static void executeTimer( TimerFn timer, v8::Isolate* isolate );
-  static cinder::Timer sScheduleTimer;
-  void v8TimerWaitingThread( double _timerWaitingFor );
-  static std::condition_variable cvTimerWaitingThread;
-  static volatile bool _timerWaitingRun;
-
+  static Timer _mainTimer;
+  static std::function<void(boost::any passOn)> _timerCallback;
+  
   // Quit
   static bool sQuitRequested;
   

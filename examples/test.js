@@ -33,8 +33,9 @@ setTimeout(function(){
 
 // Test interval
 var timer = setInterval(function(now){
-  console.log("Time passed: " + (Date.now() - now) + "ms");
+  console.log("Interval Time passed: " + (Date.now() - now) + "ms");
 }, 100, Date.now());
+
 setTimeout(function(){
   console.log('Clearing interval...');
   clearInterval(timer);
