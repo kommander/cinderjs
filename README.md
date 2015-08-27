@@ -1,4 +1,5 @@
-# CinderJS
+# Cinder.js
+OpenGL + Javascript
 
 # Intentions
 In an effort to conceptualize a programming course for beginning minors and children,
@@ -12,8 +13,17 @@ So while maintainig a feature rich foundation for graphical scripting,
 it is supposed to be the base for a simplified gfx programming abstraction, suitable for children and minors,
 with abilities to exchange cross platform compatible scripts.
 
+# The Rough Roadmap
+- Get a JS test suite up and running to stabilize API early on
+- More GL features!
+- Add a usefull 2D REPL console
+- Security features (like user dialogues for file and network access etc.)
+- Allow remote resource loading (http://mydomain.org/index.cjs, certificates, user trusted domains, domain specific contexts)
+- Native modules (dynamically load additional bindings)
+- Multi Window/Display support
+
 # Run
-# OSX
+## OSX
 Drag a js file onto the application. If it is a cinder module, it will run it. If another script is already running,
 it is shut down and replaced.  
 Or, simply specify a "*.js" file to run on startup:  
@@ -21,18 +31,15 @@ Or, simply specify a "*.js" file to run on startup:
 $> open xcode/build/Debug/cinderjs.app --args /examples/cube/cubes.js
 ```
 
-# Hotkeys
-## ESC 2x
+## Hotkeys
+- __ESC 2x__  
 Hitting _ESC_ two times fast will first exit fullscreen mode and if not in fullscreen mode,
 it will quit and terminate the application completely.
-
-## F1
+- __F1__  
 Toggle FPS text, showing the current Cinder & v8 frame rate.
-
-## F2
+- __F2__  
 Toggle v8 heap statistics.
-
-## F3
+- __F3__  
 Toggle textual console overlay.
 
 # Build & Develop
