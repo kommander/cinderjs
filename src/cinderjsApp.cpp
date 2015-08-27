@@ -318,12 +318,12 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   
   #ifdef DEBUG
   // For development loading...
-  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/test.js");
+  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/test.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/particle.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cube/cubes.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/geometry_shader/index.js");
-  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/ParticleSphereGPU/index.js");
+  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/ParticleSphereGPU/index.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/physics.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/ray.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/fbo_basic.js");
@@ -379,6 +379,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
 /**
  *
  */
+v8::Handle<v8::Value> drawCallbackArgs[3];
 void CinderjsApp::v8Draw(){
   
   // Gather some info...
@@ -422,14 +423,12 @@ void CinderjsApp::v8Draw(){
   }
 
   if( !_fnDrawCallback.IsEmpty() ){
+
+    drawCallbackArgs[0] = v8::Number::New(mIsolate, timePassed);
+    drawCallbackArgs[1] = v8::Number::New(mIsolate, mousePosBuf.x);
+    drawCallbackArgs[2] = v8::Number::New(mIsolate, mousePosBuf.y);
     
-    v8::Handle<v8::Value> argv[3] = {
-      v8::Number::New(mIsolate, timePassed),
-      v8::Number::New(mIsolate, mousePosBuf.x),
-      v8::Number::New(mIsolate, mousePosBuf.y)
-    };
-    
-    _fnDrawCallback->Call(_fnDrawCallback->CreationContext()->Global(), 3, argv);
+    _fnDrawCallback->Call(_fnDrawCallback->CreationContext()->Global(), 3, drawCallbackArgs);
     
     // TODO: Check if an FBO buffer was bound and not unbound.
     //       -> Unbind it to show console correctly and show eventual errors.
@@ -461,7 +460,11 @@ void CinderjsApp::v8Draw(){
   }
   
   if(_fpsActive || _v8StatsActive) {
-    cinder::gl::draw( cinder::gl::Texture::create( fpsText.render() ) );
+    try {
+      cinder::gl::draw( cinder::gl::Texture::create( fpsText.render() ) );
+    } catch ( std::exception &e ){
+      // don't draw if window not available
+    }
   }
   
   // Draw console (if active)
@@ -741,7 +744,6 @@ void CinderjsApp::update()
 /**
  * Cinder draw loop (tick)
  * - Triggers v8 rendering
- * - Proxies nextFrame() 
  */
 void CinderjsApp::draw()
 {
