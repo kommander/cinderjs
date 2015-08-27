@@ -1,6 +1,9 @@
 # Cinder.js
 OpenGL + Javascript
 
+![alt tag](https://raw.githubusercontent.com/kommander/cinderjs/master/examples/demo_screenshot.png)
+[Click here for a short demo video.](https://vimeo.com/137488580)
+
 # Intentions
 In an effort to conceptualize a programming course for beginning minors and children,
 it became clear in early tests that fast visual feedback is the best motivation.
