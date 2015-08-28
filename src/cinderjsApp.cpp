@@ -111,28 +111,12 @@ void CinderjsApp::cleanup()
   
   std::this_thread::sleep_for(std::chrono::milliseconds(1));
   
-  //deprecated?
-  //_v8Run = true;
-  //cvJSThread.notify_all();
-  
   _eventRun = true;
   cvEventThread.notify_all();
   
   mEventQueue.cancel();
   sExecutionQueue.cancel();
   
-  // Shutdown v8Thread
-  if( mV8Thread ) {
-    mV8Thread->join();
-    mV8Thread.reset();
-  }
-  
-  // Shutdown v8RenderThread
-//  if( mV8RenderThread ) {
-//    mV8RenderThread->join();
-//    mV8RenderThread.reset();
-//  }
-
   // Shutdown v8EventThread
   if( mV8EventThread ) {
     mV8EventThread->join();
@@ -159,7 +143,6 @@ void CinderjsApp::setup()
   
 
   mCwd = boost::filesystem::current_path();
-  AppConsole::log("Current Path: " + mCwd.string());
   
   // Check argv arguments
   // TODO: Check for debug flag
@@ -176,8 +159,7 @@ void CinderjsApp::setup()
   // Get cinder.js main native
   if(cinder_native && sizeof(cinder_native) > 0) {
     std::string mainJS(cinder_native);
-    //mV8Thread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8Thread, this, mainJS ) );
-    v8Thread(mainJS);
+    v8Setup(mainJS);
   } else {
     // FATAL: No main entry source
     quit();
@@ -217,8 +199,7 @@ v8::Local<v8::Value> CinderjsApp::executeScriptString( std::string scriptStr, Is
 /**
  * Setup V8
  */
-void CinderjsApp::v8Thread( std::string mainJS ){
-  //ThreadSetup threadSetup;
+void CinderjsApp::v8Setup( std::string mainJS ){
   
   // Initialize V8 (implicit initialization was removed in an earlier revision)
   v8::V8::InitializeICU();
@@ -323,7 +304,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/lines.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/cube/cubes.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/geometry_shader/index.js");
-  argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/ParticleSphereGPU/index.js");
+  //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/ParticleSphereGPU/index.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/physics.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/ray.js");
   //argv.push_back("/Users/sebastian/Dropbox/+Projects/cinderjs/examples/fbo_basic.js");
@@ -344,6 +325,7 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   sEmptyObject.Reset(mIsolate, emptyObjInstance);
   
   // Grab GL context to execute the entry script and allow gl setup
+  // @todo: deprecated as setup has context to draw with glNext already?
   glRenderer->startDraw();
   
   // Execute entry script
@@ -370,10 +352,13 @@ void CinderjsApp::v8Thread( std::string mainJS ){
   }
   
   // Get rid of gl context again
+  // @todo: deprecated as setup has context to draw with glNext already?
   glRenderer->finishDraw();
   
+  gl::ContextRef backgroundCtx = gl::Context::create( gl::context() );
+  
   // Start sub threads
-  mV8EventThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8EventThread, this ) );
+  mV8EventThread = make_shared<std::thread>( boost::bind( &CinderjsApp::v8EventThread, this, backgroundCtx ) );
 }
 
 /**
@@ -486,8 +471,11 @@ void CinderjsApp::v8Draw(){
 /**
  *
  */
-void CinderjsApp::v8EventThread(){
+void CinderjsApp::v8EventThread( gl::ContextRef context ){
   ThreadSetup threadSetup;
+  context->makeCurrent();
+  
+  // TODO: Work around v8 blocking...
   
   // Thread loop
   while( !mShouldQuit ) {
@@ -499,9 +487,6 @@ void CinderjsApp::v8EventThread(){
     }
     
     if(!mShouldQuit && mEventQueue.isNotEmpty()){
-      
-      // Grab renderer...
-      glRenderer->startDraw();
       
       // TODO: If available, push mouse/key/resize events to v8
       v8::Locker lock(mIsolate);
@@ -600,9 +585,6 @@ void CinderjsApp::v8EventThread(){
           quit();
         }
       }
-      
-      // Release renderer...
-      glRenderer->finishDraw();
       
       context->Exit();
       v8::Unlocker unlock(mIsolate);

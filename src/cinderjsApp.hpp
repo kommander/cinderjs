@@ -106,12 +106,8 @@ class CinderjsApp : public CinderAppBase  {
   void resize();
   void fileDrop( cinder::app::FileDropEvent event );
   
-  // Threads
-  void v8Thread( std::string jsFileContents );
-  void v8RenderThread();
-  void v8EventThread();
-  
   // V8 Setup
+  void v8Setup( std::string jsFileContents );
   static v8::Local<v8::Value> executeScriptString( std::string scriptStr, v8::Isolate* isolate,
     v8::Local<v8::Context> context, v8::Handle<v8::String> filename );
   
@@ -128,10 +124,6 @@ class CinderjsApp : public CinderAppBase  {
   volatile bool mShouldQuit;
   std::mutex mMainMutex;
   
-  //deprecated?
-  //std::condition_variable cvJSThread;
-  //volatile bool _v8Run = false;
-  
   std::condition_variable cvMainThread;
   volatile bool _mainRun = false;
   std::condition_variable cvEventThread;
@@ -147,9 +139,8 @@ class CinderjsApp : public CinderAppBase  {
   // Path
   Path mCwd;
   
-  // V8 Threads
-  std::shared_ptr<std::thread> mV8Thread;
-  std::shared_ptr<std::thread> mV8RenderThread;
+  // Threads
+  void v8EventThread( cinder::gl::ContextRef context );
   std::shared_ptr<std::thread> mV8EventThread;
   
   // Modules
